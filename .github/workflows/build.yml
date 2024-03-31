@@ -31,11 +31,9 @@ jobs:
           tar -xzf vpxtool-Linux-x86_64-musl-v0.10.1.tar.gz
         
       - name: Run Command
-        run: |
-          ls -l
-          uname -i
-          ./vpxtool assemble aztecquest
-      
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+        run: ./vpxtool assemble aztecquest
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: 'Aztec Quest.vpx'  # Name of the artifact
+          path: ./aztecquest.vpx 
