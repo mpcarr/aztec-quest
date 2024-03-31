@@ -27,7 +27,7 @@ jobs:
 
       - name: Download vpxtool
         run: |
-          wget https://github.com/francisdb/vpxtool/releases/download/v0.10.1/
+          wget https://github.com/francisdb/vpxtool/releases/download/v0.10.1/vpxtool-Linux-aarch64-musl-v0.10.1.tar.gz
           tar -xzf vpxtool-Linux-aarch64-musl-v0.10.1.tar.gz
         
       - name: Run Command
