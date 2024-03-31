@@ -34,9 +34,11 @@ jobs:
           tar -xzf vpxtool-Linux-x86_64-musl-v0.10.1.tar.gz
         
       - name: Run Command
-        run: ./vpxtool assemble aztecquest
+        run: |
+          ./vpxtool assemble aztecquest
+          mv ./aztecquest.vpx ./aztecquest{{steps.version.outputs.build_number}}.vpx
           
       - uses: actions/upload-artifact@v4
         with:
-          name: AztecQuest${{ steps.version.outputs.build_number }}
-          path: ./aztecquest.vpx 
+          name: AztecQuest_${{ steps.version.outputs.build_number }}
+          path: ./aztecquest{{steps.version.outputs.build_number}}.vpx
