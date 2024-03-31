@@ -27,13 +27,14 @@ jobs:
 
       - name: Download vpxtool
         run: |
-          wget https://github.com/francisdb/vpxtool/releases/download/v0.10.1/vpxtool-Linux-aarch64-musl-v0.10.1.tar.gz
-          tar -xzf vpxtool-Linux-aarch64-musl-v0.10.1.tar.gz
+          wget https://github.com/francisdb/vpxtool/releases/download/v0.10.1/vpxtool-Linux-x86_64-musl-v0.10.1.tar.gz
+          tar -xzf vpxtool-Linux-x86_64-musl-v0.10.1.tar.gz
         
       - name: Run Command
         run: |
           ls -l
           uname -i
+          ./vpxtool assemble aztecquest
       
       # Runs a single command using the runners shell
       - name: Run a one-line script
