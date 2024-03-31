@@ -29,7 +29,7 @@ jobs:
           fetch-depth: 0
       - id: version
         run: |
-          echo "::set-output name=build_number::$(git rev-list 1295e43d69488b1a9d128bde0edc14347097e1f1..HEAD --count)"
+          echo "build_number=$(git rev-list 1295e43d69488b1a9d128bde0edc14347097e1f1..HEAD --count)"  >> $GITHUB_OUTPUT
 
       - name: Download vpxtool
         run: |
