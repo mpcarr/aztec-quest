@@ -26,7 +26,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - id: version
-        run: build_number=$(git rev-list master --count)
+        run: echo "::set-output name=build_number::$(git rev-list master --count)"
 
       - name: Download vpxtool
         run: |
