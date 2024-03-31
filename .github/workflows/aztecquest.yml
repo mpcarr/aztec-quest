@@ -45,4 +45,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: AztecQuest_${{ steps.version.outputs.build_number }}
-          path: ./aztecquest{{steps.version.outputs.build_number}}.vpx
+          path: ./aztecquest${{steps.version.outputs.build_number}}.vpx
