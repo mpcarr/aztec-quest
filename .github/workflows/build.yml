@@ -33,6 +33,7 @@ jobs:
       - name: Run Command
         run: |
           ls -l
+          uname -i
       
       # Runs a single command using the runners shell
       - name: Run a one-line script
