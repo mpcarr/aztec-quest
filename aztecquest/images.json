@@ -18,7 +18,7 @@
     "path": "C:\\ball_HDR.hdr",
     "width": 256,
     "height": 256,
-    "alpha_test_value": 1.0,
+    "alpha_test_value": -1.0,
     "is_opaque": true,
     "is_signed": false,
     "jpeg": {
@@ -38,6 +38,20 @@
     "jpeg": {
       "path": "C:\\vPinball\\VisualPinball\\Tables\\wip\\aztecquest\\aztec - Bakes/Export/Nestmap 0.webp",
       "name": "VLM.Nestmap0"
+    },
+    "bits": false
+  },
+  {
+    "name": "shinyenvironment3blur4",
+    "path": "C:\\pinball\\resources\\environments\\shinyenvironment3blur4.hdr",
+    "width": 1024,
+    "height": 512,
+    "alpha_test_value": -1.0,
+    "is_opaque": true,
+    "is_signed": false,
+    "jpeg": {
+      "path": "C:\\pinball\\resources\\environments\\shinyenvironment3blur4.hdr",
+      "name": "shinyenvironment3blur4"
     },
     "bits": false
   }
