@@ -25,6 +25,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - id: version
         run: |
           echo "::set-output name=build_number::$(git rev-list 1295e43d69488b1a9d128bde0edc14347097e1f1..HEAD --count)"
