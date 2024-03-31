@@ -33,7 +33,7 @@ jobs:
       - name: Run Command
         run: ./vpxtool assemble aztecquest
           
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: 'Aztec Quest.vpx'  # Name of the artifact
           path: ./aztecquest.vpx 
