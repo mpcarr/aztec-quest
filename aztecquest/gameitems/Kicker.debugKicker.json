@@ -1,0 +1,22 @@
+{
+  "Kicker": {
+    "center": {
+      "x": 432.79,
+      "y": 1852.312
+    },
+    "radius": 200.0,
+    "is_timer_enabled": false,
+    "timer_interval": 100,
+    "material": "",
+    "surface": "",
+    "is_enabled": false,
+    "name": "debugKicker",
+    "kicker_type": 0,
+    "scatter": 0.0,
+    "hit_accuracy": 0.7,
+    "hit_height": 40.0,
+    "orientation": 0.0,
+    "fall_through": false,
+    "legacy_mode": true
+  }
+}

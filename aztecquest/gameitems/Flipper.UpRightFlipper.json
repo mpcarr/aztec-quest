@@ -1,0 +1,42 @@
+{
+  "Flipper": {
+    "center": {
+      "x": 932.07855,
+      "y": 488.82742
+    },
+    "base_radius": 21.5,
+    "end_radius": 11.8,
+    "flipper_radius_max": 114.0,
+    "return_": 0.018,
+    "start_angle": 200.0,
+    "end_angle": 259.4,
+    "override_physics": 0,
+    "mass": 1.0,
+    "is_timer_enabled": false,
+    "timer_interval": 100,
+    "surface": "UpperPf",
+    "material": "Rubber Yellow",
+    "name": "UpRightFlipper",
+    "rubber_material": "Red Rubber",
+    "rubber_thickness_int": 5,
+    "rubber_thickness": 5.0,
+    "rubber_height_int": 17,
+    "rubber_height": 17.5,
+    "rubber_width_int": 23,
+    "rubber_width": 23.0,
+    "strength": 5000.0,
+    "elasticity": 0.8,
+    "elasticity_falloff": 0.38,
+    "friction": 1.0,
+    "ramp_up": 4.0,
+    "scatter": 0.0,
+    "torque_damping": 0.28,
+    "torque_damping_angle": 10.0,
+    "flipper_radius_min": 0.0,
+    "is_visible": true,
+    "is_enabled": true,
+    "height": 50.0,
+    "image": "",
+    "is_reflection_enabled": false
+  }
+}

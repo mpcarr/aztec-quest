@@ -1,0 +1,220 @@
+[
+  {
+    "name": "Rubbers",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "Posts",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "Pins",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "Targets",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "Metals",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "Gates",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "GI",
+    "items": [],
+    "fire_events": false,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "GatesWire",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "Apron",
+    "items": [
+      "Wall78",
+      "Wall001"
+    ],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": true
+  },
+  {
+    "name": "Walls",
+    "items": [
+      "Wall5top",
+      "Wall350",
+      "Wall3",
+      "Wall4"
+    ],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "Rollovers",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "dPosts",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "dSleeves",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "VR_Cab",
+    "items": [],
+    "fire_events": false,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "ShadowDT",
+    "items": [],
+    "fire_events": false,
+    "stop_single_events": false,
+    "group_elements": true
+  },
+  {
+    "name": "TargetBounce",
+    "items": [],
+    "fire_events": true,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "DynamicSources",
+    "items": [],
+    "fire_events": false,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "AllInsertLights",
+    "items": [],
+    "fire_events": false,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "alights",
+    "items": [
+      "l22",
+      "l118",
+      "l52",
+      "l51",
+      "l25",
+      "l36",
+      "l59",
+      "l119",
+      "f176",
+      "f168",
+      "f163",
+      "l101",
+      "l102",
+      "l141",
+      "l140",
+      "l105",
+      "l96",
+      "l99",
+      "l81",
+      "l82",
+      "l113",
+      "l12",
+      "l16",
+      "l135",
+      "l134",
+      "l62",
+      "l39",
+      "l48",
+      "l78",
+      "l91",
+      "l122",
+      "l126",
+      "l108",
+      "l131",
+      "l55",
+      "l125",
+      "l87",
+      "l88",
+      "l112",
+      "l111",
+      "l01",
+      "f177",
+      "l19",
+      "l69",
+      "l68",
+      "l67",
+      "l66",
+      "l65",
+      "l42",
+      "l43",
+      "l44",
+      "l45",
+      "l11",
+      "l15",
+      "l35",
+      "l34",
+      "l32",
+      "l29",
+      "l28",
+      "l30",
+      "l31",
+      "l33",
+      "f174",
+      "f170",
+      "f175",
+      "f182",
+      "f165",
+      "f172",
+      "f160",
+      "f162",
+      "f161",
+      "f184",
+      "f173",
+      "f179",
+      "f178",
+      "l01a"
+    ],
+    "fire_events": false,
+    "stop_single_events": false,
+    "group_elements": true
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "Timer": {
+    "center": {
+      "x": 187.03706,
+      "y": 2451.638
+    },
+    "is_timer_enabled": true,
+    "timer_interval": 100,
+    "name": "RampRoll",
+    "backglass": false
+  }
+}

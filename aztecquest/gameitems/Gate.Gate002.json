@@ -1,0 +1,30 @@
+{
+  "Gate": {
+    "center": {
+      "x": 70.018555,
+      "y": 1165.2587
+    },
+    "length": 100.0,
+    "height": 50.0,
+    "rotation": 120.0,
+    "material": "",
+    "is_timer_enabled": false,
+    "show_bracket": true,
+    "is_collidable": true,
+    "timer_interval": 100,
+    "imgf": null,
+    "imgb": null,
+    "surface": "",
+    "elasticity": 0.3,
+    "angle_max": 1.5707964,
+    "angle_min": 0.0,
+    "friction": 0.02,
+    "damping": 0.985,
+    "gravity_factor": 0.25,
+    "is_visible": true,
+    "name": "Gate002",
+    "two_way": false,
+    "is_reflection_enabled": true,
+    "gate_type": "WireW"
+  }
+}

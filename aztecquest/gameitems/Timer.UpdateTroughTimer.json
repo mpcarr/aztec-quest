@@ -1,0 +1,12 @@
+{
+  "Timer": {
+    "center": {
+      "x": 188.03705,
+      "y": 2404.2302
+    },
+    "is_timer_enabled": false,
+    "timer_interval": 300,
+    "name": "UpdateTroughTimer",
+    "backglass": false
+  }
+}

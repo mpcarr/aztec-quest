@@ -1,0 +1,12 @@
+{
+  "Timer": {
+    "center": {
+      "x": 241.37036,
+      "y": 2398.304
+    },
+    "is_timer_enabled": false,
+    "timer_interval": 40,
+    "name": "PulseTimer",
+    "backglass": false
+  }
+}

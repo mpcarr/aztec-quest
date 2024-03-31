@@ -1,0 +1,12 @@
+{
+  "Timer": {
+    "center": {
+      "x": 138.33322,
+      "y": 2449.4155
+    },
+    "is_timer_enabled": true,
+    "timer_interval": -1,
+    "name": "FrameTimer",
+    "backglass": false
+  }
+}

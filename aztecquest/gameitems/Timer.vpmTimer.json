@@ -1,0 +1,12 @@
+{
+  "Timer": {
+    "center": {
+      "x": 289.89618,
+      "y": 2400.5608
+    },
+    "is_timer_enabled": false,
+    "timer_interval": 40,
+    "name": "vpmTimer",
+    "backglass": false
+  }
+}

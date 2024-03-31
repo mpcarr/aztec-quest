@@ -1,0 +1,24 @@
+{
+  "Spinner": {
+    "center": {
+      "x": 675.83826,
+      "y": 922.4514
+    },
+    "rotation": 20.0,
+    "is_timer_enabled": false,
+    "timer_interval": 100,
+    "height": 60.000004,
+    "length": 80.0,
+    "damping": 0.9879,
+    "angle_max": 0.0,
+    "angle_min": 0.0,
+    "elasticity": 0.3,
+    "is_visible": true,
+    "show_bracket": false,
+    "material": "Colour_Purple",
+    "image": "",
+    "surface": "",
+    "name": "Spinner002",
+    "is_reflection_enabled": true
+  }
+}
