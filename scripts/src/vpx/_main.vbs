@@ -29,7 +29,7 @@ Const RampRollVolume = 0.5		'Level of ramp rolling volume. Value between 0 and 1
 '----- VR Room -----
 Const VRRoom = 0				'0 - VR Room off, 1 - Minimal Room, 2 - Ultra Minimal Room
 
-
+Dim GameTilted : GameTilted = False
 Dim gameDebugger : Set gameDebugger = new AdvGameDebugger
 '*******************************************
 '  Constants and Global Variables
@@ -41,7 +41,7 @@ Const BallSize = 50			'Ball diameter in VPX units; must be 50
 Const BallMass = 1			'Ball mass must be 1
 Const tnob = 7				'Total number of balls the table can hold
 Const lob = 2				'Locked balls
-Const cGameName = "tmntpro"	'The unique alphanumeric name for this table
+Const cGameName = "aztecquest"	'The unique alphanumeric name for this table
 
 Dim tablewidth
 tablewidth = Table1.width
@@ -113,6 +113,9 @@ Sub Table1_Init
 	PlayVPXSeq
 	
 	DTDrop 1
+
+	BuildPinEventSelectCase
+	BuildPlayerEventSelectCase
 End Sub
 
 

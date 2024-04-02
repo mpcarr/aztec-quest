@@ -12,3 +12,6 @@ Const GAME_OVER = "Game Over"
 
 Const SWITCH_LEFT_FLIPPER_DOWN = "Switches Left Flipper Down"
 Const SWITCH_RIGHT_FLIPPER_DOWN = "Switches Right Flipper Down"
+Const SWITCH_LEFT_FLIPPER_UP = "Switches Left Flipper Up"
+Const SWITCH_RIGHT_FLIPPER_UP = "Switches Right Flipper Up"
+Const SWITCH_BOTH_FLIPPERS_PRESSED = "Switches Both Flippers Pressed"

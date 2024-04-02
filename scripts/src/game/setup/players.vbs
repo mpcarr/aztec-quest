@@ -49,18 +49,6 @@ Function InitNewPlayer()
     state.Add BALLS_LOCKED, 0
 
     state.Add BALL_SAVE_ENABLED, False
-
-    state.Add TURTLE, ""
-    state.Add PIZZA_INGREDIENT_1, ""
-    state.Add PIZZA_INGREDIENT_2, ""
-    state.Add PIZZA_INGREDIENT_3, ""
-    state.Add PIZZA_INGREDIENT_4, ""
-    state.Add PIZZA_INGREDIENT_5, ""
-    state.Add PIZZA_INGREDIENT_6, ""
-    state.Add PIZZA_INGREDIENT_7, ""
-    state.Add PIZZA_INGREDIENT_8, ""
-    state.Add CURRENT_MODE, 0
-    state.Add MODE_SELECT_TURTLE, False
     
     Set InitNewPlayer = state
 

@@ -12,7 +12,7 @@ Class AdvGameDebugger
         Set m_advDebugger = CreateObject("vpx_adv_debugger.VPXAdvDebugger")
         m_advDebugger.Connect()
         m_connected = True
-        If Err Then MsgBox "Can't start advanced debugger" : m_connected = False
+        If Err Then Debug.print("Can't start advanced debugger") : m_connected = False
     End Sub
 
 	Public Sub SendPlayerState(key, value)

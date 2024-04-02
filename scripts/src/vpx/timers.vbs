@@ -7,7 +7,6 @@ Sub GameTimer_Timer() 'The game timer interval; should be 10 ms
 	RollingUpdate   'update rolling sounds
 	DoSTAnim		'handle stand up target animations
 	DoDTAnim
-	UpdateDropTargets
 End Sub
 
 Dim FrameTime, InitFrameTime
