@@ -24,7 +24,7 @@
     "is_reflection_enabled": true,
     "physics_material": "",
     "overwrite_physics": true,
-    "points": [
+    "drag_points": [
       {
         "x": 68.75158,
         "y": 1417.6592,

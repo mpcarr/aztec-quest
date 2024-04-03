@@ -2079,6 +2079,55 @@
     "editor_layer_visibility": true
   },
   {
+    "file_name": "HitTarget.sw13.json",
+    "is_locked": false,
+    "editor_layer": 1,
+    "editor_layer_name": "StandUpTargets",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "HitTarget.sw12.json",
+    "is_locked": false,
+    "editor_layer": 1,
+    "editor_layer_name": "StandUpTargets",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "HitTarget.sw11.json",
+    "is_locked": false,
+    "editor_layer": 1,
+    "editor_layer_name": "StandUpTargets",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "HitTarget.sw15.json",
+    "is_locked": false,
+    "editor_layer": 1,
+    "editor_layer_name": "StandUpTargets",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "HitTarget.sw16.json",
+    "is_locked": false,
+    "editor_layer": 1,
+    "editor_layer_name": "StandUpTargets",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "HitTarget.sw17.json",
+    "is_locked": false,
+    "editor_layer": 1,
+    "editor_layer_name": "StandUpTargets",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "Wall.Wall018.json",
+    "is_locked": false,
+    "editor_layer": 0,
+    "editor_layer_name": "StandUpTargets",
+    "editor_layer_visibility": true
+  },
+  {
     "file_name": "Primitive.BM_Cab.json",
     "is_locked": true,
     "editor_layer": 0,
@@ -2093,14 +2142,28 @@
     "editor_layer_visibility": true
   },
   {
-    "file_name": "Primitive.BM_Panther.json",
+    "file_name": "Primitive.BM_Parts.json",
     "is_locked": true,
     "editor_layer": 0,
     "editor_layer_name": "VLM.Visuals",
     "editor_layer_visibility": true
   },
   {
-    "file_name": "Primitive.BM_Parts.json",
+    "file_name": "Primitive.BM_pantherLid.json",
+    "is_locked": true,
+    "editor_layer": 0,
+    "editor_layer_name": "VLM.Visuals",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "Primitive.BM_pantherSupport.json",
+    "is_locked": true,
+    "editor_layer": 0,
+    "editor_layer_name": "VLM.Visuals",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "Primitive.BM_sw01.json",
     "is_locked": true,
     "editor_layer": 0,
     "editor_layer_name": "VLM.Visuals",
@@ -2195,55 +2258,6 @@
     "is_locked": true,
     "editor_layer": 0,
     "editor_layer_name": "VLM.Visuals",
-    "editor_layer_visibility": true
-  },
-  {
-    "file_name": "HitTarget.sw13.json",
-    "is_locked": false,
-    "editor_layer": 1,
-    "editor_layer_name": "StandUpTargets",
-    "editor_layer_visibility": true
-  },
-  {
-    "file_name": "HitTarget.sw12.json",
-    "is_locked": false,
-    "editor_layer": 1,
-    "editor_layer_name": "StandUpTargets",
-    "editor_layer_visibility": true
-  },
-  {
-    "file_name": "HitTarget.sw11.json",
-    "is_locked": false,
-    "editor_layer": 1,
-    "editor_layer_name": "StandUpTargets",
-    "editor_layer_visibility": true
-  },
-  {
-    "file_name": "HitTarget.sw15.json",
-    "is_locked": false,
-    "editor_layer": 1,
-    "editor_layer_name": "StandUpTargets",
-    "editor_layer_visibility": true
-  },
-  {
-    "file_name": "HitTarget.sw16.json",
-    "is_locked": false,
-    "editor_layer": 1,
-    "editor_layer_name": "StandUpTargets",
-    "editor_layer_visibility": true
-  },
-  {
-    "file_name": "HitTarget.sw17.json",
-    "is_locked": false,
-    "editor_layer": 1,
-    "editor_layer_name": "StandUpTargets",
-    "editor_layer_visibility": true
-  },
-  {
-    "file_name": "Wall.Wall018.json",
-    "is_locked": false,
-    "editor_layer": 0,
-    "editor_layer_name": "StandUpTargets",
     "editor_layer_visibility": true
   }
 ]

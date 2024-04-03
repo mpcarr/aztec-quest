@@ -101,7 +101,7 @@ Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45
 'Set DT38 = (new DropTarget)(sw38, sw38a, BM_sw38, 38, 0, False)
 'Set DT40 = (new DropTarget)(sw40, sw40a, BM_sw40, 40, 0, False)
 'Set DT45 = (new DropTarget)(sw45, sw45a, BM_sw45, 45, 0, False)
-Set DT01 = (new DropTarget)(sw01, sw01a, BM_Panther, 1, 0, True) 
+Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True) 
 'Set DT02 = (new DropTarget)(sw02, sw02a, BM_sw02, 2, 0, False) 
 Set DT04 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False)
 Set DT05 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False)
@@ -363,6 +363,17 @@ Sub DTAction(switchid)
 	Select Case switchid
 		
 	End Select
+End Sub
+
+Sub UpdateTargets
+
+	If DTDropped(1) = True Then
+		BM_pantherLid.RotX = -6
+	Else
+		BM_pantherLid.RotX = 0
+	End If
+	BM_pantherLid.transz = BM_sw01.transz
+	BM_pantherSupport.transz = BM_sw01.transz
 End Sub
 
 

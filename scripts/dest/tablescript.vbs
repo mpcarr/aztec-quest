@@ -588,33 +588,6 @@ End Class
 '*****************************************************************************************************************************************
 
 
-' VLM  Arrays - Start
-' Arrays per baked part
-Dim BP_Cab: BP_Cab=Array(BM_Cab)
-Dim BP_PF: BP_PF=Array(BM_PF)
-Dim BP_Panther: BP_Panther=Array(BM_Panther)
-Dim BP_Parts: BP_Parts=Array(BM_Parts)
-Dim BP_sw04: BP_sw04=Array(BM_sw04)
-Dim BP_sw05: BP_sw05=Array(BM_sw05)
-Dim BP_sw06: BP_sw06=Array(BM_sw06)
-Dim BP_sw08: BP_sw08=Array(BM_sw08)
-Dim BP_sw09: BP_sw09=Array(BM_sw09)
-Dim BP_sw10: BP_sw10=Array(BM_sw10)
-Dim BP_sw11: BP_sw11=Array(BM_sw11)
-Dim BP_sw12: BP_sw12=Array(BM_sw12)
-Dim BP_sw13: BP_sw13=Array(BM_sw13)
-Dim BP_sw15: BP_sw15=Array(BM_sw15)
-Dim BP_sw16: BP_sw16=Array(BM_sw16)
-Dim BP_sw17: BP_sw17=Array(BM_sw17)
-Dim BP_targetbank: BP_targetbank=Array(BM_targetbank)
-' Arrays per lighting scenario
-Dim BL_World: BL_World=Array(BM_Cab, BM_PF, BM_Panther, BM_Parts, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-' Global arrays
-Dim BG_Bakemap: BG_Bakemap=Array(BM_Cab, BM_PF, BM_Panther, BM_Parts, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-Dim BG_Lightmap: BG_Lightmap=Array()
-Dim BG_All: BG_All=Array(BM_Cab, BM_PF, BM_Panther, BM_Parts, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-' VLM  Arrays - End
-
 
 '****************************************************************
 ' Section; Debug Shot Tester v3.2
@@ -1044,7 +1017,7 @@ Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45
 'Set DT38 = (new DropTarget)(sw38, sw38a, BM_sw38, 38, 0, False)
 'Set DT40 = (new DropTarget)(sw40, sw40a, BM_sw40, 40, 0, False)
 'Set DT45 = (new DropTarget)(sw45, sw45a, BM_sw45, 45, 0, False)
-Set DT01 = (new DropTarget)(sw01, sw01a, BM_Panther, 1, 0, True) 
+Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True) 
 'Set DT02 = (new DropTarget)(sw02, sw02a, BM_sw02, 2, 0, False) 
 Set DT04 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False)
 Set DT05 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False)
@@ -1306,6 +1279,17 @@ Sub DTAction(switchid)
 	Select Case switchid
 		
 	End Select
+End Sub
+
+Sub UpdateTargets
+
+	If DTDropped(1) = True Then
+		BM_pantherLid.RotX = -6
+	Else
+		BM_pantherLid.RotX = 0
+	End If
+	BM_pantherLid.transz = BM_sw01.transz
+	BM_pantherSupport.transz = BM_sw01.transz
 End Sub
 
 
@@ -3468,6 +3452,35 @@ Class LCSeqRunner
     End Function
 
 End Class
+' VLM  Arrays - Start
+' Arrays per baked part
+Dim BP_Cab: BP_Cab=Array(BM_Cab)
+Dim BP_PF: BP_PF=Array(BM_PF)
+Dim BP_Parts: BP_Parts=Array(BM_Parts)
+Dim BP_pantherLid: BP_pantherLid=Array(BM_pantherLid)
+Dim BP_pantherSupport: BP_pantherSupport=Array(BM_pantherSupport)
+Dim BP_sw01: BP_sw01=Array(BM_sw01)
+Dim BP_sw04: BP_sw04=Array(BM_sw04)
+Dim BP_sw05: BP_sw05=Array(BM_sw05)
+Dim BP_sw06: BP_sw06=Array(BM_sw06)
+Dim BP_sw08: BP_sw08=Array(BM_sw08)
+Dim BP_sw09: BP_sw09=Array(BM_sw09)
+Dim BP_sw10: BP_sw10=Array(BM_sw10)
+Dim BP_sw11: BP_sw11=Array(BM_sw11)
+Dim BP_sw12: BP_sw12=Array(BM_sw12)
+Dim BP_sw13: BP_sw13=Array(BM_sw13)
+Dim BP_sw15: BP_sw15=Array(BM_sw15)
+Dim BP_sw16: BP_sw16=Array(BM_sw16)
+Dim BP_sw17: BP_sw17=Array(BM_sw17)
+Dim BP_targetbank: BP_targetbank=Array(BM_targetbank)
+' Arrays per lighting scenario
+Dim BL_World: BL_World=Array(BM_Cab, BM_PF, BM_Parts, BM_pantherLid, BM_pantherSupport, BM_sw01, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
+' Global arrays
+Dim BG_Bakemap: BG_Bakemap=Array(BM_Cab, BM_PF, BM_Parts, BM_pantherLid, BM_pantherSupport, BM_sw01, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
+Dim BG_Lightmap: BG_Lightmap=Array()
+Dim BG_All: BG_All=Array(BM_Cab, BM_PF, BM_Parts, BM_pantherLid, BM_pantherSupport, BM_sw01, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
+' VLM  Arrays - End
+
 
 '******************************************************
 '****  GNEREAL ADVICE ON PHYSICS
@@ -5899,6 +5912,7 @@ Sub GameTimer_Timer() 'The game timer interval; should be 10 ms
 	RollingUpdate   'update rolling sounds
 	DoSTAnim		'handle stand up target animations
 	DoDTAnim
+	UpdateTargets
 End Sub
 
 Dim FrameTime, InitFrameTime

@@ -24,7 +24,7 @@
     "is_reflection_enabled": true,
     "physics_material": "zCol_RubberPosts",
     "overwrite_physics": false,
-    "points": [
+    "drag_points": [
       {
         "x": 705.9163,
         "y": 1629.2856,
