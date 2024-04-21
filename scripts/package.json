@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "shx rm -rf ../aztecquest && vpxtool extract ../aztecquest.vpx && shx cp ./dest/tablescript.vbs ../aztecquest/script.vbs",
+    "build": "shx rm -rf ../aztecquest-dev && vpxtool extract ../aztecquest-dev.vpx && shx cp ./dest/vpx/tablescript.vbs ../aztecquest/script.vbs",
     "grunt-vpx": "grunt watch:vpx",
     "grunt-mpf": "grunt watch:mpf"
   },

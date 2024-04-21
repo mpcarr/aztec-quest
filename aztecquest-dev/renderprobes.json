@@ -1,0 +1,15 @@
+[
+  {
+    "type_": "plane_reflection",
+    "name": "Playfield Reflections",
+    "roughness": 0,
+    "reflection_plane": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 1.0,
+      "w": 0.0
+    },
+    "reflection_mode": "unknown",
+    "disable_light_reflection": true
+  }
+]
