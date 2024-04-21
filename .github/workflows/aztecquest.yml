@@ -39,6 +39,7 @@ jobs:
       - name: Run Command
         run: |
           git rev-list --max-parents=0 HEAD
+          rm aztecquest-dev.vpx
           ./vpxtool assemble aztecquest-dev
           mv ./aztecquest-dev.vpx ./aztecquest${{steps.version.outputs.build_number}}.vpx
           
