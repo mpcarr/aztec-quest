@@ -1,41 +1,45 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   grunt.initConfig({
-      concat: {
-        dist: {
-          src: ['src/vpx/**/*.vbs', 'src/game/**/*.vbs', '!src/unittests/**/*.vbs', '!src/**/*.test.vbs'],
-          dest: 'dest/tablescript.vbs',
-        },
-        state: {
-          src: ['src/game/**/*.vbs'],
-          dest: 'dest/tablescript-state.vbs',
-        },
-        tests:{
-          src: ['src/unittests/vbsUnit.vbs', 'src/unittests/mocks/**/*.vbs', 'dest/tablescript-state.vbs', 'src/unittests/tests-init.vbs','src/**/*.test.vbs', 'src/unittests/tests-report.vbs'],
-          dest: 'dest/tests.vbs',
+    concat: {
+      vpx: {
+        src: ['src/vpx/**/*.vbs', 'src/game/**/*.vbs', '!src/unittests/**/*.vbs', '!src/**/*.test.vbs', '!src/**/*-mpf.vbs'],
+        dest: 'dest/vpx/tablescript.vbs',
+      },
+      mpf: {
+        src: ['src/vpx/**/*.vbs', 'src/game/**/*.vbs', '!src/unittests/**/*.vbs', '!src/**/*.test.vbs', '!src/**/*-vpx.vbs'],
+        dest: 'dest/mpf/tablescript.vbs',
+      },
+    },
+    exec: {
+      tests: 'cscript dest/tests.vbs'
+    },
+    watch: {
+      vpx: {
+        files: 'src/**/*.vbs',
+        tasks: ['concat:vpx'],
+        //tasks: ['concat', 'exec:tests'],
+        options: {
+          atBegin: true
         }
       },
-      exec: {
-          tests: 'cscript dest/tests.vbs'
-      },
-      watch: {
-        scripts: {
-            files: 'src/**/*.vbs',
-            tasks: ['concat'],
-            //tasks: ['concat', 'exec:tests'],
-            options: {  
-                atBegin: true
-            }
+      mpf: {
+        files: 'src/**/*.vbs',
+        tasks: ['concat:mpf'],
+        //tasks: ['concat', 'exec:tests'],
+        options: {
+          atBegin: true
         }
       }
-  
-    });
-  
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    //grunt.loadNpmTasks('grunt-exec');
+    }
 
-  
-    // Default task(s).
-    grunt.registerTask('default', ['concat']);
-  
-  };
+  });
+
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  //grunt.loadNpmTasks('grunt-exec');
+
+
+  // Default task(s).
+  grunt.registerTask('default', ['concat']);
+
+};

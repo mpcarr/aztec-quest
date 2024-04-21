@@ -6,15 +6,15 @@
 Sub StartGame()
     gameStarted = True
     SetPlayerState BALL_SAVE_ENABLED, True
-    DispatchPinEvent START_GAME
+    DispatchPinEvent START_GAME, Null
 End Sub
 
 '****************************
 ' End Of Game
 ' Event Listeners:  
-    AddPinEventListener GAME_OVER,    "EndOfGame"
+    AddPinEventListener GAME_OVER, "end_of_game", "EndOfGame", 1000, Null
 '
 '*****************************
-Sub EndOfGame()
+Function EndOfGame(args)
     
-End Sub
+End Function

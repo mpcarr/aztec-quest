@@ -9,25 +9,17 @@ Sub AddPlayer()
         Case -1:
             playerState.Add "PLAYER 1", InitNewPlayer()
             currentPlayer = "PLAYER 1"
-            PuPlayer.LabelSet   pBackglass, "lblPlayer1",             "Player 1",                        1,  "{}"
-            PuPlayer.LabelSet   pBackglass, "lblPlayer1Score",        "00",                        1,  "{}"
         Case 0:     
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 2", InitNewPlayer()
-                PuPlayer.LabelSet   pBackglass, "lblPlayer2",         "Player 2",                        1,  "{}"
-                PuPlayer.LabelSet   pBackglass, "lblPlayer2Score",    "00",                        1,  "{}"
             End If
         Case 1:
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 3", InitNewPlayer()
-                PuPlayer.LabelSet   pBackglass, "lblPlayer3",         "Player 3",                        1,  "{}"
-                PuPlayer.LabelSet   pBackglass, "lblPlayer3Score",    "00",                        1,  "{}"
             End If     
         Case 2:   
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 4", InitNewPlayer()
-                PuPlayer.LabelSet   pBackglass, "lblPlayer4",         "Player 4",                        1,  "{}"
-                PuPlayer.LabelSet   pBackglass, "lblPlayer4Score",    "00",                        1,  "{}"
             End If  
             canAddPlayers = False
     End Select
@@ -58,10 +50,10 @@ End Function
 '****************************
 ' Setup Player
 ' Event Listeners:  
-    AddPinEventListener START_GAME,    "SetupPlayer"
-    AddPinEventListener NEXT_PLAYER,   "SetupPlayer"
+    AddPinEventListener START_GAME,  "start_game_setup",  "SetupPlayer", 1000, Null
+    AddPinEventListener NEXT_PLAYER, "next_player_setup",  "SetupPlayer", 1000, Null
 '
 '*****************************
-Sub SetupPlayer()
+Function SetupPlayer(args)
     EmitAllPlayerEvents()
-End Sub
+End Function

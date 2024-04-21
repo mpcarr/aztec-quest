@@ -1,4 +1,4 @@
-Include("scripts\dest\tablescript.vbs")
+Include("scripts\dest\vpx\tablescript.vbs")
 Dim objFSO,objTextFile
 Sub Include (strFile)
 	'Create objects for opening text file

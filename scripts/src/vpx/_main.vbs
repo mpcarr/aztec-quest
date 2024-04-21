@@ -29,8 +29,12 @@ Const RampRollVolume = 0.5		'Level of ramp rolling volume. Value between 0 and 1
 '----- VR Room -----
 Const VRRoom = 0				'0 - VR Room off, 1 - Minimal Room, 2 - Ultra Minimal Room
 
+Dim haspup : haspup = false
+
 Dim GameTilted : GameTilted = False
 Dim gameDebugger : Set gameDebugger = new AdvGameDebugger
+Dim debugLog : Set debugLog = (new DebugLogFile)()
+Dim debugEnabled : debugEnabled = True
 '*******************************************
 '  Constants and Global Variables
 '*******************************************
@@ -52,10 +56,9 @@ BIP = 0
 Dim BIPL					'Ball in plunger lane
 BIPL = False
 
-
-Const IMPowerSetting = 50 			'Plunger Power
-Const IMTime = 1.1        			'Time in seconds for Full Plunge
-Dim plungerIM
+'Const IMPowerSetting = 50 			'Plunger Power
+'Const IMTime = 1.1        			'Time in seconds for Full Plunge
+'Dim plungerIM
 
 Dim lightCtrl : Set lightCtrl = new LStateController
 Dim gilvl : gilvl = 0  'General Illumination light state tracked for Dynamic Ball Shadows
@@ -103,18 +106,17 @@ Sub Table1_Init
 		xx.visible = True
 	Next
 
-	Set plungerIM = New cvpmImpulseP
-	With plungerIM
-		.InitImpulseP swPlunger, IMPowerSetting, IMTime
-		.Random 1.5
-		.InitExitSnd SoundFX("fx_kicker", DOFContactors), SoundFX("fx_solenoid", DOFContactors)
-		.CreateEvents "plungerIM"
-	End With
+	'Set plungerIM = New cvpmImpulseP
+	'With plungerIM
+	'	.InitImpulseP sw_plunger, IMPowerSetting, IMTime
+	'	.Random 1.5
+	'	.InitExitSnd SoundFX("fx_kicker", DOFContactors), SoundFX("fx_solenoid", DOFContactors)
+	'	.CreateEvents "plungerIM"
+	'End With
 	PlayVPXSeq
 	
 	DTDrop 1
-
-	BuildPinEventSelectCase
+	PuPInit
 	BuildPlayerEventSelectCase
 End Sub
 

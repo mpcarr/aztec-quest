@@ -413,7 +413,7 @@ Class StandupTarget
 End Class
 
 'Define a variable for each stand-up target
-Dim ST11, ST12, ST13
+Dim ST11, ST12, ST13, ST15, ST16, ST17
 
 'Set array with stand-up target objects
 '
@@ -429,14 +429,18 @@ Dim ST11, ST12, ST13
 'these are inclined primitives to simulate hitting a bent target and should provide so z velocity on high speed impacts
 
 
-Set ST11 = (new StandupTarget)(sw11, BM_sw11 ,11 , 0)
-'Set ST12 = (new StandupTarget)(sw12, psw12,12, 0)
-'Set ST13 = (new StandupTarget)(sw13, psw13,13, 0)
+Set ST11 = (new StandupTarget)(sw11, BM_sw11,11 , 0)
+Set ST12 = (new StandupTarget)(sw12, BM_sw11,12, 0)
+Set ST13 = (new StandupTarget)(sw13, BM_sw11,13, 0)
+
+Set ST15 = (new StandupTarget)(sw15, BM_sw15,15 , 0)
+Set ST16 = (new StandupTarget)(sw16, BM_sw16,16, 0)
+Set ST17 = (new StandupTarget)(sw17, BM_sw17,17, 0)
 
 'Add all the Stand-up Target Arrays to Stand-up Target Animation Array
 '   STAnimationArray = Array(ST1, ST2, ....)
 Dim STArray
-STArray = Array()
+STArray = Array(ST11, ST12, ST13, ST15, ST16, ST17)
 
 'Configure the behavior of Stand-up Targets
 Const STAnimStep = 1.5  'vpunits per animation step (control return to Start)
