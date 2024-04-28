@@ -338,7 +338,7 @@ Function BallSaveEventHandler(args)
             End If
         Case "auto_launch"
             If PlungerDevice.HasBall = True Then
-                'PlungerDevice.Eject
+                PlungerDevice.Eject
             Else
                 SetDelay ballSave.Name&"_auto_launch", "BallSaveEventHandler" , Array(Array("auto_launch", ballSave), Null), 500
             End If
@@ -6332,7 +6332,6 @@ Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
 
 Dim ball_saves_default : Set ball_saves_default = (new BallSave)("default", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", true, 1, True)
-Dim ball_saves_mode1 : Set ball_saves_mode1 = (new BallSave)("mode1", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", false, 1, True)
 Dim balldevice_plunger : Set balldevice_plunger = (new BallDevice)("plunger", "sw_plunger", Null, 3, True, 0, 50, "y-up", True)
 
 

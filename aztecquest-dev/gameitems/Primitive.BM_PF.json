@@ -1,13 +1,13 @@
 {
   "Primitive": {
     "position": {
-      "x": 476.00003,
-      "y": 1107.4988,
-      "z": -17.687061
+      "x": 0.0,
+      "y": -0.0,
+      "z": -0.01
     },
     "size": {
       "x": 1.0,
-      "y": 1.0,
+      "y": 0.999999,
       "z": 1.0
     },
     "rot_and_tra": [
@@ -55,7 +55,7 @@
     "mesh_file_name": "VLM.BM.PF",
     "depth_bias": -500.0,
     "add_blend": false,
-    "use_depth_mask": true,
+    "use_depth_mask": false,
     "alpha": 100.0,
     "color": "#ff00ffff",
     "light_map": "",

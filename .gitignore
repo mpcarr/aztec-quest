@@ -6,3 +6,5 @@ mpf/logs
 *.dmp
 crash.txt
 mpf-vpcom-bridge.txt
+aztecquest-dev - VLM.vpx
+aztecquest-dev.ini
