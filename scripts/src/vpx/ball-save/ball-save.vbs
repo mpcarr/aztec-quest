@@ -132,7 +132,7 @@ Function BallSaveEventHandler(args)
             End If
         Case "auto_launch"
             If PlungerDevice.HasBall = True Then
-                'PlungerDevice.Eject
+                PlungerDevice.Eject
             Else
                 SetDelay ballSave.Name&"_auto_launch", "BallSaveEventHandler" , Array(Array("auto_launch", ballSave), Null), 500
             End If
