@@ -7,7 +7,7 @@ module.exports = function (grunt) {
       },
       mpf: {
         src: ['src/vpx/**/*.vbs', 'src/game/**/*.vbs', '!src/unittests/**/*.vbs', '!src/**/*.test.vbs', '!src/**/*-vpx.vbs'],
-        dest: 'dest/mpf/tablescript.vbs',
+        dest: 'dest/vpx/tablescript.vbs',
       },
     },
     exec: {

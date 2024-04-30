@@ -1,3 +1,13 @@
+'Aztec Quest by Flux
+
+
+Option Explicit
+Randomize
+
+On Error Resume Next
+ExecuteGlobal GetTextFile("controller.vbs")
+If Err Then MsgBox "You need the controller.vbs in order to run this table, available in the vp10 package"
+On Error GoTo 0
 
 On Error Resume Next
 Dim MPFController : Set MPFController = CreateObject("MPF.Controller")
@@ -10,7 +20,121 @@ MPFController.Switch("0-0-11")=1
 If Err Then MsgBox "MPF Not Setup"
 On Error GoTo 0
 
+'*******************************************
+'  User Options
+'*******************************************
 
+'----- DMD Options -----
+Const UseFlexDMD = 0			'0 = no FlexDMD, 1 = enable FlexDMD
+Const FlexONPlayfield = False	'False = off, True=DMD on playfield ( vrroom overrides this )
+
+'----- Shadow Options -----
+Const DynamicBallShadowsOn = 1	'0 = no dynamic ball shadow ("triangles" near slings and such), 1 = enable dynamic ball shadow
+Const AmbientBallShadowOn = 1	'0 = Static shadow under ball ("flasher" image, like JP's), 1 = Moving ball shadow ("primitive" object, like ninuzzu's) - This is the only one that behaves like a true shadow!, 2 = flasher image shadow, but it moves like ninuzzu's
+
+'----- General Sound Options -----
+Const VolumeDial = 0.8			'Overall Mechanical sound effect volume. Recommended values should be no greater than 1.
+Const BallRollVolume = 0.5		'Level of ball rolling volume. Value between 0 and 1
+Const RampRollVolume = 0.5		'Level of ramp rolling volume. Value between 0 and 1
+
+'----- VR Room -----
+Const VRRoom = 0				'0 - VR Room off, 1 - Minimal Room, 2 - Ultra Minimal Room
+
+Dim haspup : haspup = false
+
+Dim GameTilted : GameTilted = False
+Dim gameDebugger : Set gameDebugger = new AdvGameDebugger
+Dim debugLog : Set debugLog = (new DebugLogFile)()
+Dim debugEnabled : debugEnabled = True
+'*******************************************
+'  Constants and Global Variables
+'*******************************************
+
+Const UsingROM = False		'The UsingROM flag is to indicate code that requires ROM usage. Mostly for instructional purposes only.
+
+Const BallSize = 50			'Ball diameter in VPX units; must be 50
+Const BallMass = 1			'Ball mass must be 1
+Const tnob = 7				'Total number of balls the table can hold
+Const lob = 2				'Locked balls
+Const cGameName = "aztecquest"	'The unique alphanumeric name for this table
+
+Dim tablewidth
+tablewidth = Table1.width
+Dim tableheight
+tableheight = Table1.height
+Dim BIP						'Balls in play
+BIP = 0
+Dim BIPL					'Ball in plunger lane
+BIPL = False
+
+'Const IMPowerSetting = 50 			'Plunger Power
+'Const IMTime = 1.1        			'Time in seconds for Full Plunge
+'Dim plungerIM
+
+Dim lightCtrl : Set lightCtrl = new LStateController
+Dim gilvl : gilvl = 0  'General Illumination light state tracked for Dynamic Ball Shadows
+
+'*******************************************
+'  Table Initialization and Exiting
+'*******************************************
+
+LoadCoreFiles
+Sub LoadCoreFiles
+	On Error Resume Next
+	ExecuteGlobal GetTextFile("core.vbs") 'TODO: drop-in replacement for vpmTimer (maybe vpwQueueManager) and cvpmDictionary (Scripting.Dictionary) to remove core.vbs dependency
+	If Err Then MsgBox "Can't open core.vbs"
+	On Error GoTo 0
+End Sub
+
+Dim tmntproBall1, tmntproBall2, tmntproBall3, tmntproBall4, tmntproBall5, gBOT, tmag, NewtonBall, CaptiveBall
+
+Sub Table1_Init
+	Dim i
+	
+	vpmMapLights alights
+	lightCtrl.RegisterLights "VPX"
+	'waterfalldiverter.isdropped=1
+
+	'Ball initializations need for physical trough
+	Set tmntproBall1 = swTrough1.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set tmntproBall2 = swTrough2.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set tmntproBall3 = swTrough3.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set tmntproBall4 = swTrough4.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set tmntproBall5 = swTrough5.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	
+	'*** Use gBOT in the script wherever BOT is normally used. Then there is no need for GetBalls calls ***
+	gBOT = Array( tmntproBall1, tmntproBall2, tmntproBall3, tmntproBall4, tmntproBall5)
+	
+	Dim xx
+	
+	' Add balls to shadow dictionary
+	For Each xx In gBOT
+		bsDict.Add xx.ID, bsNone
+	Next
+	
+	' Make drop target shadows visible
+	For Each xx In ShadowDT
+		xx.visible = True
+	Next
+
+	'Set plungerIM = New cvpmImpulseP
+	'With plungerIM
+	'	.InitImpulseP sw_plunger, IMPowerSetting, IMTime
+	'	.Random 1.5
+	'	.InitExitSnd SoundFX("fx_kicker", DOFContactors), SoundFX("fx_solenoid", DOFContactors)
+	'	.CreateEvents "plungerIM"
+	'End With
+	PlayVPXSeq
+	
+	DTDrop 1
+	PuPInit
+	'BuildPlayerEventSelectCase
+End Sub
+
+
+Sub Table1_Exit
+	gameDebugger.Disconnect
+End Sub
 
 'Aztec Quest by Flux
 
@@ -43,7 +167,7 @@ Const RampRollVolume = 0.5		'Level of ramp rolling volume. Value between 0 and 1
 '----- VR Room -----
 Const VRRoom = 0				'0 - VR Room off, 1 - Minimal Room, 2 - Ultra Minimal Room
 
-Dim haspup : haspup = true
+Dim haspup : haspup = false
 
 Dim GameTilted : GameTilted = False
 Dim gameDebugger : Set gameDebugger = new AdvGameDebugger
@@ -149,6 +273,7 @@ Class BallDevice
     Private m_eject_angle
     Private m_eject_strength
     Private m_eject_direction
+    Private m_default_device
     Private m_debug
 
 	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
@@ -163,6 +288,7 @@ Class BallDevice
         m_eject_direction = eject_direction
         m_ball=False
         m_debug = debug_on
+        m_default_device = default_device
         If default_device = True Then
             Set PlungerDevice = Me
         End If
@@ -174,7 +300,10 @@ Class BallDevice
     Public Sub BallEnter(ball)
         RemoveDelay m_name & "_eject_timeout"
         Set m_ball = ball
-        Log "Ball Entered"
+        Log "Ball Entered"        
+        If m_default_device = False Then
+            SetDelay m_name & "_eject_attempt", "BallDeviceEventHandler", Array(Array("ball_eject", Me), m_ball), 500
+        End If
     End Sub
 
     Public Sub BallExiting(ball)
@@ -195,7 +324,11 @@ Class BallDevice
         Select Case m_eject_direction
             Case "y-up"
                 m_ball.vely = sin(rangle)*m_eject_strength
+            Case "z-up"
+                m_ball.z = m_ball.z + 30
+                m_ball.velz = m_eject_strength        
         End Select
+        SoundSaucerKick 1, m_ball
     End Sub
 
     Private Sub Log(message)
@@ -212,6 +345,8 @@ Sub BallDeviceEventHandler(args)
     Select Case evt
         Case "ball_enter"
             ballDevice.BallEnter ball
+        Case "ball_eject"
+            ballDevice.Eject
         Case "ball_exiting"
             ballDevice.BallExiting ball
         Case "eject_timeout"
@@ -352,7 +487,7 @@ Function BallSaveEventHandler(args)
             End If
         Case "auto_launch"
             If PlungerDevice.HasBall = True Then
-                'PlungerDevice.Eject
+                PlungerDevice.Eject
             Else
                 SetDelay ballSave.Name&"_auto_launch", "BallSaveEventHandler" , Array(Array("auto_launch", ballSave), Null), 500
             End If
@@ -6168,20 +6303,6 @@ End Function
 '******************************************************
 
 
-Sub sw39001_Hit()
-    set KickerBall39 = activeball
-    SoundSaucerLock()
-    sw39001.TimerEnabled = True
-    debug.print("hitsw39")
-End Sub
-Sub sw39001_Timer()
-    debug.print("kicksw39")
-	sw39001.TimerEnabled = False
-    SoundSaucerKick 1, sw39001
-    KickBall KickerBall39, 0, 0, 60, 30
-End Sub
-
-
 Sub Kicker001_Hit()
     set KickerBall40 = activeball
     SoundSaucerLock()
@@ -6366,9 +6487,10 @@ Dim playerEvents : Set playerEvents = CreateObject("Scripting.Dictionary")
 Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
 
-Dim ball_saves_default : Set ball_saves_default = (new BallSave)("default", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", true, 1, True)
-Dim ball_saves_mode1 : Set ball_saves_mode1 = (new BallSave)("mode1", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", false, 1, True)
-Dim balldevice_plunger : Set balldevice_plunger = (new BallDevice)("plunger", "sw_plunger", Null, 3, True, 0, 50, "y-up", True)
+Dim ball_saves_default : Set ball_saves_default = (new BallSave)("default", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", true, 1, False)
+Dim balldevice_plunger : Set balldevice_plunger = (new BallDevice)("plunger", "sw_plunger", Null, 3, True, 0, 50, "y-up", False)
+Dim balldevice_cave : Set balldevice_cave = (new BallDevice)("cave", "sw39", Null, 2, False, 0, 60, "z-up", True)
+
 
 
 '******************************************************
@@ -6571,7 +6693,6 @@ Function ReleaseBall(args)
     debugLog.WriteToLog "Release Ball", "Just Kicked"
     BIP = BIP + 1
     RandomSoundBallRelease swTrough1
-    PuPlayer.LabelSet   pBackglass, "lblBall",      "Ball " & GetPlayerState(CURRENT_BALL),                        1,  "{}"
 End Function
 
 
@@ -7276,6 +7397,10 @@ Dim pUseFramePos : pUseFramePos=1     'DO NOT CHANGE, this is pupdmd author sett
 
 '*************  starts PUP system,  must be called AFTER b2s/controller running so put in last line of table1_init
 Sub PuPInit
+
+    If haspup = False Then 
+        Exit Sub
+    End If
     If haspup = True then Set PuPlayer = CreateObject("PinUpPlayer.PinDisplay")   
     If haspup = True then PuPlayer.B2SInit "", pGameName
 
@@ -7487,25 +7612,17 @@ Sub AddPlayer()
         Case -1:
             playerState.Add "PLAYER 1", InitNewPlayer()
             currentPlayer = "PLAYER 1"
-            PuPlayer.LabelSet   pBackglass, "lblPlayer1",             "Player 1",                        1,  "{}"
-            PuPlayer.LabelSet   pBackglass, "lblPlayer1Score",        "00",                        1,  "{}"
         Case 0:     
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 2", InitNewPlayer()
-                PuPlayer.LabelSet   pBackglass, "lblPlayer2",         "Player 2",                        1,  "{}"
-                PuPlayer.LabelSet   pBackglass, "lblPlayer2Score",    "00",                        1,  "{}"
             End If
         Case 1:
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 3", InitNewPlayer()
-                PuPlayer.LabelSet   pBackglass, "lblPlayer3",         "Player 3",                        1,  "{}"
-                PuPlayer.LabelSet   pBackglass, "lblPlayer3Score",    "00",                        1,  "{}"
             End If     
         Case 2:   
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 4", InitNewPlayer()
-                PuPlayer.LabelSet   pBackglass, "lblPlayer4",         "Player 4",                        1,  "{}"
-                PuPlayer.LabelSet   pBackglass, "lblPlayer4Score",    "00",                        1,  "{}"
             End If  
             canAddPlayers = False
     End Select

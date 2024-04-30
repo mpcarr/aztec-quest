@@ -9,5 +9,3 @@ MPFController.Switch("0-0-10")=1
 MPFController.Switch("0-0-11")=1
 If Err Then MsgBox "MPF Not Setup"
 On Error GoTo 0
-
-

@@ -125,226 +125,6 @@ Sub Table1_Exit
 	gameDebugger.Disconnect
 End Sub
 
-Class BallDevice
-
-    Private m_name
-    Private m_ball_switches
-    Private m_player_controlled_eject_event
-    Private m_eject_timeouts
-    Private m_ball
-    Private m_eject_angle
-    Private m_eject_strength
-    Private m_eject_direction
-    Private m_debug
-
-	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
-  
-	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, eject_angle, eject_strength, eject_direction, debug_on)
-        m_ball_switches = ball_switches
-        m_player_controlled_eject_event = player_controlled_eject_event
-        m_eject_timeouts = eject_timeouts * 1000
-        m_name = "balldevice_"&name
-        m_eject_angle = eject_angle
-        m_eject_strength = eject_strength
-        m_eject_direction = eject_direction
-        m_ball=False
-        m_debug = debug_on
-        If default_device = True Then
-            Set PlungerDevice = Me
-        End If
-        AddPinEventListener m_ball_switches&"_active", m_name & "_ball_enter", "BallDeviceEventHandler", 1000, Array("ball_enter", Me)
-        AddPinEventListener m_ball_switches&"_inactive", m_name & "_ball_exiting", "BallDeviceEventHandler", 1000, Array("ball_exiting", Me)
-	  Set Init = Me
-	End Function
-
-    Public Sub BallEnter(ball)
-        RemoveDelay m_name & "_eject_timeout"
-        Set m_ball = ball
-        Log "Ball Entered"
-    End Sub
-
-    Public Sub BallExiting(ball)
-        SetDelay m_name & "_eject_timeout", "BallDeviceEventHandler", Array(Array("eject_timeout", Me), m_ball), m_eject_timeouts
-        Log "Ball Exiting"
-    End Sub
-
-    Public Sub BallExitSuccess(ball)
-        DispatchPinEvent m_name & "_ball_eject_success", Null
-        m_ball = Null
-        Log "Ball successfully exited"
-    End Sub
-
-    Public Sub Eject
-        Log "Ejecting."
-        dim rangle
-	    rangle = PI * (m_eject_angle - 90) / 180
-        Select Case m_eject_direction
-            Case "y-up"
-                m_ball.vely = sin(rangle)*m_eject_strength
-        End Select
-    End Sub
-
-    Private Sub Log(message)
-        If m_debug = True Then
-            debugLog.WriteToLog m_name, message
-        End If
-    End Sub
-End Class
-
-Sub BallDeviceEventHandler(args)
-    Dim ownProps, ball : ownProps = args(0) : Set ball = args(1) 
-    Dim evt : evt = ownProps(0)
-    Dim ballDevice : Set ballDevice = ownProps(1)
-    Select Case evt
-        Case "ball_enter"
-            ballDevice.BallEnter ball
-        Case "ball_exiting"
-            ballDevice.BallExiting ball
-        Case "eject_timeout"
-            ballDevice.BallExitSuccess ball
-    End Select
-End Sub
-Class BallSave
-
-    Private m_name
-    Private m_active_time
-    Private m_grace_period
-    Private m_enable_events
-    Private m_timer_start_events
-    Private m_auto_launch
-    Private m_balls_to_save
-    Private m_enabled
-    Private m_timer_started
-    Private m_tick
-    Private m_in_grace
-    Private m_in_hurry_up
-    Private m_hurry_up_time
-    Private m_debug
-
-    Public Property Get Name(): Name = m_name: End Property
-    Public Property Get AutoLaunch(): AutoLaunch = m_auto_launch: End Property
-  
-
-	Public default Function init(name, active_time, grace_period, hurry_up_time, enable_events, timer_start_events, auto_launch, balls_to_save, debug_on)
-        m_name = "ball_saves_"&name
-        m_active_time = active_time*1000
-	    m_grace_period = grace_period*1000
-        m_hurry_up_time = hurry_up_time*1000
-        m_enable_events = enable_events
-        m_timer_start_events = timer_start_events
-	    m_auto_launch = auto_launch
-	    m_balls_to_save = balls_to_save
-        m_enabled = False
-        m_timer_started = False
-        m_debug = debug_on
-        AddPinEventListener m_enable_events, m_name & "_enable", "BallSaveEventHandler", 1000, Array("enable", Me)
-        AddPinEventListener m_timer_start_events, m_name & "_timer_start", "BallSaveEventHandler", 1000, Array("timer_start", Me)
-	  Set Init = Me
-	End Function
-
-    Public Sub Enable
-        If m_enabled = True Then
-            Exit Sub
-        End If
-        m_enabled = True
-        Log "Enabling. Auto launch: "&m_auto_launch&", Balls to save: "&m_balls_to_save&", Active time: "& m_active_time&"ms"
-        AddPinEventListener "ball_drain", m_name & "_ball_drain", "BallSaveEventHandler", 1000, Array("drain", Me)
-        DispatchPinEvent m_name&"_enabled", Null
-    End Sub
-
-    Public Sub Disable
-        'Disable ball save
-        If m_enabled = False Then
-            Exit Sub
-        End If
-        m_enabled = False
-        m_timer_started = False
-        Log "Disabling..."
-        RemovePinEventListener "ball_drain", m_name & "_ball_drain"
-        RemoveDelay "_ball_saves_"&m_name&"_disable"
-        RemoveDelay m_name&"_grace_period"
-        RemoveDelay m_name&"_hurry_up_time"
-        DispatchPinEvent m_name&"_disabled", Null
-    End Sub
-
-    Sub Drain(ballsToSave)
-        If m_enabled = True And ballsToSave > 0 Then
-            Log "Ball(s) drained while active. Requesting new one(s). Auto launch: "& m_auto_launch
-            DispatchPinEvent m_name&"_saving_ball", Null
-            SetDelay m_name&"_queued_release", "BallSaveEventHandler" , Array(Array("queue_release", Me),Null), 1000
-        End If
-    End Sub
-
-    Public Sub TimerStart
-        'Start the timer.
-        'This is usually called after the ball was ejected while the ball save may have been enabled earlier.
-        If m_timer_started=True Or m_enabled=False Then
-            Exit Sub
-        End If
-        m_timer_started=True
-        DispatchPinEvent m_name&"_timer_start", Null
-        If m_active_time > 0 Then
-            Log "Starting ball save timer: " & m_active_time
-            Log "gametime: "& gametime & ". disabled at: " & gametime+m_active_time+m_grace_period
-            SetDelay m_name&"_disable", "BallSaveEventHandler" , Array(Array("disable", Me),Null), m_active_time+m_grace_period
-            SetDelay m_name&"_grace_period", "BallSaveEventHandler", Array(Array("grace_period", Me),Null), m_active_time
-            SetDelay m_name&"_hurry_up_time", "BallSaveEventHandler", Array(Array("hurry_up_time", Me), Null), m_active_time-m_hurry_up_time
-        End If
-    End Sub
-
-    Public Sub GracePeriod
-        DispatchPinEvent m_name & "_grace_period", Null
-    End Sub
-
-    Public Sub HurryUpTime
-        DispatchPinEvent m_name & "_hurry_up_time", Null
-    End Sub
-
-    Private Sub Log(message)
-        If m_debug = True Then
-            debugLog.WriteToLog m_name, message
-        End If
-    End Sub
-End Class
-
-Function BallSaveEventHandler(args)
-    Dim ownProps, ballsToSave : ownProps = args(0) : ballsToSave = args(1) 
-    Dim evt : evt = ownProps(0)
-    Dim ballSave : Set ballSave = ownProps(1)
-    Select Case evt
-        Case "enable"
-            ballSave.Enable
-        Case "disable"
-            ballSave.Disable
-        Case "grace_period"
-            ballSave.GracePeriod
-        Case "hurry_up_time"
-            ballSave.HurryUpTime
-        Case "drain"
-            If ballsToSave > 0 Then
-                ballSave.Drain ballsToSave
-                ballsToSave = ballsToSave - 1
-            End If
-        Case "timer_start"
-            ballSave.TimerStart
-        Case "queue_release"
-            If PlungerDevice.HasBall = False And ballInReleasePostion = True Then
-                ReleaseBall(Null)
-                If ballSave.AutoLaunch = True Then
-                    SetDelay ballSave.Name&"_auto_launch", "BallSaveEventHandler" , Array(Array("auto_launch", ballSave),Null), 500
-                End If
-            Else
-                SetDelay ballSave.Name&"_queued_release", "BallSaveEventHandler" , Array(Array("queue_release", ballSave), Null), 1000
-            End If
-        Case "auto_launch"
-            If PlungerDevice.HasBall = True Then
-                PlungerDevice.Eject
-            Else
-                SetDelay ballSave.Name&"_auto_launch", "BallSaveEventHandler" , Array(Array("auto_launch", ballSave), Null), 500
-            End If
-    End Select
-    BallSaveEventHandler = ballsToSave
-End Function
 
 '***************************************************************
 '****  VPW DYNAMIC BALL SHADOWS by Iakki, Apophis, and Wylte
@@ -1251,6 +1031,283 @@ Sub DelayTick()
         End If
     Next
 End Sub
+Class BallDevice
+
+    Private m_name
+    Private m_ball_switches
+    Private m_player_controlled_eject_event
+    Private m_eject_timeouts
+    Private m_ball
+    Private m_eject_angle
+    Private m_eject_strength
+    Private m_eject_direction
+    Private m_default_device
+    Private m_debug
+
+	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
+  
+	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, eject_angle, eject_strength, eject_direction, debug_on)
+        m_ball_switches = ball_switches
+        m_player_controlled_eject_event = player_controlled_eject_event
+        m_eject_timeouts = eject_timeouts * 1000
+        m_name = "balldevice_"&name
+        m_eject_angle = eject_angle
+        m_eject_strength = eject_strength
+        m_eject_direction = eject_direction
+        m_ball=False
+        m_debug = debug_on
+        m_default_device = default_device
+        If default_device = True Then
+            Set PlungerDevice = Me
+        End If
+        AddPinEventListener m_ball_switches&"_active", m_name & "_ball_enter", "BallDeviceEventHandler", 1000, Array("ball_enter", Me)
+        AddPinEventListener m_ball_switches&"_inactive", m_name & "_ball_exiting", "BallDeviceEventHandler", 1000, Array("ball_exiting", Me)
+	  Set Init = Me
+	End Function
+
+    Public Sub BallEnter(ball)
+        RemoveDelay m_name & "_eject_timeout"
+        Set m_ball = ball
+        Log "Ball Entered"        
+        If m_default_device = False Then
+            SetDelay m_name & "_eject_attempt", "BallDeviceEventHandler", Array(Array("ball_eject", Me), m_ball), 500
+        End If
+    End Sub
+
+    Public Sub BallExiting(ball)
+        SetDelay m_name & "_eject_timeout", "BallDeviceEventHandler", Array(Array("eject_timeout", Me), m_ball), m_eject_timeouts
+        Log "Ball Exiting"
+    End Sub
+
+    Public Sub BallExitSuccess(ball)
+        DispatchPinEvent m_name & "_ball_eject_success", Null
+        m_ball = Null
+        Log "Ball successfully exited"
+    End Sub
+
+    Public Sub Eject
+        Log "Ejecting."
+        dim rangle
+	    rangle = PI * (m_eject_angle - 90) / 180
+        Select Case m_eject_direction
+            Case "y-up"
+                m_ball.vely = sin(rangle)*m_eject_strength
+            Case "z-up"
+                m_ball.z = m_ball.z + 30
+                m_ball.velz = m_eject_strength        
+        End Select
+        SoundSaucerKick 1, m_ball
+    End Sub
+
+    Private Sub Log(message)
+        If m_debug = True Then
+            debugLog.WriteToLog m_name, message
+        End If
+    End Sub
+End Class
+
+Sub BallDeviceEventHandler(args)
+    Dim ownProps, ball : ownProps = args(0) : Set ball = args(1) 
+    Dim evt : evt = ownProps(0)
+    Dim ballDevice : Set ballDevice = ownProps(1)
+    Select Case evt
+        Case "ball_enter"
+            ballDevice.BallEnter ball
+        Case "ball_eject"
+            ballDevice.Eject
+        Case "ball_exiting"
+            ballDevice.BallExiting ball
+        Case "eject_timeout"
+            ballDevice.BallExitSuccess ball
+    End Select
+End Sub
+Class BallSave
+
+    Private m_name
+    Private m_active_time
+    Private m_grace_period
+    Private m_enable_events
+    Private m_timer_start_events
+    Private m_auto_launch
+    Private m_balls_to_save
+    Private m_enabled
+    Private m_timer_started
+    Private m_tick
+    Private m_in_grace
+    Private m_in_hurry_up
+    Private m_hurry_up_time
+    Private m_debug
+
+    Public Property Get Name(): Name = m_name: End Property
+    Public Property Get AutoLaunch(): AutoLaunch = m_auto_launch: End Property
+  
+
+	Public default Function init(name, active_time, grace_period, hurry_up_time, enable_events, timer_start_events, auto_launch, balls_to_save, debug_on)
+        m_name = "ball_saves_"&name
+        m_active_time = active_time*1000
+	    m_grace_period = grace_period*1000
+        m_hurry_up_time = hurry_up_time*1000
+        m_enable_events = enable_events
+        m_timer_start_events = timer_start_events
+	    m_auto_launch = auto_launch
+	    m_balls_to_save = balls_to_save
+        m_enabled = False
+        m_timer_started = False
+        m_debug = debug_on
+        AddPinEventListener m_enable_events, m_name & "_enable", "BallSaveEventHandler", 1000, Array("enable", Me)
+        AddPinEventListener m_timer_start_events, m_name & "_timer_start", "BallSaveEventHandler", 1000, Array("timer_start", Me)
+	  Set Init = Me
+	End Function
+
+    Public Sub Enable
+        If m_enabled = True Then
+            Exit Sub
+        End If
+        m_enabled = True
+        Log "Enabling. Auto launch: "&m_auto_launch&", Balls to save: "&m_balls_to_save&", Active time: "& m_active_time&"ms"
+        AddPinEventListener "ball_drain", m_name & "_ball_drain", "BallSaveEventHandler", 1000, Array("drain", Me)
+        DispatchPinEvent m_name&"_enabled", Null
+    End Sub
+
+    Public Sub Disable
+        'Disable ball save
+        If m_enabled = False Then
+            Exit Sub
+        End If
+        m_enabled = False
+        m_timer_started = False
+        Log "Disabling..."
+        RemovePinEventListener "ball_drain", m_name & "_ball_drain"
+        RemoveDelay "_ball_saves_"&m_name&"_disable"
+        RemoveDelay m_name&"_grace_period"
+        RemoveDelay m_name&"_hurry_up_time"
+        DispatchPinEvent m_name&"_disabled", Null
+    End Sub
+
+    Sub Drain(ballsToSave)
+        If m_enabled = True And ballsToSave > 0 Then
+            Log "Ball(s) drained while active. Requesting new one(s). Auto launch: "& m_auto_launch
+            DispatchPinEvent m_name&"_saving_ball", Null
+            SetDelay m_name&"_queued_release", "BallSaveEventHandler" , Array(Array("queue_release", Me),Null), 1000
+        End If
+    End Sub
+
+    Public Sub TimerStart
+        'Start the timer.
+        'This is usually called after the ball was ejected while the ball save may have been enabled earlier.
+        If m_timer_started=True Or m_enabled=False Then
+            Exit Sub
+        End If
+        m_timer_started=True
+        DispatchPinEvent m_name&"_timer_start", Null
+        If m_active_time > 0 Then
+            Log "Starting ball save timer: " & m_active_time
+            Log "gametime: "& gametime & ". disabled at: " & gametime+m_active_time+m_grace_period
+            SetDelay m_name&"_disable", "BallSaveEventHandler" , Array(Array("disable", Me),Null), m_active_time+m_grace_period
+            SetDelay m_name&"_grace_period", "BallSaveEventHandler", Array(Array("grace_period", Me),Null), m_active_time
+            SetDelay m_name&"_hurry_up_time", "BallSaveEventHandler", Array(Array("hurry_up_time", Me), Null), m_active_time-m_hurry_up_time
+        End If
+    End Sub
+
+    Public Sub GracePeriod
+        DispatchPinEvent m_name & "_grace_period", Null
+    End Sub
+
+    Public Sub HurryUpTime
+        DispatchPinEvent m_name & "_hurry_up_time", Null
+    End Sub
+
+    Private Sub Log(message)
+        If m_debug = True Then
+            debugLog.WriteToLog m_name, message
+        End If
+    End Sub
+End Class
+
+Function BallSaveEventHandler(args)
+    Dim ownProps, ballsToSave : ownProps = args(0) : ballsToSave = args(1) 
+    Dim evt : evt = ownProps(0)
+    Dim ballSave : Set ballSave = ownProps(1)
+    Select Case evt
+        Case "enable"
+            ballSave.Enable
+        Case "disable"
+            ballSave.Disable
+        Case "grace_period"
+            ballSave.GracePeriod
+        Case "hurry_up_time"
+            ballSave.HurryUpTime
+        Case "drain"
+            If ballsToSave > 0 Then
+                ballSave.Drain ballsToSave
+                ballsToSave = ballsToSave - 1
+            End If
+        Case "timer_start"
+            ballSave.TimerStart
+        Case "queue_release"
+            If PlungerDevice.HasBall = False And ballInReleasePostion = True Then
+                ReleaseBall(Null)
+                If ballSave.AutoLaunch = True Then
+                    SetDelay ballSave.Name&"_auto_launch", "BallSaveEventHandler" , Array(Array("auto_launch", ballSave),Null), 500
+                End If
+            Else
+                SetDelay ballSave.Name&"_queued_release", "BallSaveEventHandler" , Array(Array("queue_release", ballSave), Null), 1000
+            End If
+        Case "auto_launch"
+            If PlungerDevice.HasBall = True Then
+                PlungerDevice.Eject
+            Else
+                SetDelay ballSave.Name&"_auto_launch", "BallSaveEventHandler" , Array(Array("auto_launch", ballSave), Null), 500
+            End If
+    End Select
+    BallSaveEventHandler = ballsToSave
+End Function
+Class DropTarget
+	Private m_primary, m_secondary, m_prim, m_sw, m_animate, m_isDropped
+    Private m_reset_events
+  
+	Public Property Get Primary(): Set Primary = m_primary: End Property
+	Public Property Let Primary(input): Set m_primary = input: End Property
+  
+	Public Property Get Secondary(): Set Secondary = m_secondary: End Property
+	Public Property Let Secondary(input): Set m_secondary = input: End Property
+  
+	Public Property Get Prim(): Set Prim = m_prim: End Property
+	Public Property Let Prim(input): Set m_prim = input: End Property
+  
+	Public Property Get Sw(): Sw = m_sw: End Property
+	Public Property Let Sw(input): m_sw = input: End Property
+  
+	Public Property Get Animate(): Animate = m_animate: End Property
+	Public Property Let Animate(input): m_animate = input: End Property
+  
+	Public Property Get IsDropped(): IsDropped = m_isDropped: End Property
+	Public Property Let IsDropped(input): m_isDropped = input: End Property
+  
+	Public default Function init(primary, secondary, prim, sw, animate, isDropped, reset_events)
+	  Set m_primary = primary
+	  Set m_secondary = secondary
+	  Set m_prim = prim
+	  m_sw = sw
+	  m_animate = animate
+	  m_isDropped = isDropped
+      m_reset_events = reset_events
+      AddPinEventListener reset_events, primary.name & "_droptarget_reset", "DropTargetEventHandler", 1000, Array("droptarget_reset", m_sw)
+	  Set Init = Me
+	End Function
+End Class
+
+Function DropTargetEventHandler(args)
+    Dim ownProps : ownProps = args(0)
+    Dim kwargs : kwargs = args(1)
+    Dim evt : evt = ownProps(0)
+    Dim switch : switch = ownProps(1)
+    Select Case evt
+        Case "droptarget_reset"
+            DTRaise switch
+    End Select
+    DropTargetEventHandler = kwargs
+End Function
 '******************************************************
 ' 	ZRDT:  DROP TARGETS by Rothbauerw
 '******************************************************
@@ -1298,41 +1355,9 @@ End Sub
 '  DROP TARGETS INITIALIZATION
 '******************************************************
 
-Class DropTarget
-	Private m_primary, m_secondary, m_prim, m_sw, m_animate, m_isDropped
-  
-	Public Property Get Primary(): Set Primary = m_primary: End Property
-	Public Property Let Primary(input): Set m_primary = input: End Property
-  
-	Public Property Get Secondary(): Set Secondary = m_secondary: End Property
-	Public Property Let Secondary(input): Set m_secondary = input: End Property
-  
-	Public Property Get Prim(): Set Prim = m_prim: End Property
-	Public Property Let Prim(input): Set m_prim = input: End Property
-  
-	Public Property Get Sw(): Sw = m_sw: End Property
-	Public Property Let Sw(input): m_sw = input: End Property
-  
-	Public Property Get Animate(): Animate = m_animate: End Property
-	Public Property Let Animate(input): m_animate = input: End Property
-  
-	Public Property Get IsDropped(): IsDropped = m_isDropped: End Property
-	Public Property Let IsDropped(input): m_isDropped = input: End Property
-  
-	Public default Function init(primary, secondary, prim, sw, animate, isDropped)
-	  Set m_primary = primary
-	  Set m_secondary = secondary
-	  Set m_prim = prim
-	  m_sw = sw
-	  m_animate = animate
-	  m_isDropped = isDropped
-  
-	  Set Init = Me
-	End Function
-End Class
+
   
 'Define a variable for each drop target
-Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45, DT46, DT47
 
 'Set array with drop target objects
 '
@@ -1351,23 +1376,6 @@ Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45
 '   isDropped:  Boolean which determines whether a drop target is dropped. Set to false if they are initially raised, true if initially dropped.
 '					Use the function DTDropped(switchid) to check a target's drop status.
 
-'Set DT38 = (new DropTarget)(sw38, sw38a, BM_sw38, 38, 0, False)
-'Set DT40 = (new DropTarget)(sw40, sw40a, BM_sw40, 40, 0, False)
-'Set DT45 = (new DropTarget)(sw45, sw45a, BM_sw45, 45, 0, False)
-Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True) 
-'Set DT02 = (new DropTarget)(sw02, sw02a, BM_sw02, 2, 0, False) 
-Set DT04 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False)
-Set DT05 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False)
-Set DT06 = (new DropTarget)(sw06, sw06a, BM_sw06, 6, 0, False)
-'Set DT07 = (new DropTarget)(sw07, sw07a, BM_sw07, 7, 0, False)
-Set DT08 = (new DropTarget)(sw08, sw08a, BM_sw08, 8, 0, False)
-Set DT09 = (new DropTarget)(sw09, sw09a, BM_sw09, 9, 0, False)
-Set DT10 = (new DropTarget)(sw10, sw10a, BM_sw10, 10, 0, False)
-'Set DT46 = (new DropTarget)(sw46, sw46a, BM_sw46, 46, 0, False)
-'Set DT47 = (new DropTarget)(sw47, sw47a, BM_sw47, 47, 0, False)
-
-Dim DTArray
-DTArray = Array(DT01,DT04, DT05, DT06, DT08, DT09, DT10)
 
 'Configure the behavior of Drop Targets.
 Const DTDropSpeed = 80 'in milliseconds
@@ -1532,7 +1540,7 @@ Function DTAnimate(primary, secondary, prim, switch, animate)
 			If UsingROM Then
 				controller.Switch(Switchid mod 100) = 1
 			Else
-				DTAction switchid
+				DTAction switchid, 1
 			End If
 			primary.uservalue = 0
 			DTAnimate = 0
@@ -1589,7 +1597,11 @@ Function DTAnimate(primary, secondary, prim, switch, animate)
 		primary.collidable = 0
 		secondary.collidable = 1
 		DTArray(ind).isDropped = False 'Mark target as not dropped
-		If UsingROM Then controller.Switch(Switchid mod 100) = 0
+		If UsingROM Then 
+			controller.Switch(Switchid mod 100) = 0
+		Else
+			DTAction switchid, 0
+		End If
 	End If
 	
 	If animate =  - 2 And animtime > DTRaiseDelay Then
@@ -1611,12 +1623,6 @@ Function DTDropped(switchid)
 	
 	DTDropped = DTArray(ind).isDropped
 End Function
-
-Sub DTAction(switchid)
-	Select Case switchid
-		
-	End Select
-End Sub
 
 Sub UpdateTargets
 
@@ -2114,8 +2120,8 @@ End Sub
 '*******************************************
 
 '************************* VUKs *****************************
-Dim KickerBall1
-
+Dim KickerBallCave
+	
 Sub KickBall(kball, kangle, kvel, kvelz, kzlift)
 	dim rangle
 	rangle = PI * (kangle - 90) / 180
@@ -6153,20 +6159,6 @@ End Function
 '******************************************************
 
 
-Sub sw39001_Hit()
-    set KickerBall39 = activeball
-    SoundSaucerLock()
-    sw39001.TimerEnabled = True
-    debug.print("hitsw39")
-End Sub
-Sub sw39001_Timer()
-    debug.print("kicksw39")
-	sw39001.TimerEnabled = False
-    SoundSaucerKick 1, sw39001
-    KickBall KickerBall39, 0, 0, 60, 30
-End Sub
-
-
 Sub Kicker001_Hit()
     set KickerBall40 = activeball
     SoundSaucerLock()
@@ -6331,9 +6323,20 @@ Dim playerEvents : Set playerEvents = CreateObject("Scripting.Dictionary")
 Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
 
-Dim ball_saves_default : Set ball_saves_default = (new BallSave)("default", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", true, 1, True)
-Dim balldevice_plunger : Set balldevice_plunger = (new BallDevice)("plunger", "sw_plunger", Null, 3, True, 0, 50, "y-up", True)
+Dim ball_saves_default : Set ball_saves_default = (new BallSave)("default", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", true, 1, False)
+Dim balldevice_plunger : Set balldevice_plunger = (new BallDevice)("plunger", "sw_plunger", Null, 3, True, 0, 50, "y-up", False)
+Dim balldevice_cave : Set balldevice_cave = (new BallDevice)("cave", "sw39", Null, 2, False, 0, 60, "z-up", True)
 
+Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45, DT46, DT47
+Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True, "ball_started") 
+Set DT04 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False, "ball_started")
+Set DT05 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False, "ball_started")
+Set DT06 = (new DropTarget)(sw06, sw06a, BM_sw06, 6, 0, False, "ball_started")
+Set DT08 = (new DropTarget)(sw08, sw08a, BM_sw08, 8, 0, False, "ball_started")
+Set DT09 = (new DropTarget)(sw09, sw09a, BM_sw09, 9, 0, False, "ball_started")
+Set DT10 = (new DropTarget)(sw10, sw10a, BM_sw10, 10, 0, False, "ball_started")
+Dim DTArray
+DTArray = Array(DT01,DT04, DT05, DT06, DT08, DT09, DT10)
 
 '******************************************************
 '*****   Pin Events                                ****
@@ -7603,7 +7606,7 @@ Sub sw10_Hit()
 End Sub
 
 Sub sw45_Hit()
-    DTHit 45
+    'DTHit 45
 End Sub
 
 Sub sw99_Hit()
@@ -7617,6 +7620,49 @@ End Sub
 
 Sub sw_plunger_Unhit()
     DispatchPinEvent "sw_plunger_inactive", ActiveBall
+End Sub
+
+Sub sw39_Hit()
+    SoundSaucerLock()
+    DispatchPinEvent "sw39_active", ActiveBall
+End Sub
+
+Sub sw39_Unhit()
+    DispatchPinEvent "sw39_inactive", ActiveBall
+End Sub
+
+Sub DTAction(switchid, enabled)
+    If enabled = 1 Then
+        Select Case switchid
+            case 4:
+                DispatchPinEvent "sw04_active", Null
+            case 5:
+                DispatchPinEvent "sw05_active", Null
+            case 6:
+                DispatchPinEvent "sw06_active", Null
+            case 8:
+                DispatchPinEvent "sw08_active", Null
+            case 9:
+                DispatchPinEvent "sw09_active", Null
+            case 10:
+                DispatchPinEvent "sw10_active", Null
+        End Select
+    ElseIf enabled = 0 Then
+        Select Case switchid
+            case 4:
+                DispatchPinEvent "sw04_inactive", Null
+            case 5:
+                DispatchPinEvent "sw05_inactive", Null
+            case 6:
+                DispatchPinEvent "sw06_inactive", Null
+            case 8:
+                DispatchPinEvent "sw08_inactive", Null
+            case 9:
+                DispatchPinEvent "sw09_inactive", Null
+            case 10:
+                DispatchPinEvent "sw10_inactive", Null            
+        End Select
+    End If
 End Sub
 
 

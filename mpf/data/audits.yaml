@@ -1,0 +1,28 @@
+events:
+  game_ended: 1
+  game_started: 29
+player:
+  score:
+    average: 0.0
+    top:
+    - 0
+    total: 1
+switches:
+  s_cave_scoop: 25
+  s_dt_map1: 21
+  s_dt_map2: 3
+  s_dt_map3: 3
+  s_dt_map4: 2
+  s_dt_map5: 2
+  s_dt_map6: 3
+  s_left_flipper: 0
+  s_plunger: 79
+  s_right_flipper: 0
+  s_start: 7
+  s_trough1: 60
+  s_trough2: 58
+  s_trough3: 58
+  s_trough4: 58
+  s_trough5: 34
+  s_trough6: 0
+  s_trough_jam: 0

@@ -16,6 +16,21 @@ Sub GameTimer_Timer() 'The game timer interval; should be 10 ms
 			If ChgSol(ii,0) = "0-0-6" and ChgSol(ii,1) Then
 				PlungerDevice.Eject
 			End If
+			If ChgSol(ii,0) = "0-0-5" and ChgSol(ii,1) Then
+				ReleaseBall
+			End If
+			If ChgSol(ii,0) = "0-0-7" and ChgSol(ii,1) Then
+				KickBall KickerBallCave, 0, 0, 60, 30
+				SoundSaucerKick 1, sw39
+			End If
+			If ChgSol(ii,0) = "0-0-8" and ChgSol(ii,1) Then
+				DTRaise 4
+				DTRaise 5
+				DTRaise 6
+				DTRaise 8
+				DTRaise 9
+				DTRaise 10
+			End If
 		Next
 	end If
 End Sub

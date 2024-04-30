@@ -8,6 +8,7 @@ Class BallDevice
     Private m_eject_angle
     Private m_eject_strength
     Private m_eject_direction
+    Private m_default_device
     Private m_debug
 
 	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
@@ -22,6 +23,7 @@ Class BallDevice
         m_eject_direction = eject_direction
         m_ball=False
         m_debug = debug_on
+        m_default_device = default_device
         If default_device = True Then
             Set PlungerDevice = Me
         End If
@@ -33,7 +35,10 @@ Class BallDevice
     Public Sub BallEnter(ball)
         RemoveDelay m_name & "_eject_timeout"
         Set m_ball = ball
-        Log "Ball Entered"
+        Log "Ball Entered"        
+        If m_default_device = False Then
+            SetDelay m_name & "_eject_attempt", "BallDeviceEventHandler", Array(Array("ball_eject", Me), m_ball), 500
+        End If
     End Sub
 
     Public Sub BallExiting(ball)
@@ -54,7 +59,11 @@ Class BallDevice
         Select Case m_eject_direction
             Case "y-up"
                 m_ball.vely = sin(rangle)*m_eject_strength
+            Case "z-up"
+                m_ball.z = m_ball.z + 30
+                m_ball.velz = m_eject_strength        
         End Select
+        SoundSaucerKick 1, m_ball
     End Sub
 
     Private Sub Log(message)
@@ -71,6 +80,8 @@ Sub BallDeviceEventHandler(args)
     Select Case evt
         Case "ball_enter"
             ballDevice.BallEnter ball
+        Case "ball_eject"
+            ballDevice.Eject
         Case "ball_exiting"
             ballDevice.BallExiting ball
         Case "eject_timeout"

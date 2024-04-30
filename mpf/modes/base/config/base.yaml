@@ -1,0 +1,41 @@
+#config_version=5
+mode:
+  start_events: ball_started
+  priority: 2000
+
+#light_player:
+#  mode_base_started:
+#    gi:
+#      color: white
+
+#slide_player:
+#  mode_base_started: attract
+
+#show_player:
+#  ball_save_main_timer_start:
+#    flash_color:
+#      key: ball_save
+#      speed: 2
+#      show_tokens:
+#        lights: ballSave
+#        color: FF1178 
+#  ball_save_main_hurry_up:
+#    flash_color:
+#      key: ball_save
+#      speed: 4
+#      show_tokens:
+#        lights: ballSave
+#        color: FF1178 
+#  ball_save_main_disabled:
+#    ball_save: stop
+
+##ball_saves:
+ # main:
+ #   active_time: 20s
+ #   grace_period: 3s
+ #   hurry_up_time: 5s
+ #   enable_events: mode_base_started
+ #   timer_start_events: balldevice_bd_owl_ball_eject_success
+ #   auto_launch: true
+ #   balls_to_save: -1
+ #   debug: true

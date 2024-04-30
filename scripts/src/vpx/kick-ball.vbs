@@ -4,8 +4,8 @@
 '*******************************************
 
 '************************* VUKs *****************************
-Dim KickerBall1
-
+Dim KickerBallCave
+	
 Sub KickBall(kball, kangle, kvel, kvelz, kzlift)
 	dim rangle
 	rangle = PI * (kangle - 90) / 180

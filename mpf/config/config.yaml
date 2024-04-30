@@ -4,8 +4,22 @@ hardware:
   platform: opp
   driverboards: gen2
 
+bcp:
+  connections:
+    local_display:
+      port: 5050
+  debug: true
+
+modes:
+  - base
+
 opp:
    ports: /dev/ttyACM0, /dev/ttyACM1
+
+displays:
+  window:
+    width: 640
+    height: 160
 
 switches:
   s_left_flipper:
@@ -28,7 +42,26 @@ switches:
     number: 0-0-27
   s_trough_jam:
     number: 0-0-26
-
+  s_plunger:
+    number: 0-0-28
+  s_start:
+    number: 0-0-29
+    tags: start
+  s_cave_scoop:
+    number: 0-0-30
+  s_dt_map1:
+    number: 0-0-31
+  s_dt_map2:
+    number: 0-0-32
+  s_dt_map3:
+    number: 0-0-33
+  s_dt_map4:
+    number: 0-0-34
+  s_dt_map5:
+    number: 0-0-35
+  s_dt_map6:
+    number: 0-0-36
+  
 coils:
   c_flipper_left_main:
     number: 0-0-1
@@ -45,47 +78,76 @@ coils:
   c_trough_eject:
     number: 0-0-5
     default_pulse_ms: 20
+    debug: true
+  c_plunger:
+    number: 0-0-6
+    default_pulse_ms: 20
+  c_cave_scoop:
+    number: 0-0-7
+    default_pulse_ms: 20
+  c_dt_reset:
+    number: 0-0-8
+    default_pulse_ms: 20
+    debug: true
+  c_dt_knockdown_1:
+    number: 0-0-9
+    default_pulse_ms: 20
+  c_dt_knockdown_2:
+    number: 0-0-10
+    default_pulse_ms: 20
+  c_dt_knockdown_3:
+    number: 0-0-11
+    default_pulse_ms: 20
+  c_dt_knockdown_4:
+    number: 0-0-12
+    default_pulse_ms: 20
+  c_dt_knockdown_5:
+    number: 0-0-13
+    default_pulse_ms: 20
+  c_dt_knockdown_6:
+    number: 0-0-14
+    default_pulse_ms: 20
+
+drop_targets:
+  map1:
+    switch: s_dt_map1
+    reset_coil: c_dt_reset
+    knockdown_coil: c_dt_knockdown_1
+  map2:
+    switch: s_dt_map2
+    reset_coil: c_dt_reset
+    knockdown_coil: c_dt_knockdown_2
+  map3:
+    switch: s_dt_map3
+    reset_coil: c_dt_reset
+    knockdown_coil: c_dt_knockdown_3
+  map4:
+    switch: s_dt_map4
+    reset_coil: c_dt_reset
+    knockdown_coil: c_dt_knockdown_4
+  map5:
+    switch: s_dt_map5
+    reset_coil: c_dt_reset
+    knockdown_coil: c_dt_knockdown_5
+  map6:
+    switch: s_dt_map6
+    reset_coil: c_dt_reset
+    knockdown_coil: c_dt_knockdown_6  
 
 playfields:
   playfield:
     tags: default
-    default_source_device: None
+    default_source_device: bd_plunger
 
 flippers:
   left_flipper:
     main_coil: c_flipper_left_main
     hold_coil: c_flipper_left_hold
     activation_switch: s_left_flipper
-    enable_events: machine_reset_phase_3
   right_flipper:
     main_coil: c_flipper_right_main
     hold_coil: c_flipper_right_hold
     activation_switch: s_right_flipper
-    enable_events: machine_reset_phase_3
-
-displays:
-  window:
-    width: 800
-    height: 600
-
-slides:
-  welcome_slide:
-    widgets:
-      - type: text
-        text: PINBALL!
-        font_size: 50
-        color: red
-      - type: rectangle
-        width: 240
-        height: 60
-  attract_started:
-    widgets:
-      - text: ATTRACT MODE
-        type: text
-
-slide_player:
-  init_done: welcome_slide
-  mode_attract_started: attract_started
 
 keyboard:
   debug: yes
@@ -93,3 +155,51 @@ keyboard:
     switch: s_left_flipper
   shift+rshift:
     switch: s_right_flipper
+  1:
+    switch: s_trough1
+    toggle: true
+  2:
+    switch: s_trough2
+    toggle: true
+  3:
+    switch: s_trough3
+    toggle: true
+  4:
+    switch: s_trough4
+    toggle: true
+  5:
+    switch: s_trough5
+    toggle: true
+  p:
+    switch: s_plunger
+    toggle: true
+  s: 
+    switch: s_start
+  j: 
+    switch: s_right_inlane
+
+virtual_platform_start_active_switches:
+  - s_trough1
+  - s_trough2
+  - s_trough3
+
+ball_devices:
+  bd_trough:
+    ball_switches: s_trough1, s_trough2, s_trough3, s_trough4, s_trough5, s_trough6, s_trough_jam
+    eject_coil: c_trough_eject
+    tags: trough, home, drain
+    jam_switch: s_trough_jam
+    eject_coil_jam_pulse: 15ms
+    eject_targets: bd_plunger
+    debug: true
+  bd_plunger:
+    ball_switches: s_plunger
+    eject_coil: c_plunger
+    mechanical_eject: true
+    eject_targets: playfield
+    eject_timeouts: 3s
+  bd_cave_scoop:
+    ball_switches: s_cave_scoop
+    eject_coil: c_cave_scoop
+    mechanical_eject: false
+    eject_timeouts: 2s

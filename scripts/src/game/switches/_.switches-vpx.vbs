@@ -65,7 +65,7 @@ Sub sw10_Hit()
 End Sub
 
 Sub sw45_Hit()
-    DTHit 45
+    'DTHit 45
 End Sub
 
 Sub sw99_Hit()
@@ -79,4 +79,47 @@ End Sub
 
 Sub sw_plunger_Unhit()
     DispatchPinEvent "sw_plunger_inactive", ActiveBall
+End Sub
+
+Sub sw39_Hit()
+    SoundSaucerLock()
+    DispatchPinEvent "sw39_active", ActiveBall
+End Sub
+
+Sub sw39_Unhit()
+    DispatchPinEvent "sw39_inactive", ActiveBall
+End Sub
+
+Sub DTAction(switchid, enabled)
+    If enabled = 1 Then
+        Select Case switchid
+            case 4:
+                DispatchPinEvent "sw04_active", Null
+            case 5:
+                DispatchPinEvent "sw05_active", Null
+            case 6:
+                DispatchPinEvent "sw06_active", Null
+            case 8:
+                DispatchPinEvent "sw08_active", Null
+            case 9:
+                DispatchPinEvent "sw09_active", Null
+            case 10:
+                DispatchPinEvent "sw10_active", Null
+        End Select
+    ElseIf enabled = 0 Then
+        Select Case switchid
+            case 4:
+                DispatchPinEvent "sw04_inactive", Null
+            case 5:
+                DispatchPinEvent "sw05_inactive", Null
+            case 6:
+                DispatchPinEvent "sw06_inactive", Null
+            case 8:
+                DispatchPinEvent "sw08_inactive", Null
+            case 9:
+                DispatchPinEvent "sw09_inactive", Null
+            case 10:
+                DispatchPinEvent "sw10_inactive", Null            
+        End Select
+    End If
 End Sub

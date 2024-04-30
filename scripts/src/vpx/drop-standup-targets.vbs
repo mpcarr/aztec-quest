@@ -45,41 +45,9 @@
 '  DROP TARGETS INITIALIZATION
 '******************************************************
 
-Class DropTarget
-	Private m_primary, m_secondary, m_prim, m_sw, m_animate, m_isDropped
-  
-	Public Property Get Primary(): Set Primary = m_primary: End Property
-	Public Property Let Primary(input): Set m_primary = input: End Property
-  
-	Public Property Get Secondary(): Set Secondary = m_secondary: End Property
-	Public Property Let Secondary(input): Set m_secondary = input: End Property
-  
-	Public Property Get Prim(): Set Prim = m_prim: End Property
-	Public Property Let Prim(input): Set m_prim = input: End Property
-  
-	Public Property Get Sw(): Sw = m_sw: End Property
-	Public Property Let Sw(input): m_sw = input: End Property
-  
-	Public Property Get Animate(): Animate = m_animate: End Property
-	Public Property Let Animate(input): m_animate = input: End Property
-  
-	Public Property Get IsDropped(): IsDropped = m_isDropped: End Property
-	Public Property Let IsDropped(input): m_isDropped = input: End Property
-  
-	Public default Function init(primary, secondary, prim, sw, animate, isDropped)
-	  Set m_primary = primary
-	  Set m_secondary = secondary
-	  Set m_prim = prim
-	  m_sw = sw
-	  m_animate = animate
-	  m_isDropped = isDropped
-  
-	  Set Init = Me
-	End Function
-End Class
+
   
 'Define a variable for each drop target
-Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45, DT46, DT47
 
 'Set array with drop target objects
 '
@@ -98,23 +66,6 @@ Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45
 '   isDropped:  Boolean which determines whether a drop target is dropped. Set to false if they are initially raised, true if initially dropped.
 '					Use the function DTDropped(switchid) to check a target's drop status.
 
-'Set DT38 = (new DropTarget)(sw38, sw38a, BM_sw38, 38, 0, False)
-'Set DT40 = (new DropTarget)(sw40, sw40a, BM_sw40, 40, 0, False)
-'Set DT45 = (new DropTarget)(sw45, sw45a, BM_sw45, 45, 0, False)
-Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True) 
-'Set DT02 = (new DropTarget)(sw02, sw02a, BM_sw02, 2, 0, False) 
-Set DT04 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False)
-Set DT05 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False)
-Set DT06 = (new DropTarget)(sw06, sw06a, BM_sw06, 6, 0, False)
-'Set DT07 = (new DropTarget)(sw07, sw07a, BM_sw07, 7, 0, False)
-Set DT08 = (new DropTarget)(sw08, sw08a, BM_sw08, 8, 0, False)
-Set DT09 = (new DropTarget)(sw09, sw09a, BM_sw09, 9, 0, False)
-Set DT10 = (new DropTarget)(sw10, sw10a, BM_sw10, 10, 0, False)
-'Set DT46 = (new DropTarget)(sw46, sw46a, BM_sw46, 46, 0, False)
-'Set DT47 = (new DropTarget)(sw47, sw47a, BM_sw47, 47, 0, False)
-
-Dim DTArray
-DTArray = Array(DT01,DT04, DT05, DT06, DT08, DT09, DT10)
 
 'Configure the behavior of Drop Targets.
 Const DTDropSpeed = 80 'in milliseconds
@@ -279,7 +230,7 @@ Function DTAnimate(primary, secondary, prim, switch, animate)
 			If UsingROM Then
 				controller.Switch(Switchid mod 100) = 1
 			Else
-				DTAction switchid
+				DTAction switchid, 1
 			End If
 			primary.uservalue = 0
 			DTAnimate = 0
@@ -336,7 +287,11 @@ Function DTAnimate(primary, secondary, prim, switch, animate)
 		primary.collidable = 0
 		secondary.collidable = 1
 		DTArray(ind).isDropped = False 'Mark target as not dropped
-		If UsingROM Then controller.Switch(Switchid mod 100) = 0
+		If UsingROM Then 
+			controller.Switch(Switchid mod 100) = 0
+		Else
+			DTAction switchid, 0
+		End If
 	End If
 	
 	If animate =  - 2 And animtime > DTRaiseDelay Then
@@ -358,12 +313,6 @@ Function DTDropped(switchid)
 	
 	DTDropped = DTArray(ind).isDropped
 End Function
-
-Sub DTAction(switchid)
-	Select Case switchid
-		
-	End Select
-End Sub
 
 Sub UpdateTargets
 
