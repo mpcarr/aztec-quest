@@ -114,6 +114,9 @@ Sub Table1_Init
 	'	.CreateEvents "plungerIM"
 	'End With
 	PlayVPXSeq
+
+	LeftSlingShot_Timer
+	RightSlingShot_Timer
 	
 	DTDrop 1
 	PuPInit
