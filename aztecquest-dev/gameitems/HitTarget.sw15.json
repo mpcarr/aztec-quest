@@ -1,25 +1,25 @@
 {
   "HitTarget": {
     "position": {
-      "x": 320.99246,
-      "y": 650.4215,
-      "z": -10.0
+      "x": 321.11758,
+      "y": 648.44037,
+      "z": 0.0
     },
     "size": {
-      "x": 31.0,
-      "y": 23.0,
+      "x": 32.0,
+      "y": 32.0,
       "z": 32.0
     },
     "rot_z": 0.0,
     "image": "",
     "target_type": "hit_target_round",
     "name": "sw15",
-    "material": "",
+    "material": "Plastic",
     "is_visible": false,
     "is_legacy": false,
     "use_hit_event": true,
     "threshold": 2.0,
-    "elasticity": 0.35,
+    "elasticity": 0.3,
     "elasticity_falloff": 0.5,
     "friction": 0.2,
     "scatter": 5.0,
@@ -30,7 +30,7 @@
     "depth_bias": 0.0,
     "is_reflection_enabled": false,
     "is_dropped": false,
-    "drop_speed": 0.5,
+    "drop_speed": 0.2,
     "is_timer_enabled": false,
     "timer_interval": 100,
     "raise_delay": 100,

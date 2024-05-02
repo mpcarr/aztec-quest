@@ -32,8 +32,8 @@ End Sub
 Sub LeftSlingShot_Slingshot
 	LS.VelocityCorrect(ActiveBall)
 	RandomSoundSlingshotLeft ActiveBall
-	DOF 103,DOFPulse
-	DOF 201,DOFPulse
+	'DOF 103,DOFPulse
+	'DOF 201,DOFPulse
 	LStep = 0
 	LeftSlingShot.TimerInterval = 17
 	LeftSlingShot.TimerEnabled = 1

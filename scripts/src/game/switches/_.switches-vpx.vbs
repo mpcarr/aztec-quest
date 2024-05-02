@@ -7,24 +7,48 @@ Sub sw11_Hit()
     STHit 11
 End Sub
 
+Sub sw11o_Hit
+	TargetBouncer ActiveBall, 1
+End Sub
+
 Sub sw12_Hit()
     STHit 12
+End Sub
+
+Sub sw12o_Hit
+	TargetBouncer ActiveBall, 1
 End Sub
 
 Sub sw13_Hit()
     STHit 13
 End Sub
 
+Sub sw13o_Hit
+	TargetBouncer ActiveBall, 1
+End Sub
+
 Sub sw15_Hit()
     STHit 15
+End Sub
+
+Sub sw15o_Hit
+	TargetBouncer ActiveBall, 1
 End Sub
 
 Sub sw16_Hit()
     STHit 16
 End Sub
 
+Sub sw16o_Hit
+	TargetBouncer ActiveBall, 1
+End Sub
+
 Sub sw17_Hit()
     STHit 17
+End Sub
+
+Sub sw17o_Hit
+	TargetBouncer ActiveBall, 1
 End Sub
 
 Sub sw41_Hit()
@@ -69,8 +93,9 @@ Sub sw45_Hit()
 End Sub
 
 Sub sw99_Hit()
-    DTRaise 1
-    lightCtrl.pulse l01, 3
+    'DTRaise 1
+    'lightCtrl.pulse l01, 3
+    DispatchPinEvent "activate_panther", Null
 End Sub
 
 Sub sw_plunger_Hit()
@@ -120,6 +145,41 @@ Sub DTAction(switchid, enabled)
                 DispatchPinEvent "sw09_inactive", Null
             case 10:
                 DispatchPinEvent "sw10_inactive", Null            
+        End Select
+    End If
+End Sub
+
+
+Sub STAction(switchid, enabled)
+    If enabled = 1 Then
+        Select Case switchid
+            case 11:
+                DispatchPinEvent "sw11_active", Null
+            case 12:
+                DispatchPinEvent "sw12_active", Null
+            case 13:
+                DispatchPinEvent "sw13_active", Null
+            case 15:
+                DispatchPinEvent "sw15_active", Null
+            case 16:
+                DispatchPinEvent "sw16_active", Null
+            case 17:
+                DispatchPinEvent "sw17_active", Null
+        End Select
+    ElseIf enabled = 0 Then
+        Select Case switchid
+            case 11:
+                DispatchPinEvent "sw11_inactive", Null
+            case 12:
+                DispatchPinEvent "sw12_inactive", Null
+            case 13:
+                DispatchPinEvent "sw13_inactive", Null
+            case 15:
+                DispatchPinEvent "sw15_inactive", Null
+            case 16:
+                DispatchPinEvent "sw16_inactive", Null
+            case 17:
+                DispatchPinEvent "sw17_inactive", Null
         End Select
     End If
 End Sub

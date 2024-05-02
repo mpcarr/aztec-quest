@@ -17,6 +17,7 @@ Function EndOfBall(args)
         Exit Function
     End If
 
+    DispatchPinEvent "ball_ended", Null
     SetPlayerState CURRENT_BALL, GetPlayerState(CURRENT_BALL) + 1
 
     Select Case currentPlayer

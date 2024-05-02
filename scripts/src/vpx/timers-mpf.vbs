@@ -31,6 +31,9 @@ Sub GameTimer_Timer() 'The game timer interval; should be 10 ms
 				DTRaise 9
 				DTRaise 10
 			End If
+			If ChgSol(ii,0) = "0-0-15" and ChgSol(ii,1) Then
+				DTRaise 1
+			End If
 		Next
 	end If
 End Sub

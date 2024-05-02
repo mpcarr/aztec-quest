@@ -28,7 +28,9 @@ Class DropTarget
 	  m_animate = animate
 	  m_isDropped = isDropped
       m_reset_events = reset_events
-      AddPinEventListener reset_events, primary.name & "_droptarget_reset", "DropTargetEventHandler", 1000, Array("droptarget_reset", m_sw)
+	  If Not IsNull(reset_events) Then
+      	AddPinEventListener reset_events, primary.name & "_droptarget_reset", "DropTargetEventHandler", 1000, Array("droptarget_reset", m_sw)
+	  End If
 	  Set Init = Me
 	End Function
 End Class

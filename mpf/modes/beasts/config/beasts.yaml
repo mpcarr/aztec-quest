@@ -1,0 +1,26 @@
+#config_version=5
+mode:
+  start_events: ball_started
+  priority: 2000
+
+counters:
+  right_ramp:
+    enable_events: mode_beasts_started, diverter_panther_diverter_deactivating
+    count_events: s_left_ramp_opto_active
+    count_complete_value: 1
+    disable_on_complete: true
+    reset_on_complete: true
+    events_when_complete: activate_panther
+
+#timers:
+#  panther_timer:
+#    start_value: 3
+#    end_value: 0
+#    direction: down
+#    control_events:
+#      - action: start
+#        event: activate_panther
+
+#event_player:
+#  timer_panther_timer_complete:
+#    - deactivate_panther

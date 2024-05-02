@@ -1265,6 +1265,95 @@ Function BallSaveEventHandler(args)
     End Select
     BallSaveEventHandler = ballsToSave
 End Function
+
+Class Diverter
+
+    Private m_name
+    Private m_activate_events
+    Private m_deactivate_events
+    Private m_activation_time
+    Private m_enable_events
+    Private m_disable_events
+    Private m_action_cb
+    Private m_debug
+
+	Public default Function init(name, enable_events, disable_events, activate_events, deactivate_events, activation_time, action_cb, debug_on)
+        m_enable_events = enable_events
+        m_disable_events = disable_events
+        m_activate_events = activate_events
+        m_deactivate_events = deactivate_events
+        m_activation_time = activation_time
+        m_name = "diverter_"&name
+        m_action_cb = action_cb
+        m_debug = debug_on
+        Dim evt
+        For Each evt in m_enable_events
+            AddPinEventListener evt, m_name & "_enable", "DiverterEventHandler", 1000, Array("enable", Me)
+        Next
+        For Each evt in m_disable_events
+            AddPinEventListener evt, m_name & "_disable", "DiverterEventHandler", 1000, Array("disable", Me)
+        Next
+        Set Init = Me
+	End Function
+
+    Public Sub Enable()
+        Log "Enabling"
+        Dim evt
+        For Each evt in m_activate_events
+            AddPinEventListener evt, m_name & "_activate", "DiverterEventHandler", 1000, Array("activate", Me)
+        Next
+        For Each evt in m_deactivate_events
+            AddPinEventListener evt, m_name & "_deactivate", "DiverterEventHandler", 1000, Array("deactivate", Me)
+        Next
+    End Sub
+
+    Public Sub Disable()
+        Log "Disabling"
+        Dim evt
+        For Each evt in m_activate_events
+            RemovePinEventListener evt, m_name & "_activate"
+        Next
+        For Each evt in m_deactivate_events
+            RemovePinEventListener evt, m_name & "_deactivate"
+        Next
+    End Sub
+
+    Public Sub Activate
+        Log "Activating"
+        GetRef(m_action_cb)(1)
+        If m_activation_time > 0 Then
+            SetDelay m_name & "_deactivate", "DiverterEventHandler", Array(Array("deactivate", Me), Null), m_activation_time
+        End If
+    End Sub
+
+    Public Sub Deactivate
+        Log "Deactivating"
+        GetRef(m_action_cb)(0)
+    End Sub
+
+    Private Sub Log(message)
+        If m_debug = True Then
+            debugLog.WriteToLog m_name, message
+        End If
+    End Sub
+End Class
+
+Function DiverterEventHandler(args)
+    Dim ownProps, kwargs : ownProps = args(0) : kwargs = args(1) 
+    Dim evt : evt = ownProps(0)
+    Dim diverter : Set diverter = ownProps(1)
+    Select Case evt
+        Case "enable"
+            diverter.Enable
+        Case "disable"
+            diverter.Disable
+        Case "activate"
+            diverter.Activate
+        Case "deactivate"
+            diverter.Deactivate
+    End Select
+    DiverterEventHandler = kwargs
+End Function
 Class DropTarget
 	Private m_primary, m_secondary, m_prim, m_sw, m_animate, m_isDropped
     Private m_reset_events
@@ -1295,7 +1384,9 @@ Class DropTarget
 	  m_animate = animate
 	  m_isDropped = isDropped
       m_reset_events = reset_events
-      AddPinEventListener reset_events, primary.name & "_droptarget_reset", "DropTargetEventHandler", 1000, Array("droptarget_reset", m_sw)
+	  If Not IsNull(reset_events) Then
+      	AddPinEventListener reset_events, primary.name & "_droptarget_reset", "DropTargetEventHandler", 1000, Array("droptarget_reset", m_sw)
+	  End If
 	  Set Init = Me
 	End Function
 End Class
@@ -1310,6 +1401,59 @@ Function DropTargetEventHandler(args)
             DTRaise switch
     End Select
     DropTargetEventHandler = kwargs
+End Function
+
+Class Mode
+
+    Private m_name
+    Private m_start_events
+    Private m_stop_events
+    Private m_debug
+
+	Public default Function init(name, start_events, stop_events, debug_on)
+        m_name = "mode_"&name
+        m_start_events = start_events
+        m_stop_events = stop_events
+        
+        m_debug = debug_on
+        Dim evt
+        For Each evt in m_start_events
+            AddPinEventListener evt, m_name & "_start", "ModeEventHandler", 1000, Array("start", Me)
+        Next
+        For Each evt in m_stop_events
+            AddPinEventListener evt, m_name & "_stop", "ModeEventHandler", 1000, Array("stop", Me)
+        Next
+        Set Init = Me
+	End Function
+
+    Public Sub Start()
+        Log "Starting"
+        Dim evt
+    End Sub
+
+    Public Sub Stop()
+        Log "Stopping"
+        Dim evt
+    End Sub
+
+    Private Sub Log(message)
+        If m_debug = True Then
+            debugLog.WriteToLog m_name, message
+        End If
+    End Sub
+End Class
+
+Function ModeEventHandler(args)
+    Dim ownProps, kwargs : ownProps = args(0) : kwargs = args(1) 
+    Dim evt : evt = ownProps(0)
+    Dim mode : Set mode = ownProps(1)
+    Select Case evt
+        Case "start"
+            mode.Enable
+        Case "stop"
+            mode.Disable
+    End Select
+    ModeEventHandler = kwargs
 End Function
 '******************************************************
 ' 	ZRDT:  DROP TARGETS by Rothbauerw
@@ -1786,7 +1930,7 @@ Function STAnimate(primary, prim, switch,  animate)
 		If UsingROM Then
 			vpmTimer.PulseSw switch mod 100
 		Else
-			STAction switch
+			STAction switch, 1
 		End If
 		STAnimate = 2
 		Exit Function
@@ -1796,6 +1940,7 @@ Function STAnimate(primary, prim, switch,  animate)
 			prim.transy = 0
 			primary.collidable = 1
 			STAnimate = 0
+			STAction switch, 0
 			Exit Function
 		Else
 			STAnimate = 2
@@ -1803,10 +1948,6 @@ Function STAnimate(primary, prim, switch,  animate)
 	End If
 End Function
 
-
-Sub STAction(Switch)
-	
-End Sub
 
 '******************************************************
 '****   END STAND-UP TARGETS
@@ -3778,34 +3919,7 @@ Class LCSeqRunner
     End Function
 
 End Class
-' VLM  Arrays - Start
-' Arrays per baked part
-Dim BP_Cab: BP_Cab=Array(BM_Cab)
-Dim BP_PF: BP_PF=Array(BM_PF)
-Dim BP_Parts: BP_Parts=Array(BM_Parts)
-Dim BP_pantherLid: BP_pantherLid=Array(BM_pantherLid)
-Dim BP_pantherSupport: BP_pantherSupport=Array(BM_pantherSupport)
-Dim BP_sw01: BP_sw01=Array(BM_sw01)
-Dim BP_sw04: BP_sw04=Array(BM_sw04)
-Dim BP_sw05: BP_sw05=Array(BM_sw05)
-Dim BP_sw06: BP_sw06=Array(BM_sw06)
-Dim BP_sw08: BP_sw08=Array(BM_sw08)
-Dim BP_sw09: BP_sw09=Array(BM_sw09)
-Dim BP_sw10: BP_sw10=Array(BM_sw10)
-Dim BP_sw11: BP_sw11=Array(BM_sw11)
-Dim BP_sw12: BP_sw12=Array(BM_sw12)
-Dim BP_sw13: BP_sw13=Array(BM_sw13)
-Dim BP_sw15: BP_sw15=Array(BM_sw15)
-Dim BP_sw16: BP_sw16=Array(BM_sw16)
-Dim BP_sw17: BP_sw17=Array(BM_sw17)
-Dim BP_targetbank: BP_targetbank=Array(BM_targetbank)
-' Arrays per lighting scenario
-Dim BL_World: BL_World=Array(BM_Cab, BM_PF, BM_Parts, BM_pantherLid, BM_pantherSupport, BM_sw01, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-' Global arrays
-Dim BG_Bakemap: BG_Bakemap=Array(BM_Cab, BM_PF, BM_Parts, BM_pantherLid, BM_pantherSupport, BM_sw01, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-Dim BG_Lightmap: BG_Lightmap=Array()
-Dim BG_All: BG_All=Array(BM_Cab, BM_PF, BM_Parts, BM_pantherLid, BM_pantherSupport, BM_sw01, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-' VLM  Arrays - End
+
 
 '--MPF
 
@@ -5108,8 +5222,8 @@ End Sub
 Sub LeftSlingShot_Slingshot
 	LS.VelocityCorrect(ActiveBall)
 	RandomSoundSlingshotLeft ActiveBall
-	DOF 103,DOFPulse
-	DOF 201,DOFPulse
+	'DOF 103,DOFPulse
+	'DOF 201,DOFPulse
 	LStep = 0
 	LeftSlingShot.TimerInterval = 17
 	LeftSlingShot.TimerEnabled = 1
@@ -6317,12 +6431,13 @@ Dim playerEvents : Set playerEvents = CreateObject("Scripting.Dictionary")
 Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
 
-Dim ball_saves_default : Set ball_saves_default = (new BallSave)("default", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", true, 1, False)
+'Dim ball_saves_default : Set ball_saves_default = (new BallSave)("default", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", true, 1, False)
 Dim balldevice_plunger : Set balldevice_plunger = (new BallDevice)("plunger", "sw_plunger", Null, 3, True, 0, 50, "y-up", False)
 Dim balldevice_cave : Set balldevice_cave = (new BallDevice)("cave", "sw39", Null, 2, False, 0, 60, "z-up", True)
+Dim diverter_panther : Set diverter_panther = (new Diverter)("panther", Array("ball_started"), Array("ball_ended"), Array("activate_panther"), Array("deactivate_panther"), 3000, "MovePanther", True)
 
 Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45, DT46, DT47
-Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True, "ball_started") 
+Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True, Null) 
 Set DT04 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False, "ball_started")
 Set DT05 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False, "ball_started")
 Set DT06 = (new DropTarget)(sw06, sw06a, BM_sw06, 6, 0, False, "ball_started")
@@ -6331,6 +6446,14 @@ Set DT09 = (new DropTarget)(sw09, sw09a, BM_sw09, 9, 0, False, "ball_started")
 Set DT10 = (new DropTarget)(sw10, sw10a, BM_sw10, 10, 0, False, "ball_started")
 Dim DTArray
 DTArray = Array(DT01,DT04, DT05, DT06, DT08, DT09, DT10)
+
+Sub MovePanther(enabled)
+    If enabled Then
+        DTRaise 1
+    Else
+        DTDrop 1
+    End If
+End Sub
 
 '******************************************************
 '*****   Pin Events                                ****
@@ -6465,6 +6588,7 @@ Function EndOfBall(args)
         Exit Function
     End If
 
+    DispatchPinEvent "ball_ended", Null
     SetPlayerState CURRENT_BALL, GetPlayerState(CURRENT_BALL) + 1
 
     Select Case currentPlayer
@@ -7542,24 +7666,48 @@ Sub sw11_Hit()
     STHit 11
 End Sub
 
+Sub sw11o_Hit
+	TargetBouncer ActiveBall, 1
+End Sub
+
 Sub sw12_Hit()
     STHit 12
+End Sub
+
+Sub sw12o_Hit
+	TargetBouncer ActiveBall, 1
 End Sub
 
 Sub sw13_Hit()
     STHit 13
 End Sub
 
+Sub sw13o_Hit
+	TargetBouncer ActiveBall, 1
+End Sub
+
 Sub sw15_Hit()
     STHit 15
+End Sub
+
+Sub sw15o_Hit
+	TargetBouncer ActiveBall, 1
 End Sub
 
 Sub sw16_Hit()
     STHit 16
 End Sub
 
+Sub sw16o_Hit
+	TargetBouncer ActiveBall, 1
+End Sub
+
 Sub sw17_Hit()
     STHit 17
+End Sub
+
+Sub sw17o_Hit
+	TargetBouncer ActiveBall, 1
 End Sub
 
 Sub sw41_Hit()
@@ -7604,8 +7752,9 @@ Sub sw45_Hit()
 End Sub
 
 Sub sw99_Hit()
-    DTRaise 1
-    lightCtrl.pulse l01, 3
+    'DTRaise 1
+    'lightCtrl.pulse l01, 3
+    DispatchPinEvent "activate_panther", Null
 End Sub
 
 Sub sw_plunger_Hit()
@@ -7655,6 +7804,41 @@ Sub DTAction(switchid, enabled)
                 DispatchPinEvent "sw09_inactive", Null
             case 10:
                 DispatchPinEvent "sw10_inactive", Null            
+        End Select
+    End If
+End Sub
+
+
+Sub STAction(switchid, enabled)
+    If enabled = 1 Then
+        Select Case switchid
+            case 11:
+                DispatchPinEvent "sw11_active", Null
+            case 12:
+                DispatchPinEvent "sw12_active", Null
+            case 13:
+                DispatchPinEvent "sw13_active", Null
+            case 15:
+                DispatchPinEvent "sw15_active", Null
+            case 16:
+                DispatchPinEvent "sw16_active", Null
+            case 17:
+                DispatchPinEvent "sw17_active", Null
+        End Select
+    ElseIf enabled = 0 Then
+        Select Case switchid
+            case 11:
+                DispatchPinEvent "sw11_inactive", Null
+            case 12:
+                DispatchPinEvent "sw12_inactive", Null
+            case 13:
+                DispatchPinEvent "sw13_inactive", Null
+            case 15:
+                DispatchPinEvent "sw15_inactive", Null
+            case 16:
+                DispatchPinEvent "sw16_inactive", Null
+            case 17:
+                DispatchPinEvent "sw17_inactive", Null
         End Select
     End If
 End Sub

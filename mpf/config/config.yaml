@@ -12,6 +12,7 @@ bcp:
 
 modes:
   - base
+  - beasts
 
 opp:
    ports: /dev/ttyACM0, /dev/ttyACM1
@@ -61,7 +62,21 @@ switches:
     number: 0-0-35
   s_dt_map6:
     number: 0-0-36
-  
+  s_map1:
+    number: 0-0-37
+  s_map2:
+    number: 0-0-38
+  s_map3:
+    number: 0-0-39
+  s_map4:
+    number: 0-0-40
+  s_map5:
+    number: 0-0-41
+  s_map6:
+    number: 0-0-42
+  s_left_ramp_opto:
+    number: 0-0-43
+
 coils:
   c_flipper_left_main:
     number: 0-0-1
@@ -107,6 +122,28 @@ coils:
   c_dt_knockdown_6:
     number: 0-0-14
     default_pulse_ms: 20
+  c_panther_main:
+    number: 0-0-15
+    default_pulse_ms: 4
+    default_hold_power: 0.2
+  c_panther_hold:
+    number: 0-0-16
+    allow_enable: true
+
+dual_wound_coils:
+  c_panther_dualcoil:
+    hold_coil: c_panther_hold
+    main_coil: c_panther_main
+
+diverters:
+  panther_diverter:
+    activate_events: activate_panther
+    deactivate_events: deactivate_panther
+    activation_coil: c_panther_dualcoil
+    type: hold
+    activation_time: 3s
+    enable_events: ball_started
+    disable_events: ball_ended
 
 drop_targets:
   map1:

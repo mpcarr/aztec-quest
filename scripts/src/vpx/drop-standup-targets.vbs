@@ -473,7 +473,7 @@ Function STAnimate(primary, prim, switch,  animate)
 		If UsingROM Then
 			vpmTimer.PulseSw switch mod 100
 		Else
-			STAction switch
+			STAction switch, 1
 		End If
 		STAnimate = 2
 		Exit Function
@@ -483,6 +483,7 @@ Function STAnimate(primary, prim, switch,  animate)
 			prim.transy = 0
 			primary.collidable = 1
 			STAnimate = 0
+			STAction switch, 0
 			Exit Function
 		Else
 			STAnimate = 2
@@ -490,10 +491,6 @@ Function STAnimate(primary, prim, switch,  animate)
 	End If
 End Function
 
-
-Sub STAction(Switch)
-	
-End Sub
 
 '******************************************************
 '****   END STAND-UP TARGETS
