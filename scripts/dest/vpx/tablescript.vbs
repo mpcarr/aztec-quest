@@ -1266,6 +1266,132 @@ Function BallSaveEventHandler(args)
     BallSaveEventHandler = ballsToSave
 End Function
 
+Class Counter
+
+    Private m_name
+    Private m_priority
+    Private m_mode
+    Private m_enable_events
+    Private m_count_events
+    Private m_count_complete_value
+    Private m_disable_on_complete
+    Private m_reset_on_complete
+    Private m_events_when_complete
+    Private m_persist_state
+    Private m_debug
+
+    Private m_count
+
+	Public default Function init(name, mode, enable_events, count_events, count_complete_value, disable_on_complete, reset_on_complete, events_when_complete, persist_state, debug_on)
+        m_name = "counter_" & name
+        m_mode = mode.Name
+        m_priority = mode.Priority
+        m_enable_events = enable_events
+        m_count_events = count_events
+        m_count_complete_value = count_complete_value
+        m_disable_on_complete = disable_on_complete
+        m_reset_on_complete = reset_on_complete
+        m_events_when_complete = events_when_complete
+        m_persist_state = persist_state
+        m_debug = debug_on
+        m_count = -1
+
+        AddPinEventListener m_mode & "_starting", m_name & "_activate", "CounterEventHandler", m_priority, Array("activate", Me)
+        AddPinEventListener m_mode & "_stopping", m_name & "_deactivate", "CounterEventHandler", m_priority, Array("deactivate", Me)
+        Set Init = Me
+	End Function
+
+    Public Sub SetValue(value)
+        If value = "" Then
+            value = 0
+        End If
+        m_count = value
+        If m_persist_state Then
+            SetPlayerState m_name & "_state", m_count
+        End If
+    End Sub
+
+    Public Sub Activate()
+        If m_persist_state And m_count > -1 Then
+            SetValue GetPlayerState(m_name & "_state")
+        Else
+            SetValue 0
+        End If
+        Dim evt
+        For Each evt in m_enable_events
+            AddPinEventListener evt, m_name & "_enable", "CounterEventHandler", m_priority, Array("enable", Me)
+        Next
+    End Sub
+
+    Public Sub Deactivate()
+        Disable()
+        If Not m_persist_state Then
+            SetValue -1
+        End If
+        Dim evt
+        For Each evt in m_enable_events
+            RemovePinEventListener evt, m_name & "_enable"
+        Next
+    End Sub
+
+    Public Sub Enable()
+        Log "Enabling"
+        Dim evt
+        For Each evt in m_count_events
+            AddPinEventListener evt, m_name & "_count", "CounterEventHandler", m_priority, Array("count", Me)
+        Next
+    End Sub
+
+    Public Sub Disable()
+        Log "Disabling"
+        Dim evt
+        For Each evt in m_count_events
+            RemovePinEventListener evt, m_name & "_count"
+        Next
+    End Sub
+
+    Public Sub Count()
+        Log "counting: old value: "& m_count & ", new Value: " & m_count+1 & ", target: "& m_count_complete_value
+        SetValue m_count + 1
+        If m_count = m_count_complete_value Then
+            Dim evt
+            For Each evt in m_events_when_complete
+                DispatchPinEvent evt, Null
+            Next
+            If m_disable_on_complete Then
+                Disable()
+            End If
+            If m_reset_on_complete Then
+                SetValue 0
+            End If
+        End If
+    End Sub
+
+    Private Sub Log(message)
+        If m_debug = True Then
+            debugLog.WriteToLog m_name, message
+        End If
+    End Sub
+End Class
+
+Function CounterEventHandler(args)
+    
+    Dim ownProps, kwargs : ownProps = args(0) : kwargs = args(1) 
+    Dim evt : evt = ownProps(0)
+    Dim counter : Set counter = ownProps(1)
+    Select Case evt
+        Case "activate"
+            counter.Activate
+        Case "deactivate"
+            counter.Deactivate
+        Case "enable"
+            counter.Enable
+        Case "count"
+            counter.Count
+    End Select
+    CounterEventHandler = kwargs
+End Function
+
 Class Diverter
 
     Private m_name
@@ -1316,6 +1442,8 @@ Class Diverter
         For Each evt in m_deactivate_events
             RemovePinEventListener evt, m_name & "_deactivate"
         Next
+        RemoveDelay m_name & "_deactivate"
+        GetRef(m_action_cb)(0)
     End Sub
 
     Public Sub Activate
@@ -1324,11 +1452,14 @@ Class Diverter
         If m_activation_time > 0 Then
             SetDelay m_name & "_deactivate", "DiverterEventHandler", Array(Array("deactivate", Me), Null), m_activation_time
         End If
+        DispatchPinEvent m_name & "_activating", Null
     End Sub
 
     Public Sub Deactivate
         Log "Deactivating"
+        RemoveDelay m_name & "_deactivate"
         GetRef(m_action_cb)(0)
+        DispatchPinEvent m_name & "_deactivating", Null
     End Sub
 
     Private Sub Log(message)
@@ -1403,37 +1534,99 @@ Function DropTargetEventHandler(args)
     DropTargetEventHandler = kwargs
 End Function
 
+
+Class EventPlayer
+
+    Private m_priority
+    Private m_mode
+    Private m_events
+    Private m_debug
+
+    Private m_value
+
+    Public Property Let Events(value) : m_events = value : End Property
+    Public Property Let Debug(value) : m_debug = value : End Property
+
+	Public default Function init(mode)
+        m_mode = mode.Name
+        m_priority = mode.Priority
+        
+        AddPinEventListener m_mode & "_starting", m_name & "_activate", "EventPlayerEventHandler", m_priority, Array("activate", Me)
+        AddPinEventListener m_mode & "_stopping", m_name & "_deactivate", "EventPlayerEventHandler", m_priority, Array("deactivate", Me)
+        Set Init = Me
+	End Function
+
+    Public Sub Activate()
+        Dim evt
+        
+    End Sub
+
+    Public Sub Deactivate()
+        Dim evt
+        
+    End Sub
+
+    Private Sub Log(message)
+        If m_debug = True Then
+            debugLog.WriteToLog m_name, message
+        End If
+    End Sub
+End Class
+
+Function EventPlayerEventHandler(args)
+    
+    Dim ownProps, kwargs : ownProps = args(0) : kwargs = args(1) 
+    Dim evt : evt = ownProps(0)
+    Dim eventPlayer : Set eventPlayer = ownProps(1)
+    Select Case evt
+        Case "activate"
+            eventPlayer.Activate
+        Case "deactivate"
+            eventPlayer.Deactivate
+    End Select
+    EventPlayerEventHandler = kwargs
+End Function
+
 Class Mode
 
     Private m_name
     Private m_start_events
     Private m_stop_events
+    private m_priority
     Private m_debug
 
-	Public default Function init(name, start_events, stop_events, debug_on)
+    Public Property Get Name(): Name = m_name: End Property
+    Public Property Get Priority(): Priority = m_priority: End Property
+
+	Public default Function init(name, priority, start_events, stop_events, debug_on)
         m_name = "mode_"&name
+        m_priority = priority
         m_start_events = start_events
         m_stop_events = stop_events
         
         m_debug = debug_on
         Dim evt
         For Each evt in m_start_events
-            AddPinEventListener evt, m_name & "_start", "ModeEventHandler", 1000, Array("start", Me)
+            AddPinEventListener evt, m_name & "_start", "ModeEventHandler", m_priority, Array("start", Me)
         Next
         For Each evt in m_stop_events
-            AddPinEventListener evt, m_name & "_stop", "ModeEventHandler", 1000, Array("stop", Me)
+            AddPinEventListener evt, m_name & "_stop", "ModeEventHandler", m_priority, Array("stop", Me)
         Next
         Set Init = Me
 	End Function
 
-    Public Sub Start()
+    Public Sub StartMode()
         Log "Starting"
-        Dim evt
+        DispatchPinEvent m_name & "_starting", Null
+        DispatchPinEvent m_name & "_started", Null
+        Log "Started"
     End Sub
 
-    Public Sub Stop()
+    Public Sub StopMode()
         Log "Stopping"
-        Dim evt
+        DispatchPinEvent m_name & "_stopping", Null
+        DispatchPinEvent m_name & "_stopped", Null
+        Log "Stopped"
     End Sub
 
     Private Sub Log(message)
@@ -1449,11 +1642,126 @@ Function ModeEventHandler(args)
     Dim mode : Set mode = ownProps(1)
     Select Case evt
         Case "start"
-            mode.Enable
+            mode.StartMode
         Case "stop"
-            mode.Disable
+            mode.StopMode
     End Select
     ModeEventHandler = kwargs
+End Function
+
+
+Class ModeTimer
+
+    Private m_name
+    Private m_priority
+    Private m_mode
+    Private m_start_value
+    Private m_end_value
+    Private m_direction
+    Private m_start_events
+    Private m_stop_events
+    Private m_debug
+
+    Private m_value
+
+    Public Property Let StartValue(value) : m_start_value = value : End Property
+    Public Property Let EndValue(value) : m_end_value = value : End Property
+    Public Property Let Direction(value) : m_direction = value : End Property
+    Public Property Let StartEvents(value) : m_start_events = value : End Property
+    Public Property Let StopEvents(value) : m_stop_events = value : End Property
+    Public Property Let Debug(value) : m_debug = value : End Property
+
+	Public default Function init(name, mode)
+        m_name = "timer_" & name
+        m_mode = mode.Name
+        m_priority = mode.Priority
+        
+        AddPinEventListener m_mode & "_starting", m_name & "_activate", "TimerEventHandler", m_priority, Array("activate", Me)
+        AddPinEventListener m_mode & "_stopping", m_name & "_deactivate", "TimerEventHandler", m_priority, Array("deactivate", Me)
+        Set Init = Me
+	End Function
+
+    Public Sub Activate()
+        Dim evt
+        For Each evt in m_start_events
+            AddPinEventListener evt, m_name & "_start", "TimerEventHandler", m_priority, Array("start", Me)
+        Next
+        If Not IsNull(m_stop_events) Then
+            For Each evt in m_stop_events
+                AddPinEventListener evt, m_name & "_stop", "TimerEventHandler", m_priority, Array("stop", Me)
+            Next
+        End If
+    End Sub
+
+    Public Sub Deactivate()
+        Dim evt
+        For Each evt in m_start_events
+            RemovePinEventListener evt, m_name & "_start"
+        Next
+        If Not IsNull(m_stop_events) Then
+            For Each evt in m_stop_events
+                RemovePinEventListener evt, m_name & "_stop"
+            Next
+        End If
+        RemoveDelay m_name & "_tick"
+    End Sub
+
+    Public Sub StartTimer()
+        Log "Started"
+        DispatchPinEvent m_name & "_started", Null
+        m_value = m_start_value
+        SetDelay m_name & "_tick", "TimerEventHandler", Array(Array("tick", Me), Null), 1000
+    End Sub
+
+    Public Sub StopTimer()
+        Log "Stopped"
+        DispatchPinEvent m_name & "_stopped", Null
+        RemoveDelay m_name & "_tick"
+        m_value = m_start_value
+    End Sub
+
+    Public Sub Tick()
+        Dim newValue
+        If m_direction = "down" Then
+            newValue = m_value - 1
+        Else
+            newValue = m_value + 1
+        End If
+        Log "ticking: old value: "& m_value & ", new Value: " & newValue & ", target: "& m_end_value
+        m_value = newValue
+        If m_value = m_end_value Then
+            DispatchPinEvent m_name & "_complete", Null
+        Else
+            DispatchPinEvent m_name & "_tick", Null
+            SetDelay m_name & "_tick", "TimerEventHandler", Array(Array("tick", Me), Null), 1000
+        End If
+    End Sub
+
+    Private Sub Log(message)
+        If m_debug = True Then
+            debugLog.WriteToLog m_name, message
+        End If
+    End Sub
+End Class
+
+Function TimerEventHandler(args)
+    
+    Dim ownProps, kwargs : ownProps = args(0) : kwargs = args(1) 
+    Dim evt : evt = ownProps(0)
+    Dim timer : Set timer = ownProps(1)
+    Select Case evt
+        Case "activate"
+            timer.Activate
+        Case "deactivate"
+            timer.Deactivate
+        Case "start"
+            timer.StartTimer
+        Case "stop"
+            timer.StopTimer
+        Case "tick"
+            timer.Tick 
+    End Select
+    TimerEventHandler = kwargs
 End Function
 '******************************************************
 ' 	ZRDT:  DROP TARGETS by Rothbauerw
@@ -1996,6 +2304,7 @@ Dim AllowPinEventsList : Set AllowPinEventsList = CreateObject("Scripting.Dictio
 Dim lastPinEvent : lastPinEvent = Null
 Sub DispatchPinEvent(e, kwargs)
     If Not pinEvents.Exists(e) Then
+        debugLog.WriteToLog "DispatchPinEvent", e & " has no listeners"
         Exit Sub
     End If
     lastPinEvent = e
@@ -2011,6 +2320,7 @@ End Sub
 
 Sub DispatchRelayPinEvent(e, kwargs)
     If Not pinEvents.Exists(e) Then
+        debugLog.WriteToLog "DispatchRelayPinEvent", e & " has no listeners"
         Exit Sub
     End If
     lastPinEvent = e
@@ -2035,8 +2345,10 @@ End Sub
 
 Sub RemovePinEventListener(evt, key)
     If pinEvents.Exists(evt) Then
-        pinEvents(evt).Remove key
-        SortPinEventsByPriority evt, Null, key, False
+        If pinEvents(evt).Exists(key) Then
+            pinEvents(evt).Remove key
+            SortPinEventsByPriority evt, Null, key, False
+        End If
     End If
 End Sub
 
@@ -6434,7 +6746,23 @@ Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 'Dim ball_saves_default : Set ball_saves_default = (new BallSave)("default", 10, 3, 2, "ball_started", "balldevice_plunger_ball_eject_success", true, 1, False)
 Dim balldevice_plunger : Set balldevice_plunger = (new BallDevice)("plunger", "sw_plunger", Null, 3, True, 0, 50, "y-up", False)
 Dim balldevice_cave : Set balldevice_cave = (new BallDevice)("cave", "sw39", Null, 2, False, 0, 60, "z-up", True)
-Dim diverter_panther : Set diverter_panther = (new Diverter)("panther", Array("ball_started"), Array("ball_ended"), Array("activate_panther"), Array("deactivate_panther"), 3000, "MovePanther", True)
+
+Dim mode_beasts : Set mode_beasts = (new Mode)("beasts", 100, Array("ball_started"), Array("ball_ended"), True)
+Dim counter_beasts : Set counter_beasts = (new Counter)("beasts", mode_beasts, Array("mode_beasts_started", "diverter_panther_deactivating"), Array("s_left_ramp_opto_active"), 2, True, True, Array("activate_panther"), True, True)
+
+Dim timer_beasts_panther : Set timer_beasts_panther = (new ModeTimer)("beasts_panther", mode_beasts)
+With timer_beasts_panther
+    .StartEvents = Array("activate_panther")
+    .StopEvents = Null
+    .Direction = "down"
+    .StartValue = 10
+    .EndValue = 0
+    .Debug = True
+End With
+
+Dim diverter_panther : Set diverter_panther = (new Diverter)("panther", Array("ball_started"), Array("ball_ended"), Array("activate_panther"), Array("deactivate_panther"), 0, "MovePanther", True)
+
+
 
 Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45, DT46, DT47
 Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True, Null) 
@@ -7752,9 +8080,10 @@ Sub sw45_Hit()
 End Sub
 
 Sub sw99_Hit()
-    'DTRaise 1
-    'lightCtrl.pulse l01, 3
-    DispatchPinEvent "activate_panther", Null
+    DispatchPinEvent "s_left_ramp_opto_active", Null
+End Sub
+Sub sw99_UnHit()
+    DispatchPinEvent "s_left_ramp_opto_inactive", Null
 End Sub
 
 Sub sw_plunger_Hit()

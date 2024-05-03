@@ -93,9 +93,10 @@ Sub sw45_Hit()
 End Sub
 
 Sub sw99_Hit()
-    'DTRaise 1
-    'lightCtrl.pulse l01, 3
-    DispatchPinEvent "activate_panther", Null
+    DispatchPinEvent "s_left_ramp_opto_active", Null
+End Sub
+Sub sw99_UnHit()
+    DispatchPinEvent "s_left_ramp_opto_inactive", Null
 End Sub
 
 Sub sw_plunger_Hit()

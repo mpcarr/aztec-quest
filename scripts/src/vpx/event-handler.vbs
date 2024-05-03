@@ -4,6 +4,7 @@ Dim AllowPinEventsList : Set AllowPinEventsList = CreateObject("Scripting.Dictio
 Dim lastPinEvent : lastPinEvent = Null
 Sub DispatchPinEvent(e, kwargs)
     If Not pinEvents.Exists(e) Then
+        debugLog.WriteToLog "DispatchPinEvent", e & " has no listeners"
         Exit Sub
     End If
     lastPinEvent = e
@@ -19,6 +20,7 @@ End Sub
 
 Sub DispatchRelayPinEvent(e, kwargs)
     If Not pinEvents.Exists(e) Then
+        debugLog.WriteToLog "DispatchRelayPinEvent", e & " has no listeners"
         Exit Sub
     End If
     lastPinEvent = e
@@ -43,8 +45,10 @@ End Sub
 
 Sub RemovePinEventListener(evt, key)
     If pinEvents.Exists(evt) Then
-        pinEvents(evt).Remove key
-        SortPinEventsByPriority evt, Null, key, False
+        If pinEvents(evt).Exists(key) Then
+            pinEvents(evt).Remove key
+            SortPinEventsByPriority evt, Null, key, False
+        End If
     End If
 End Sub
 

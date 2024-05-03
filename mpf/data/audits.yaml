@@ -1,6 +1,6 @@
 events:
-  game_ended: 3
-  game_started: 45
+  game_ended: 4
+  game_started: 50
 player:
   score:
     average: 0.0
@@ -8,30 +8,31 @@ player:
     - 0
     - 0
     - 0
-    total: 3
+    - 0
+    total: 4
 switches:
-  s_cave_scoop: 40
-  s_dt_map1: 33
+  s_cave_scoop: 42
+  s_dt_map1: 35
   s_dt_map2: 5
   s_dt_map3: 5
   s_dt_map4: 11
   s_dt_map5: 7
   s_dt_map6: 13
   s_left_flipper: 0
-  s_left_ramp_opto: 10
+  s_left_ramp_opto: 36
   s_map1: 3
   s_map2: 0
   s_map3: 1
   s_map4: 4
   s_map5: 3
   s_map6: 7
-  s_plunger: 117
+  s_plunger: 129
   s_right_flipper: 0
-  s_start: 13
-  s_trough1: 97
-  s_trough2: 95
-  s_trough3: 95
-  s_trough4: 95
-  s_trough5: 59
+  s_start: 18
+  s_trough1: 108
+  s_trough2: 106
+  s_trough3: 106
+  s_trough4: 106
+  s_trough5: 67
   s_trough6: 0
   s_trough_jam: 0

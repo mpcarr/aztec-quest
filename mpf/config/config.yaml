@@ -136,12 +136,12 @@ dual_wound_coils:
     main_coil: c_panther_main
 
 diverters:
-  panther_diverter:
+  panther:
     activate_events: activate_panther
     deactivate_events: deactivate_panther
     activation_coil: c_panther_dualcoil
     type: hold
-    activation_time: 3s
+    activation_time: 0
     enable_events: ball_started
     disable_events: ball_ended
 
