@@ -4,32 +4,41 @@ Class Mode
     Private m_name
     Private m_start_events
     Private m_stop_events
+    private m_priority
     Private m_debug
 
-	Public default Function init(name, start_events, stop_events, debug_on)
+    Public Property Get Name(): Name = m_name: End Property
+    Public Property Get Priority(): Priority = m_priority: End Property
+
+	Public default Function init(name, priority, start_events, stop_events, debug_on)
         m_name = "mode_"&name
+        m_priority = priority
         m_start_events = start_events
         m_stop_events = stop_events
         
         m_debug = debug_on
         Dim evt
         For Each evt in m_start_events
-            AddPinEventListener evt, m_name & "_start", "ModeEventHandler", 1000, Array("start", Me)
+            AddPinEventListener evt, m_name & "_start", "ModeEventHandler", m_priority, Array("start", Me)
         Next
         For Each evt in m_stop_events
-            AddPinEventListener evt, m_name & "_stop", "ModeEventHandler", 1000, Array("stop", Me)
+            AddPinEventListener evt, m_name & "_stop", "ModeEventHandler", m_priority, Array("stop", Me)
         Next
         Set Init = Me
 	End Function
 
-    Public Sub Start()
+    Public Sub StartMode()
         Log "Starting"
-        Dim evt
+        DispatchPinEvent m_name & "_starting", Null
+        DispatchPinEvent m_name & "_started", Null
+        Log "Started"
     End Sub
 
-    Public Sub Stop()
+    Public Sub StopMode()
         Log "Stopping"
-        Dim evt
+        DispatchPinEvent m_name & "_stopping", Null
+        DispatchPinEvent m_name & "_stopped", Null
+        Log "Stopped"
     End Sub
 
     Private Sub Log(message)
@@ -45,9 +54,9 @@ Function ModeEventHandler(args)
     Dim mode : Set mode = ownProps(1)
     Select Case evt
         Case "start"
-            mode.Enable
+            mode.StartMode
         Case "stop"
-            mode.Disable
+            mode.StopMode
     End Select
     ModeEventHandler = kwargs
 End Function

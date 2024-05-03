@@ -49,6 +49,8 @@ Class Diverter
         For Each evt in m_deactivate_events
             RemovePinEventListener evt, m_name & "_deactivate"
         Next
+        RemoveDelay m_name & "_deactivate"
+        GetRef(m_action_cb)(0)
     End Sub
 
     Public Sub Activate
@@ -57,11 +59,14 @@ Class Diverter
         If m_activation_time > 0 Then
             SetDelay m_name & "_deactivate", "DiverterEventHandler", Array(Array("deactivate", Me), Null), m_activation_time
         End If
+        DispatchPinEvent m_name & "_activating", Null
     End Sub
 
     Public Sub Deactivate
         Log "Deactivating"
+        RemoveDelay m_name & "_deactivate"
         GetRef(m_action_cb)(0)
+        DispatchPinEvent m_name & "_deactivating", Null
     End Sub
 
     Private Sub Log(message)
