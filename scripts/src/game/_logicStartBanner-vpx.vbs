@@ -31,6 +31,14 @@ With timer_beasts_panther
     .Debug = True
 End With
 
+Dim event_player_beasts : Set event_player_beasts = (New EventPlayer)(mode_beasts)
+Dim event_player_beasts_events : Set event_player_beasts_events = CreateObject("Scripting.Dictionary")
+event_player_beasts_events.Add "timer_beasts_panther_complete", Array("deactivate_panther")
+With event_player_beasts
+    .Events = event_player_beasts_events
+    .Debug = True
+End With
+
 Dim diverter_panther : Set diverter_panther = (new Diverter)("panther", Array("ball_started"), Array("ball_ended"), Array("activate_panther"), Array("deactivate_panther"), 0, "MovePanther", True)
 
 
