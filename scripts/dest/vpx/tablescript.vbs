@@ -119,6 +119,7 @@ Sub Table1_Init
 	RightSlingShot_Timer
 	
 	DTDrop 1
+	DTDrop 2
 	PuPInit
 	BuildPlayerEventSelectCase
 End Sub
@@ -2108,6 +2109,14 @@ Sub UpdateTargets
 	End If
 	BM_pantherLid.transz = BM_sw01.transz
 	BM_pantherSupport.transz = BM_sw01.transz
+
+	If DTDropped(2) = True Then
+		BM_pantherLid2.RotX = -6
+	Else
+		BM_pantherLid2.RotX = 0
+	End If
+	BM_pantherLid2.transz = BM_sw02.transz
+	BM_pantherSupport2.transz = BM_sw02.transz
 End Sub
 
 
@@ -6811,11 +6820,13 @@ Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 Dim balldevice_plunger : Set balldevice_plunger = (new BallDevice)("plunger", "sw_plunger", Null, 3, True, 0, 50, "y-up", False)
 Dim balldevice_cave : Set balldevice_cave = (new BallDevice)("cave", "sw39", Null, 2, False, 0, 60, "z-up", True)
 Dim diverter_panther : Set diverter_panther = (new Diverter)("panther", Array("ball_started"), Array("ball_ended"), Array("activate_panther"), Array("deactivate_panther"), 0, "MovePanther", True)
-
+Dim diverter_panther2 : Set diverter_panther2 = (new Diverter)("panther2", Array("ball_started"), Array("ball_ended"), Array("activate_panther"), Array("deactivate_panther"), 0, "MovePanther", True)
 
 
 Dim DT01, DT02, DT03, DT04, DT05, DT06, DT07, DT08, DT09, DT10, DT38, DT40, DT45, DT46, DT47
+
 Set DT01 = (new DropTarget)(sw01, sw01a, BM_sw01, 1, 0, True, Null) 
+Set DT02 = (new DropTarget)(sw02, sw02a, BM_sw02, 2, 0, True, Null) 
 Set DT04 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False, "ball_started")
 Set DT05 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False, "ball_started")
 Set DT06 = (new DropTarget)(sw06, sw06a, BM_sw06, 6, 0, False, "ball_started")
@@ -6823,13 +6834,15 @@ Set DT08 = (new DropTarget)(sw08, sw08a, BM_sw08, 8, 0, False, "ball_started")
 Set DT09 = (new DropTarget)(sw09, sw09a, BM_sw09, 9, 0, False, "ball_started")
 Set DT10 = (new DropTarget)(sw10, sw10a, BM_sw10, 10, 0, False, "ball_started")
 Dim DTArray
-DTArray = Array(DT01,DT04, DT05, DT06, DT08, DT09, DT10)
+DTArray = Array(DT01, DT02, DT04, DT05, DT06, DT08, DT09, DT10)
 
 Sub MovePanther(enabled)
     If enabled Then
         DTRaise 1
+        DTRaise 2
     Else
         DTDrop 1
+        DTDrop 2
     End If
 End Sub
 
@@ -8195,6 +8208,8 @@ Sub DTAction(switchid, enabled)
         Select Case switchid
             case 1:
                 DispatchPinEvent "sw01_inactive", Null
+            case 2:
+                DispatchPinEvent "sw02_inactive", Null
             case 4:
                 DispatchPinEvent "sw04_active", Null
             case 5:
@@ -8212,6 +8227,8 @@ Sub DTAction(switchid, enabled)
         Select Case switchid
             case 1:
                 DispatchPinEvent "sw01_active", Null
+            case 2:
+                DispatchPinEvent "sw02_active", Null
             case 4:
                 DispatchPinEvent "sw04_inactive", Null
             case 5:

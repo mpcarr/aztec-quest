@@ -18,7 +18,7 @@
     "is_locked": true,
     "editor_layer": 4,
     "editor_layer_name": "DropTargets",
-    "editor_layer_visibility": false
+    "editor_layer_visibility": true
   },
   {
     "file_name": "Wall.Wall39.json",
@@ -1947,10 +1947,10 @@
   },
   {
     "file_name": "Wall.sw01a.json",
-    "is_locked": true,
+    "is_locked": false,
     "editor_layer": 4,
     "editor_layer_name": "DropTargets",
-    "editor_layer_visibility": false
+    "editor_layer_visibility": true
   },
   {
     "file_name": "Light.l01a.json",
@@ -2223,7 +2223,7 @@
     "is_locked": true,
     "editor_layer": 0,
     "editor_layer_name": "VLM.Visuals",
-    "editor_layer_visibility": false
+    "editor_layer_visibility": true
   },
   {
     "file_name": "Primitive.BM_sw04.json",
@@ -2419,6 +2419,20 @@
     "is_locked": true,
     "editor_layer": 0,
     "editor_layer_name": "Layer1Walls",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "Wall.sw02.json",
+    "is_locked": false,
+    "editor_layer": 4,
+    "editor_layer_name": "Layer1Walls",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "Wall.sw02a.json",
+    "is_locked": false,
+    "editor_layer": 4,
+    "editor_layer_name": "DropTargets",
     "editor_layer_visibility": true
   }
 ]

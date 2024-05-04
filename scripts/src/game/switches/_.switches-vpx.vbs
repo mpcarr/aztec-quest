@@ -121,6 +121,8 @@ Sub DTAction(switchid, enabled)
         Select Case switchid
             case 1:
                 DispatchPinEvent "sw01_inactive", Null
+            case 2:
+                DispatchPinEvent "sw02_inactive", Null
             case 4:
                 DispatchPinEvent "sw04_active", Null
             case 5:
@@ -138,6 +140,8 @@ Sub DTAction(switchid, enabled)
         Select Case switchid
             case 1:
                 DispatchPinEvent "sw01_active", Null
+            case 2:
+                DispatchPinEvent "sw02_active", Null
             case 4:
                 DispatchPinEvent "sw04_inactive", Null
             case 5:

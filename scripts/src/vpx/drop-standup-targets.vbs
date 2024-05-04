@@ -323,6 +323,14 @@ Sub UpdateTargets
 	End If
 	BM_pantherLid.transz = BM_sw01.transz
 	BM_pantherSupport.transz = BM_sw01.transz
+
+	If DTDropped(2) = True Then
+		BM_pantherLid2.RotX = -6
+	Else
+		BM_pantherLid2.RotX = 0
+	End If
+	BM_pantherLid2.transz = BM_sw02.transz
+	BM_pantherSupport2.transz = BM_sw02.transz
 End Sub
 
 

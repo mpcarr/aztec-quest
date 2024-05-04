@@ -119,6 +119,7 @@ Sub Table1_Init
 	RightSlingShot_Timer
 	
 	DTDrop 1
+	DTDrop 2
 	PuPInit
 	BuildPlayerEventSelectCase
 End Sub
