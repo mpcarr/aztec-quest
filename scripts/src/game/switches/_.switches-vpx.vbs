@@ -119,6 +119,8 @@ End Sub
 Sub DTAction(switchid, enabled)
     If enabled = 1 Then
         Select Case switchid
+            case 1:
+                DispatchPinEvent "sw01_inactive", Null
             case 4:
                 DispatchPinEvent "sw04_active", Null
             case 5:
@@ -134,6 +136,8 @@ Sub DTAction(switchid, enabled)
         End Select
     ElseIf enabled = 0 Then
         Select Case switchid
+            case 1:
+                DispatchPinEvent "sw01_active", Null
             case 4:
                 DispatchPinEvent "sw04_inactive", Null
             case 5:

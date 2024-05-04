@@ -39,8 +39,10 @@ Sub AddPinEventListener(evt, key, callbackName, priority, args)
     If Not pinEvents.Exists(evt) Then
         pinEvents.Add evt, CreateObject("Scripting.Dictionary")
     End If
-    pinEvents(evt).Add key, Array(callbackName, priority, args)
-    SortPinEventsByPriority evt, priority, key, True
+    If Not pinEvents(evt).Exists(key) Then
+        pinEvents(evt).Add key, Array(callbackName, priority, args)
+        SortPinEventsByPriority evt, priority, key, True
+    End If
 End Sub
 
 Sub RemovePinEventListener(evt, key)

@@ -34,7 +34,7 @@ Dim haspup : haspup = false
 Dim GameTilted : GameTilted = False
 Dim gameDebugger : Set gameDebugger = new AdvGameDebugger
 Dim debugLog : Set debugLog = (new DebugLogFile)()
-Dim debugEnabled : debugEnabled = True
+Dim debugEnabled : debugEnabled = False
 '*******************************************
 '  Constants and Global Variables
 '*******************************************

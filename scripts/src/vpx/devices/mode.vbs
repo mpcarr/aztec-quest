@@ -10,20 +10,26 @@ Class Mode
     Public Property Get Name(): Name = m_name: End Property
     Public Property Get Priority(): Priority = m_priority: End Property
 
-	Public default Function init(name, priority, start_events, stop_events, debug_on)
-        m_name = "mode_"&name
-        m_priority = priority
-        m_start_events = start_events
-        m_stop_events = stop_events
-        
-        m_debug = debug_on
+    Public Property Let StartEvents(value)
+        m_start_events = value
         Dim evt
         For Each evt in m_start_events
             AddPinEventListener evt, m_name & "_start", "ModeEventHandler", m_priority, Array("start", Me)
         Next
+    End Property
+    
+    Public Property Let StopEvents(value)
+        m_stop_events = value
+        Dim evt
         For Each evt in m_stop_events
             AddPinEventListener evt, m_name & "_stop", "ModeEventHandler", m_priority, Array("stop", Me)
         Next
+    End Property
+    Public Property Let Debug(value) : m_debug = value : End Property
+
+	Public default Function init(name, priority)
+        m_name = "mode_"&name
+        m_priority = priority
         Set Init = Me
 	End Function
 

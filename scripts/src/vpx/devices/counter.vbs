@@ -15,18 +15,19 @@ Class Counter
 
     Private m_count
 
-	Public default Function init(name, mode, enable_events, count_events, count_complete_value, disable_on_complete, reset_on_complete, events_when_complete, persist_state, debug_on)
+    Public Property Let EnableEvents(value) : m_enable_events = value : End Property
+    Public Property Let CountEvents(value) : m_count_events = value : End Property
+    Public Property Let CountCompleteValue(value) : m_count_complete_value = value : End Property
+    Public Property Let DisableOnComplete(value) : m_disable_on_complete = value : End Property
+    Public Property Let ResetOnComplete(value) : m_reset_on_complete = value : End Property
+    Public Property Let EventsWhenComplete(value) : m_events_when_complete = value : End Property
+    Public Property Let PersistState(value) : m_persist_state = value : End Property
+    Public Property Let Debug(value) : m_debug = value : End Property
+
+	Public default Function init(name, mode)
         m_name = "counter_" & name
         m_mode = mode.Name
         m_priority = mode.Priority
-        m_enable_events = enable_events
-        m_count_events = count_events
-        m_count_complete_value = count_complete_value
-        m_disable_on_complete = disable_on_complete
-        m_reset_on_complete = reset_on_complete
-        m_events_when_complete = events_when_complete
-        m_persist_state = persist_state
-        m_debug = debug_on
         m_count = -1
 
         AddPinEventListener m_mode & "_starting", m_name & "_activate", "CounterEventHandler", m_priority, Array("activate", Me)
@@ -46,7 +47,11 @@ Class Counter
 
     Public Sub Activate()
         If m_persist_state And m_count > -1 Then
-            SetValue GetPlayerState(m_name & "_state")
+            If Not IsNull(GetPlayerState(m_name & "_state")) Then
+                SetValue GetPlayerState(m_name & "_state")
+            Else
+                SetValue 0
+            End If
         Else
             SetValue 0
         End If
