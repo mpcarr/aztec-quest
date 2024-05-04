@@ -31,6 +31,11 @@ jobs:
         run: |
           echo "build_number=$(git rev-list 1295e43d69488b1a9d128bde0edc14347097e1f1..HEAD --count)"  >> $GITHUB_OUTPUT
 
+      - name: Modify locked property
+        run: |
+          jq '.locked = 1' aztecquest-dev/gamedata.json > temp.json && mv temp.json aztecquest-dev/gamedata.json
+        working-directory: ${{ github.workspace }}
+
       - name: Download vpxtool
         run: |
           wget https://github.com/francisdb/vpxtool/releases/download/v0.13.0/vpxtool-Linux-x86_64-musl-v0.13.0.tar.gz
