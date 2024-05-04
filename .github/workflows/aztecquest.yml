@@ -33,7 +33,7 @@ jobs:
 
       - name: Modify locked property
         run: |
-          jq '.locked = 1' aztecquest-dev/gamedata.json > temp.json && mv temp.json aztectquest-dev/gamedata.json
+          jq '.locked = 1' aztecquest-dev/gamedata.json > temp.json && mv temp.json aztecquest-dev/gamedata.json
         working-directory: ${{ github.workspace }}
 
       - name: Download vpxtool
