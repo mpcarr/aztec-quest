@@ -94,7 +94,7 @@ jobs:
         with:
           script: |
             const release_id = ${{ steps.get_release.outputs.release_id }};
-            const { data: assets } = await github.repos.listReleaseAssets({
+            const { data: assets } = await github.rest.repos.listReleaseAssets({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id
