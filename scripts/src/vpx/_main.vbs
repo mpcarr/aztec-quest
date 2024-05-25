@@ -136,7 +136,7 @@ End Sub
 
 
 Sub Table1_Exit
-	gameDebugger.Disconnect
+	'gameDebugger.Disconnect
 	If Not IsNull(bcpController) Then
 		bcpController.Disconnect
 		Set bcpController = Nothing

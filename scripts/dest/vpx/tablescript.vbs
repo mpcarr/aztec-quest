@@ -136,7 +136,7 @@ End Sub
 
 
 Sub Table1_Exit
-	gameDebugger.Disconnect
+	'gameDebugger.Disconnect
 	If Not IsNull(bcpController) Then
 		bcpController.Disconnect
 		Set bcpController = Nothing
@@ -7738,8 +7738,8 @@ Dim playerEvents : Set playerEvents = CreateObject("Scripting.Dictionary")
 Dim playerEventsOrder : Set playerEventsOrder = CreateObject("Scripting.Dictionary")
 Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
-Dim bcpController
-Dim useBCP : useBCP = True
+Dim bcpController : bcpController = Null
+Dim useBCP : useBCP = False
 Public Sub ConnectToBCPMediaController
     Set bcpController = (new VpxBcpController)(5050, Null)
 End Sub
@@ -8040,7 +8040,6 @@ Function EndOfBall(args)
         gameStarted = False
         currentPlayer = Null
         playerState.RemoveAll()
-        msgbox "gameover"
     Else
         DispatchPinEvent NEXT_PLAYER, Null
     End If

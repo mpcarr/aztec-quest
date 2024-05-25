@@ -14,8 +14,8 @@ Dim playerEvents : Set playerEvents = CreateObject("Scripting.Dictionary")
 Dim playerEventsOrder : Set playerEventsOrder = CreateObject("Scripting.Dictionary")
 Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
-Dim bcpController
-Dim useBCP : useBCP = True
+Dim bcpController : bcpController = Null
+Dim useBCP : useBCP = False
 Public Sub ConnectToBCPMediaController
     Set bcpController = (new VpxBcpController)(5050, Null)
 End Sub

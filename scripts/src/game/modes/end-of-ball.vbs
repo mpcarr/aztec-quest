@@ -49,7 +49,6 @@ Function EndOfBall(args)
         gameStarted = False
         currentPlayer = Null
         playerState.RemoveAll()
-        msgbox "gameover"
     Else
         DispatchPinEvent NEXT_PLAYER, Null
     End If
