@@ -94,23 +94,21 @@ Sub DTHit(switch)
 	If DTArray(i).animate = 1 Or DTArray(i).animate = 3 Or DTArray(i).animate = 4 Then
 		DTBallPhysics ActiveBall, DTArray(i).prim.rotz, DTMass
 	End If
-	DoDTAnim
+	DTArray(i).animate = DTAnimate(DTArray(i).primary,DTArray(i).secondary,DTArray(i).prim,DTArray(i).sw,DTArray(i).animate)
 End Sub
 
 Sub DTRaise(switch)
 	Dim i
 	i = DTArrayID(switch)
 	
-	DTArray(i).animate =  - 1
-	DoDTAnim
+	DTArray(i).animate =  DTAnimate(DTArray(i).primary,DTArray(i).secondary,DTArray(i).prim,DTArray(i).sw, -1)
 End Sub
 
 Sub DTDrop(switch)
 	Dim i
 	i = DTArrayID(switch)
 	
-	DTArray(i).animate = 1
-	DoDTAnim
+	DTArray(i).animate = DTAnimate(DTArray(i).primary,DTArray(i).secondary,DTArray(i).prim,DTArray(i).sw, 1)
 End Sub
 
 Function DTArrayID(switch)
@@ -286,11 +284,14 @@ Function DTAnimate(primary, secondary, prim, switch, animate)
 		End If
 		primary.collidable = 0
 		secondary.collidable = 1
-		DTArray(ind).isDropped = False 'Mark target as not dropped
-		If UsingROM Then 
-			controller.Switch(Switchid mod 100) = 0
-		Else
-			DTAction switchid, 0
+
+		If DTArray(ind).isDropped = True Then
+			DTArray(ind).isDropped = False 'Mark target as not dropped
+			If UsingROM Then 
+				controller.Switch(Switchid mod 100) = 0
+			Else
+				DTAction switchid, 0
+			End If
 		End If
 	End If
 	

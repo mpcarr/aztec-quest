@@ -30,9 +30,7 @@ Function GetPlayerScore(player)
     End If
 End Function
 
-
 Function GetCurrentPlayerNumber()
-    
     Select Case currentPlayer
         Case "PLAYER 1":
             GetCurrentPlayerNumber = 1
@@ -59,8 +57,9 @@ Function SetPlayerState(key, value)
             Exit Function
         End If
     End If   
-    
+    Dim prevValue
     If playerState(currentPlayer).Exists(key) Then
+        prevValue = playerState(currentPlayer)(key)
        playerState(currentPlayer).Remove key
     End If
     playerState(currentPlayer).Add key, value
@@ -71,55 +70,107 @@ Function SetPlayerState(key, value)
         gameDebugger.SendPlayerState key, value
     End If
     If playerEvents.Exists(key) Then
-        FirePlayerEventCallback key
+        FirePlayerEventHandlers key, value, prevValue
     End If
     
     SetPlayerState = Null
 End Function
 
-Sub RegisterPlayerStateEvent(e, v)
-    If Not playerEvents.Exists(e) Then
-        playerEvents.Add e, CreateObject("Scripting.Dictionary")
+Sub FirePlayerEventHandlers(evt, value, prevValue)
+    If Not playerEvents.Exists(evt) Then
+        Exit Sub
+    End If    
+    Dim k
+    Dim handlers : Set handlers = playerEvents(evt)
+    For Each k In playerEventsOrder(evt)
+        GetRef(handlers(k(1))(0))(Array(handlers(k(1))(2), Array(evt,value,prevValue)))
+    Next
+End Sub
+
+Sub AddPlayerStateEventListener(evt, key, callbackName, priority, args)
+    If Not playerEvents.Exists(evt) Then
+        playerEvents.Add evt, CreateObject("Scripting.Dictionary")
     End If
-    playerEvents(e).Add v, True
+    If Not playerEvents(evt).Exists(key) Then
+        playerEvents(evt).Add key, Array(callbackName, priority, args)
+        SortPlayerEventsByPriority evt, priority, key, True
+    End If
+End Sub
+
+Sub RemovePlayerStateEventListener(evt, key)
+    If playerEvents.Exists(evt) Then
+        If playerEvents(evt).Exists(key) Then
+            playerEvents(evt).Remove key
+            SortPlayerEventsByPriority evt, Null, key, False
+        End If
+    End If
+End Sub
+
+Sub SortPlayerEventsByPriority(evt, priority, key, isAdding)
+    Dim tempArray, i, inserted, foundIndex
+    
+    ' Initialize or update the playerEventsOrder to maintain order based on priority
+    If Not playerEventsOrder.Exists(evt) Then
+        ' If the event does not exist in playerEventsOrder, just add it directly if we're adding
+        If isAdding Then
+            playerEventsOrder.Add evt, Array(Array(priority, key))
+        End If
+    Else
+        tempArray = playerEventsOrder(evt)
+        If isAdding Then
+            ' Prepare to add one more element if adding
+            ReDim Preserve tempArray(UBound(tempArray) + 1)
+            inserted = False
+            
+            For i = 0 To UBound(tempArray) - 1
+                If priority > tempArray(i)(0) Then ' Compare priorities
+                    ' Move existing elements to insert the new callback at the correct position
+                    Dim j
+                    For j = UBound(tempArray) To i + 1 Step -1
+                        tempArray(j) = tempArray(j - 1)
+                    Next
+                    ' Insert the new callback
+                    tempArray(i) = Array(priority, key)
+                    inserted = True
+                    Exit For
+                End If
+            Next
+            
+            ' If the new callback has the lowest priority, add it at the end
+            If Not inserted Then
+                tempArray(UBound(tempArray)) = Array(priority, key)
+            End If
+        Else
+            ' Code to remove an element by key
+            foundIndex = -1 ' Initialize to an invalid index
+            
+            ' First, find the element's index
+            For i = 0 To UBound(tempArray)
+                If tempArray(i)(1) = key Then
+                    foundIndex = i
+                    Exit For
+                End If
+            Next
+            
+            ' If found, remove the element by shifting others
+            If foundIndex <> -1 Then
+                For i = foundIndex To UBound(tempArray) - 1
+                    tempArray(i) = tempArray(i + 1)
+                Next
+                
+                ' Resize the array to reflect the removal
+                ReDim Preserve tempArray(UBound(tempArray) - 1)
+            End If
+        End If
+        
+        ' Update the playerEventsOrder with the newly ordered or modified list
+        playerEventsOrder(evt) = tempArray
+    End If
 End Sub
 
 Sub EmitAllPlayerEvents()
     Dim key
     For Each key in playerState(currentPlayer).Keys()
-        FirePlayerEventCallback key
+        FirePlayerEventHandlers key, GetPlayerState(key), GetPlayerState(key)
     Next
-End Sub
-
-Sub BuildPlayerEventSelectCase()
-    Dim eventName, functionName, caseString, innerDict,BuildSelectCase
-    ' Initialize the Select Case string
-    BuildSelectCase = "Sub FirePlayerEventCallback(eventName)" & vbCrLf
-    BuildSelectCase = BuildSelectCase & "    Select Case eventName" & vbCrLf
-    
-    ' Iterate over the outer dictionary (playerEvents)
-    For Each eventName In playerEvents.Keys
-        ' Start the Case clause for this event
-        caseString = "        Case """ & eventName & """:" & vbCrLf
-        
-        ' Get the sub-dictionary for this event
-        Set innerDict = playerEvents(eventName)
-        
-        ' Iterate over the sub-dictionary to append function names
-        For Each functionName In innerDict.Keys
-            ' Only append if the value is True (as per your description)
-            If innerDict(functionName) = True Then
-                caseString = caseString & "            " & functionName & vbCrLf
-            End If
-        Next
-        
-        ' Append this case to the overall Select Case string
-        BuildSelectCase = BuildSelectCase & caseString
-    Next
-    
-    ' Close the Select Case statement
-    BuildSelectCase = BuildSelectCase & "    End Select" & vbCrLf
-    BuildSelectCase = BuildSelectCase & "End Sub"
-    'debug.print(BuildSelectCase)
-    ExecuteGlobal BuildSelectCase
 End Sub

@@ -8,3 +8,9 @@ crash.txt
 mpf-vpcom-bridge.txt
 aztecquest-dev - VLM.vpx
 aztecquest-dev.ini
+mpf080
+*.exe
+*.pck
+*.log
+bcplog.txt
+log.txt

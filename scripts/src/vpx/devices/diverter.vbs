@@ -10,14 +10,15 @@ Class Diverter
     Private m_action_cb
     Private m_debug
 
-	Public default Function init(name, enable_events, disable_events, activate_events, deactivate_events, activation_time, action_cb, debug_on)
+    Public Property Let ActionCallback(value) : m_action_cb = value : End Property
+
+	Public default Function init(name, enable_events, disable_events, activate_events, deactivate_events, activation_time, debug_on)
         m_enable_events = enable_events
         m_disable_events = disable_events
         m_activate_events = activate_events
         m_deactivate_events = deactivate_events
         m_activation_time = activation_time
         m_name = "diverter_"&name
-        m_action_cb = action_cb
         m_debug = debug_on
         Dim evt
         For Each evt in m_enable_events

@@ -4,10 +4,10 @@
 '***********************************************************************************
 
 'Score 
-Const SCORE = "Player Score"
+Const SCORE = "score"
 Const PLAYER_NAME = "Player Name"
 'Ball
-Const CURRENT_BALL = "Current Ball"
+Const CURRENT_BALL = "ball"
 'Lanes
 Const LANE_1 = "Lane 1"
 Const LANE_2 = "Lane 2"

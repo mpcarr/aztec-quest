@@ -34,7 +34,7 @@ Dim haspup : haspup = false
 Dim GameTilted : GameTilted = False
 Dim gameDebugger : Set gameDebugger = new AdvGameDebugger
 Dim debugLog : Set debugLog = (new DebugLogFile)()
-Dim debugEnabled : debugEnabled = False
+Dim debugEnabled : debugEnabled = True
 '*******************************************
 '  Constants and Global Variables
 '*******************************************
@@ -113,18 +113,32 @@ Sub Table1_Init
 	'	.InitExitSnd SoundFX("fx_kicker", DOFContactors), SoundFX("fx_solenoid", DOFContactors)
 	'	.CreateEvents "plungerIM"
 	'End With
-	PlayVPXSeq
+	'PlayVPXSeq
 
 	LeftSlingShot_Timer
 	RightSlingShot_Timer
+	lightCtrl.SyncLightMapColors
 	
 	DTDrop 1
 	DTDrop 2
 	PuPInit
-	BuildPlayerEventSelectCase
+	
+
+	If AllLightsOnMode Then
+		SetLightsOn
+	End If
+
+	If useBCP = True Then
+		ConnectToBCPMediaController
+	End If
+
 End Sub
 
 
 Sub Table1_Exit
 	gameDebugger.Disconnect
+	If Not IsNull(bcpController) Then
+		bcpController.Disconnect
+		Set bcpController = Nothing
+	End If
 End Sub

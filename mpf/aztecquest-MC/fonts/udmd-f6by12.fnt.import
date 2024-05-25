@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://dphpb5nlfrijl"
+path="res://.godot/imported/udmd-f6by12.fnt-d835ffc7781da1388801b8eb9390a362.fontdata"
+
+[deps]
+
+source_file="res://fonts/udmd-f6by12.fnt"
+dest_files=["res://.godot/imported/udmd-f6by12.fnt-d835ffc7781da1388801b8eb9390a362.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

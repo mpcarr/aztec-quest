@@ -26,34 +26,57 @@ Class DelayObject
 End Class
 
 Dim delayQueue : Set delayQueue = CreateObject("Scripting.Dictionary")
+Dim delayQueueMap : Set delayQueueMap = CreateObject("Scripting.Dictionary")
 Dim delayCallbacks : Set delayCallbacks = CreateObject("Scripting.Dictionary")
 
 Sub SetDelay(name, callbackFunc, args, delayInMs)
     Dim executionTime
-    executionTime = gametime + delayInMs
+    executionTime = AlignToQuarterSecond(gametime + delayInMs)
     
-    If delayQueue.Exists(name) Then
-        delayQueue.Remove(name)
+    If delayQueueMap.Exists(name) Then
+        delayQueueMap.Remove name
     End If
+    
+
+    If delayQueue.Exists(executionTime) Then
+        If delayQueue(executionTime).Exists(name) Then
+            delayQueue(executionTime).Remove name
+        End If
+
+    Else
+        delayQueue.Add executionTime, CreateObject("Scripting.Dictionary")
+
+    End If
+
     debugLog.WriteToLog "Delay", "Adding delay for " & name & ", callback: " & callbackFunc
-    delayQueue.Add name, (new DelayObject)(name, callbackFunc, executionTime, args) 
+     delayQueue(executionTime).Add name, (new DelayObject)(name, callbackFunc, executionTime, args)
+     delayQueueMap.Add name, executionTime
+    
 End Sub
 
+Function AlignToQuarterSecond(timeMs)
+    AlignToQuarterSecond = Int(timeMs / 125) * 125
+End Function
+
 Sub RemoveDelay(name)
-    If delayQueue.Exists(name) Then
-        delayQueue.Remove(name)
+    If delayQueueMap.Exists(name) Then
+        If delayQueue.Exists(delayQueueMap(name)) Then
+            delayQueue.Remove(delayQueueMap(name))
+        End If
     End If
 End Sub
 
 Sub DelayTick()
     Dim key, delayObject
-    
-    For Each key In delayQueue.Keys()
-        Set delayObject = delayQueue(key)
-        If delayObject.TTL <= gametime Then
-            delayQueue.remove(key)
+
+    Dim executionTime
+    executionTime = AlignToQuarterSecond(gametime)
+    If delayQueue.Exists(executionTime) Then
+        For Each key In delayQueue(executionTime).Keys()
+            Set delayObject = delayQueue(executionTime)(key)
             debugLog.WriteToLog "Delay", "Executing delay: " & key & ", callback: " & delayObject.Callback
             GetRef(delayObject.Callback)(delayObject.Args)
-        End If
-    Next
+        Next
+        delayQueue.Remove executionTime
+    End If
 End Sub

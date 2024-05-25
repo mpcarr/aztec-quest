@@ -1,6 +1,24 @@
 events:
   game_ended: 4
-  game_started: 50
+  game_started: 77
+missing_switches:
+  s_left_flipper: 9
+  s_map1: 9
+  s_map2: 9
+  s_map3: 9
+  s_map4: 9
+  s_map5: 9
+  s_map6: 9
+  s_right_flipper: 9
+  s_trough6: 9
+  s_trough_jam: 9
+  sw04: 6
+  sw05: 1
+  sw06: 9
+  sw08: 6
+  sw09: 6
+  sw10: 9
+  sw39: 6
 player:
   score:
     average: 0.0
@@ -11,28 +29,37 @@ player:
     - 0
     total: 4
 switches:
-  s_cave_scoop: 42
-  s_dt_map1: 35
+  s_cave_scoop: 47
+  s_dt_map1: 37
   s_dt_map2: 5
   s_dt_map3: 5
   s_dt_map4: 11
-  s_dt_map5: 7
+  s_dt_map5: 10
   s_dt_map6: 13
   s_left_flipper: 0
-  s_left_ramp_opto: 36
-  s_map1: 3
+  s_left_ramp_opto: 105
+  s_map1: 5
   s_map2: 0
   s_map3: 1
   s_map4: 4
   s_map5: 3
   s_map6: 7
-  s_plunger: 129
+  s_plunger: 152
   s_right_flipper: 0
-  s_start: 18
-  s_trough1: 108
-  s_trough2: 106
-  s_trough3: 106
-  s_trough4: 106
-  s_trough5: 67
+  s_start: 50
+  s_trough1: 142
+  s_trough2: 140
+  s_trough3: 139
+  s_trough4: 139
+  s_trough5: 84
   s_trough6: 0
   s_trough_jam: 0
+  sw04: 2
+  sw05: 1
+  sw06: 0
+  sw08: 1
+  sw09: 1
+  sw10: 0
+  sw39: 1
+  sw99: 8
+  sw_plunger: 13

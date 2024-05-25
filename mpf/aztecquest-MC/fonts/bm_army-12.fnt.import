@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://pg3abna3vlpx"
+path="res://.godot/imported/bm_army-12.fnt-2235dce6563183abe70a64a25bea41fa.fontdata"
+
+[deps]
+
+source_file="res://fonts/bm_army-12.fnt"
+dest_files=["res://.godot/imported/bm_army-12.fnt-2235dce6563183abe70a64a25bea41fa.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

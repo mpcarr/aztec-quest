@@ -1,4 +1,4 @@
-#config_version=5
+#config_version=6
 
 hardware:
   platform: opp
@@ -31,36 +31,44 @@ switches:
     tags: right_flipper
   s_trough1:
     number: 0-0-3
+    tags: trough1
   s_trough2:
     number: 0-0-8
+    tags: trough2
   s_trough3:
     number: 0-0-9
+    tags: trough3
   s_trough4:
     number: 0-0-10
+    tags: trough4
   s_trough5:
     number: 0-0-11
+    tags: trough5
   s_trough6:
     number: 0-0-27
+    tags: trough6
   s_trough_jam:
     number: 0-0-26
-  s_plunger:
+    tags: troughJam
+  sw_plunger:
     number: 0-0-28
   s_start:
     number: 0-0-29
     tags: start
-  s_cave_scoop:
+  sw39:
     number: 0-0-30
-  s_dt_map1:
+    tags: cave_scoop
+  sw04:
     number: 0-0-31
-  s_dt_map2:
+  sw05:
     number: 0-0-32
-  s_dt_map3:
+  sw06:
     number: 0-0-33
-  s_dt_map4:
+  sw08:
     number: 0-0-34
-  s_dt_map5:
+  sw09:
     number: 0-0-35
-  s_dt_map6:
+  sw10:
     number: 0-0-36
   s_map1:
     number: 0-0-37
@@ -74,8 +82,9 @@ switches:
     number: 0-0-41
   s_map6:
     number: 0-0-42
-  s_left_ramp_opto:
+  sw99:
     number: 0-0-43
+    tags: left_ramp_opto
 
 coils:
   c_flipper_left_main:
@@ -135,8 +144,42 @@ dual_wound_coils:
     hold_coil: c_panther_hold
     main_coil: c_panther_main
 
+lights:
+  l01:
+    number: 0-0-0
+    subtype: led
+    tags: panther
+  l02:
+    number: 0-0-1
+    subtype: led
+    tags: panther
+  l03:
+    number: 0-0-2
+    subtype: led
+    tags: map1
+  l04:
+    number: 0-0-3
+    subtype: led
+    tags: map2
+  l05:
+    number: 0-0-4
+    subtype: led
+    tags: map3
+  l06:
+    number: 0-0-5
+    subtype: led
+    tags: map4
+  l07:
+    number: 0-0-6
+    subtype: led
+    tags: map5
+  l08:
+    number: 0-0-7
+    subtype: led
+    tags: map6
+
 diverters:
-  panther:
+  dv_panther:
     activate_events: activate_panther
     deactivate_events: deactivate_panther
     activation_coil: c_panther_dualcoil
@@ -146,30 +189,36 @@ diverters:
     disable_events: ball_ended
 
 drop_targets:
-  map1:
-    switch: s_dt_map1
+  dt_map1:
+    switch: sw04
     reset_coil: c_dt_reset
     knockdown_coil: c_dt_knockdown_1
-  map2:
-    switch: s_dt_map2
+    reset_events: ball_starting, machine_reset_phase_3
+  dt_map2:
+    switch: sw05
     reset_coil: c_dt_reset
     knockdown_coil: c_dt_knockdown_2
-  map3:
-    switch: s_dt_map3
+    reset_events: ball_starting, machine_reset_phase_3
+  dt_map3:
+    switch: sw06
     reset_coil: c_dt_reset
     knockdown_coil: c_dt_knockdown_3
-  map4:
-    switch: s_dt_map4
+    reset_events: ball_starting, machine_reset_phase_3
+  dt_map4:
+    switch: sw08
     reset_coil: c_dt_reset
     knockdown_coil: c_dt_knockdown_4
-  map5:
-    switch: s_dt_map5
+    reset_events: ball_starting, machine_reset_phase_3
+  dt_map5:
+    switch: sw09
     reset_coil: c_dt_reset
     knockdown_coil: c_dt_knockdown_5
-  map6:
-    switch: s_dt_map6
+    reset_events: ball_starting, machine_reset_phase_3
+  dt_map6:
+    switch: sw10
     reset_coil: c_dt_reset
     knockdown_coil: c_dt_knockdown_6  
+    reset_events: ball_starting, machine_reset_phase_3
 
 playfields:
   playfield:
@@ -208,7 +257,7 @@ keyboard:
     switch: s_trough5
     toggle: true
   p:
-    switch: s_plunger
+    switch: sw_plunger
     toggle: true
   s: 
     switch: s_start
@@ -230,13 +279,13 @@ ball_devices:
     eject_targets: bd_plunger
     debug: true
   bd_plunger:
-    ball_switches: s_plunger
+    ball_switches: sw_plunger
     eject_coil: c_plunger
     mechanical_eject: true
     eject_targets: playfield
-    eject_timeouts: 3s
+    eject_timeouts: 1s
   bd_cave_scoop:
-    ball_switches: s_cave_scoop
+    ball_switches: sw39
     eject_coil: c_cave_scoop
     mechanical_eject: false
     eject_timeouts: 2s

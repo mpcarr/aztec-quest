@@ -1,25 +1,38 @@
-#config_version=5
+#config_version=6
 mode:
   start_events: ball_started
   priority: 2000
 
+show_player:
+  activate_panther:
+    flash_color:
+      key: panther
+      speed: 2
+      show_tokens:
+        lights: panther
+        color: red 
+  diverter_dv_panther_deactivating:
+    panther: stop 
+
 counters:
   right_ramp:
-    enable_events: mode_beasts_started, diverter_panther_diverter_deactivating
-    count_events: s_left_ramp_opto_active
-    count_complete_value: 5
+    enable_events: mode_beasts_started, diverter_dv_panther_deactivating
+    count_events: sw99_active
+    count_complete_value: 2
     disable_on_complete: true
     reset_on_complete: true
     events_when_complete: activate_panther
 
 timers:
   panther:
-    start_value: 3
+    start_value: 5
     end_value: 0
     direction: down
     control_events:
       - action: start
         event: activate_panther
+      - action: reset
+        event: diverter_dv_panther_deactivating
 
 event_player:
   timer_panther_complete:

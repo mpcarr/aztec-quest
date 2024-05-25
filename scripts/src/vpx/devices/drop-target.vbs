@@ -29,7 +29,10 @@ Class DropTarget
 	  m_isDropped = isDropped
       m_reset_events = reset_events
 	  If Not IsNull(reset_events) Then
-      	AddPinEventListener reset_events, primary.name & "_droptarget_reset", "DropTargetEventHandler", 1000, Array("droptarget_reset", m_sw)
+	  	Dim evt
+		For Each evt in reset_events
+			AddPinEventListener evt, primary.name & "_droptarget_reset", "DropTargetEventHandler", 1000, Array("droptarget_reset", m_sw)
+		Next      	
 	  End If
 	  Set Init = Me
 	End Function

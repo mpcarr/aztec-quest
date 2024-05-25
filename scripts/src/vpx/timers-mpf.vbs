@@ -9,6 +9,15 @@ Sub GameTimer_Timer() 'The game timer interval; should be 10 ms
 	DoDTAnim
 	UpdateTargets
 	Dim ii
+
+	Dim ChgLED : ChgLED = MPFController.ChangedBrightnessLEDs
+	if not isempty(ChgLED) Then	
+		for ii=0 to UBound(ChgLED)
+			MPFUpdateLamps ChgLED(ii,0), ChgLED(ii,1) 
+		Next
+	end If
+	lightCtrl.SyncLightMapColors
+
 	Dim ChgSol : ChgSol = MPFController.ChangedSolenoids
 	if not isempty(ChgSol) Then	
 		for ii=0 to UBound(ChgSol)
@@ -34,7 +43,7 @@ Sub GameTimer_Timer() 'The game timer interval; should be 10 ms
 			If ChgSol(ii,0) = "0-0-15" and ChgSol(ii,1) Then
 				DTRaise 1
 			End If
-			If ChgSol(ii,0) = "0-0-16" and ChgSol(ii,1) Then
+			If ChgSol(ii,0) = "0-0-16" and ChgSol(ii,1) = False Then
 				DTDrop 1
 			End If
 		Next

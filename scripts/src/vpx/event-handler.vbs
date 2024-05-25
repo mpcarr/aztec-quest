@@ -4,32 +4,32 @@ Dim AllowPinEventsList : Set AllowPinEventsList = CreateObject("Scripting.Dictio
 Dim lastPinEvent : lastPinEvent = Null
 Sub DispatchPinEvent(e, kwargs)
     If Not pinEvents.Exists(e) Then
-        debugLog.WriteToLog "DispatchPinEvent", e & " has no listeners"
+        'debugLog.WriteToLog "DispatchPinEvent", e & " has no listeners"
         Exit Sub
     End If
     lastPinEvent = e
     gameDebugger.SendPinEvent e
     Dim k
     Dim handlers : Set handlers = pinEvents(e)
-    debugLog.WriteToLog "DispatchPinEvent", e
+    'debugLog.WriteToLog "DispatchPinEvent", e
     For Each k In pinEventsOrder(e)
-        debugLog.WriteToLog "DispatchPinEvent_"&e, "key: " & k(1) & ", priority: " & k(0)
+        'debugLog.WriteToLog "DispatchPinEvent_"&e, "key: " & k(1) & ", priority: " & k(0)
         GetRef(handlers(k(1))(0))(Array(handlers(k(1))(2), kwargs))
     Next
 End Sub
 
 Sub DispatchRelayPinEvent(e, kwargs)
     If Not pinEvents.Exists(e) Then
-        debugLog.WriteToLog "DispatchRelayPinEvent", e & " has no listeners"
+        'debugLog.WriteToLog "DispatchRelayPinEvent", e & " has no listeners"
         Exit Sub
     End If
     lastPinEvent = e
     gameDebugger.SendPinEvent e
     Dim k
     Dim handlers : Set handlers = pinEvents(e)
-    debugLog.WriteToLog "DispatchReplayPinEvent", e
+    'debugLog.WriteToLog "DispatchReplayPinEvent", e
     For Each k In pinEventsOrder(e)
-        debugLog.WriteToLog "DispatchReplayPinEvent_"&e, "key: " & k(1) & ", priority: " & k(0)
+        'debugLog.WriteToLog "DispatchReplayPinEvent_"&e, "key: " & k(1) & ", priority: " & k(0)
         kwargs = GetRef(handlers(k(1))(0))(Array(handlers(k(1))(2), kwargs))
     Next
 End Sub

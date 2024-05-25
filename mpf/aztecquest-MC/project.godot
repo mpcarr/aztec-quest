@@ -1,0 +1,47 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="pygame"
+run/main_scene="res://addons/mpf-gmc/slides/window.tscn"
+config/features=PackedStringArray("4.2", "Mobile")
+boot_splash/image="res://splash.png"
+config/icon="res://icon.svg"
+
+[autoload]
+
+MPF="*res://addons/mpf-gmc/mpf_gmc.gd"
+Settings="*res://settings.gd"
+
+[debug]
+
+file_logging/enable_file_logging=true
+file_logging/log_path="C:\\vPinball\\VisualPinball\\Tables\\wip\\aztecquest\\game\\godot.log"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/initial_position_type=0
+window/size/borderless=true
+window/size/always_on_top=true
+window/stretch/mode="viewport"
+window/log_path="user://logs/godot.log"
+window/enable_file_logging=false
+window/name="pygame"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/mpf-gmc/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="mobile"

@@ -8,18 +8,22 @@ Sub AddPlayer()
     Select Case UBound(playerState.Keys())
         Case -1:
             playerState.Add "PLAYER 1", InitNewPlayer()
+            BcpAddPlayer 1
             currentPlayer = "PLAYER 1"
         Case 0:     
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 2", InitNewPlayer()
+                BcpAddPlayer 2
             End If
         Case 1:
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 3", InitNewPlayer()
+                BcpAddPlayer 3
             End If     
         Case 2:   
             If GetPlayerState(CURRENT_BALL) = 1 Then
                 playerState.Add "PLAYER 4", InitNewPlayer()
+                BcpAddPlayer 4
             End If  
             canAddPlayers = False
     End Select
@@ -57,3 +61,5 @@ End Function
 Function SetupPlayer(args)
     EmitAllPlayerEvents()
 End Function
+
+

@@ -92,29 +92,9 @@ Sub sw45_Hit()
     'DTHit 45
 End Sub
 
-Sub sw99_Hit()
-    DispatchPinEvent "s_left_ramp_opto_active", Null
-End Sub
-Sub sw99_UnHit()
-    DispatchPinEvent "s_left_ramp_opto_inactive", Null
-End Sub
+Sub sw99_Hit()   : DispatchPinEvent "sw99_active",   Null : End Sub
+Sub sw99_Unhit() : DispatchPinEvent "sw99_inactive", Null : End Sub
 
-Sub sw_plunger_Hit()
-    DispatchPinEvent "sw_plunger_active", ActiveBall
-End Sub
-
-Sub sw_plunger_Unhit()
-    DispatchPinEvent "sw_plunger_inactive", ActiveBall
-End Sub
-
-Sub sw39_Hit()
-    SoundSaucerLock()
-    DispatchPinEvent "sw39_active", ActiveBall
-End Sub
-
-Sub sw39_Unhit()
-    DispatchPinEvent "sw39_inactive", ActiveBall
-End Sub
 
 Sub DTAction(switchid, enabled)
     If enabled = 1 Then

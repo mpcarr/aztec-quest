@@ -13,14 +13,18 @@ Class BallDevice
 
 	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
   
-	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, eject_angle, eject_strength, eject_direction, debug_on)
+    Public Property Let EjectAngle(value) : m_eject_angle = value : End Property
+    Public Property Let EjectStrength(value) : m_eject_strength = value : End Property
+    Public Property Let EjectDirection(value) : m_eject_direction = value : End Property
+
+	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, debug_on)
         m_ball_switches = ball_switches
         m_player_controlled_eject_event = player_controlled_eject_event
         m_eject_timeouts = eject_timeouts * 1000
         m_name = "balldevice_"&name
-        m_eject_angle = eject_angle
-        m_eject_strength = eject_strength
-        m_eject_direction = eject_direction
+        m_eject_angle = 0
+        m_eject_strength = 0
+        m_eject_direction = ""
         m_ball=False
         m_debug = debug_on
         m_default_device = default_device
@@ -34,6 +38,7 @@ Class BallDevice
 
     Public Sub BallEnter(ball)
         RemoveDelay m_name & "_eject_timeout"
+        SoundSaucerLock()
         Set m_ball = ball
         Log "Ball Entered"        
         If m_default_device = False Then

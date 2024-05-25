@@ -1,0 +1,140 @@
+[gd_scene load_steps=5 format=3 uid="uid://ccq6cl1nf6dm"]
+
+[ext_resource type="Script" path="res://addons/mpf-gmc/classes/mpf_slide.gd" id="1_0vklx"]
+[ext_resource type="Texture2D" uid="uid://c8kj3q0wb8jty" path="res://images/Untitled-1.png" id="2_hc2d4"]
+[ext_resource type="Script" path="res://addons/mpf-gmc/classes/mpf_variable.gd" id="3_jwp85"]
+
+[sub_resource type="SystemFont" id="SystemFont_wwu6h"]
+
+[node name="Attract" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0vklx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_hc2d4")
+expand_mode = 1
+
+[node name="score" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_wwu6h")
+theme_override_font_sizes/font_size = 166
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_jwp85")
+variable_name = "score"
+comma_separate = true
+min_digits = 2
+
+[node name="HFlowContainer" type="HFlowContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 262.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="current_player" type="Label" parent="HFlowContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Player 1"
+horizontal_alignment = 1
+script = ExtResource("3_jwp85")
+variable_type = 4
+variable_name = "score"
+comma_separate = true
+min_digits = 2
+
+[node name="current_player2" type="Label" parent="HFlowContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Player 2"
+horizontal_alignment = 1
+script = ExtResource("3_jwp85")
+variable_type = 5
+variable_name = "score"
+comma_separate = true
+min_digits = 2
+template_string = "Player %s"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HFlowContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_font_sizes/font_size = 50
+text = "Aztec Quest"
+
+[node name="ball" type="Label" parent="HFlowContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_font_sizes/font_size = 30
+script = ExtResource("3_jwp85")
+variable_name = "ball"
+template_string = "Ball %s"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="current_player3" type="Label" parent="HFlowContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Player 3
+"
+horizontal_alignment = 1
+script = ExtResource("3_jwp85")
+variable_type = 6
+variable_name = "score"
+comma_separate = true
+min_digits = 2
+template_string = "Player %s"
+
+[node name="current_player4" type="Label" parent="HFlowContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Player 4"
+horizontal_alignment = 1
+script = ExtResource("3_jwp85")
+variable_type = 7
+variable_name = "score"
+comma_separate = true
+min_digits = 2
+template_string = "Player %s"

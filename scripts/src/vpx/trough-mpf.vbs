@@ -20,6 +20,7 @@ Sub swTrough1_Hit
 End Sub
 Sub swTrough1_UnHit
 	MPFController.Switch("0-0-3")=0
+	ballInReleasePostion = False
 	UpdateTrough
 End Sub
 Sub swTrough2_Hit

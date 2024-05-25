@@ -37,7 +37,7 @@ Class EventPlayer
 
     Private Sub Log(message)
         If m_debug = True Then
-            debugLog.WriteToLog m_name, message
+            debugLog.WriteToLog m_mode & "_event_player_play", message
         End If
     End Sub
 End Class

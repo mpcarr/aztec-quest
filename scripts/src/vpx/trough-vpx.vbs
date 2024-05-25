@@ -18,6 +18,7 @@ Sub swTrough1_Hit
 	UpdateTrough
 End Sub
 Sub swTrough1_UnHit
+	ballInReleasePostion = False
 	UpdateTrough
 End Sub
 Sub swTrough2_Hit

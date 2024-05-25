@@ -20,6 +20,7 @@ Function EndOfBall(args)
     DispatchPinEvent "ball_ended", Null
     SetPlayerState CURRENT_BALL, GetPlayerState(CURRENT_BALL) + 1
 
+    Dim previousPlayerNumber : previousPlayerNumber = GetCurrentPlayerNumber()
     Select Case currentPlayer
         Case "PLAYER 1":
             If UBound(playerState.Keys()) > 0 Then
@@ -40,12 +41,15 @@ Function EndOfBall(args)
         Case "PLAYER 4":
             currentPlayer = "PLAYER 1"
     End Select
-
+    If useBcp Then
+        bcpController.SendPlayerVariable "number", GetCurrentPlayerNumber(), previousPlayerNumber
+    End If
     If GetPlayerState(CURRENT_BALL) > BALLS_PER_GAME Then
         DispatchPinEvent GAME_OVER, Null
         gameStarted = False
         currentPlayer = Null
         playerState.RemoveAll()
+        msgbox "gameover"
     Else
         DispatchPinEvent NEXT_PLAYER, Null
     End If

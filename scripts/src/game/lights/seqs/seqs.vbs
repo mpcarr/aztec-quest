@@ -1,7 +1,7 @@
 
 Sub PlayVPXSeq()
-	LightSeq.Play SeqCircleOutOn, 20, 1
-	lightCtrl.SyncWithVpxLights LightSeq
+	'LightSeq.Play SeqCircleOutOn, 20, 1
+	'lightCtrl.SyncWithVpxLights LightSeq
 	'lightCtrl.SetVpxSyncLightGradientColor MakeGradident, coordsX, 80
 End Sub
 
