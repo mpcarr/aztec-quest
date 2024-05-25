@@ -9,22 +9,17 @@ Class BallDevice
     Private m_eject_strength
     Private m_eject_direction
     Private m_default_device
+    Private m_eject_callback
     Private m_debug
 
 	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
-  
-    Public Property Let EjectAngle(value) : m_eject_angle = value : End Property
-    Public Property Let EjectStrength(value) : m_eject_strength = value : End Property
-    Public Property Let EjectDirection(value) : m_eject_direction = value : End Property
-
+    Public Property Let EjectCallback(value) : m_eject_callback = value : End Property
+        
 	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, debug_on)
         m_ball_switches = ball_switches
         m_player_controlled_eject_event = player_controlled_eject_event
         m_eject_timeouts = eject_timeouts * 1000
-        m_name = "balldevice_"&name
-        m_eject_angle = 0
-        m_eject_strength = 0
-        m_eject_direction = ""
+        m_name = "balldevice_" & name
         m_ball=False
         m_debug = debug_on
         m_default_device = default_device
@@ -40,13 +35,15 @@ Class BallDevice
         RemoveDelay m_name & "_eject_timeout"
         SoundSaucerLock()
         Set m_ball = ball
-        Log "Ball Entered"        
+        Log "Ball Entered" 
+        DispatchPinEvent m_name & "_ball_entered", Null
         If m_default_device = False Then
             SetDelay m_name & "_eject_attempt", "BallDeviceEventHandler", Array(Array("ball_eject", Me), m_ball), 500
         End If
     End Sub
 
     Public Sub BallExiting(ball)
+        DispatchPinEvent m_name & "_ball_exiting", Null
         SetDelay m_name & "_eject_timeout", "BallDeviceEventHandler", Array(Array("eject_timeout", Me), m_ball), m_eject_timeouts
         Log "Ball Exiting"
     End Sub
@@ -59,16 +56,7 @@ Class BallDevice
 
     Public Sub Eject
         Log "Ejecting."
-        dim rangle
-	    rangle = PI * (m_eject_angle - 90) / 180
-        Select Case m_eject_direction
-            Case "y-up"
-                m_ball.vely = sin(rangle)*m_eject_strength
-            Case "z-up"
-                m_ball.z = m_ball.z + 30
-                m_ball.velz = m_eject_strength        
-        End Select
-        SoundSaucerKick 1, m_ball
+        GetRef(m_eject_callback)(m_ball)
     End Sub
 
     Private Sub Log(message)

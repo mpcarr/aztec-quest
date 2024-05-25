@@ -95,6 +95,9 @@ End Sub
 Sub sw99_Hit()   : DispatchPinEvent "sw99_active",   Null : End Sub
 Sub sw99_Unhit() : DispatchPinEvent "sw99_inactive", Null : End Sub
 
+Sub sw44_Hit()   : DispatchPinEvent "sw44_active",   Null : End Sub
+Sub sw44_Unhit() : DispatchPinEvent "sw44_inactive", Null : End Sub
+
 
 Sub DTAction(switchid, enabled)
     If enabled = 1 Then

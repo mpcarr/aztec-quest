@@ -14,7 +14,7 @@
     "top_material": "",
     "slingshot_material": "",
     "height_bottom": 0.0,
-    "height_top": 50.0,
+    "height_top": 20.0,
     "name": "Wall020",
     "display_texture": false,
     "slingshot_force": 80.0,
@@ -34,7 +34,7 @@
     "overwrite_physics": true,
     "drag_points": [
       {
-        "x": 224.5844,
+        "x": 280.77094,
         "y": 100.27415,
         "z": 0.0,
         "smooth": false,
@@ -47,7 +47,7 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 238.07149,
+        "x": 294.25803,
         "y": 100.245186,
         "z": 0.0,
         "smooth": false,
@@ -60,7 +60,7 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 236.91858,
+        "x": 293.1051,
         "y": 1.115397,
         "z": 0.0,
         "smooth": false,
@@ -73,7 +73,7 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 223.65627,
+        "x": 279.8428,
         "y": 0.47000057,
         "z": 0.0,
         "smooth": false,

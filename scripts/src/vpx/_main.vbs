@@ -82,7 +82,7 @@ Sub Table1_Init
 	
 	vpmMapLights alights
 	lightCtrl.RegisterLights "VPX"
-	'waterfalldiverter.isdropped=1
+	
 
 	'Ball initializations need for physical trough
 	Set tmntproBall1 = swTrough1.CreateSizedballWithMass(Ballsize / 2,Ballmass)

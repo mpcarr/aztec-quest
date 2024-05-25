@@ -54,7 +54,7 @@ Class Diverter
         GetRef(m_action_cb)(0)
     End Sub
 
-    Public Sub Activate
+    Public Sub Activate()
         Log "Activating"
         GetRef(m_action_cb)(1)
         If m_activation_time > 0 Then
@@ -63,7 +63,7 @@ Class Diverter
         DispatchPinEvent m_name & "_activating", Null
     End Sub
 
-    Public Sub Deactivate
+    Public Sub Deactivate()
         Log "Deactivating"
         RemoveDelay m_name & "_deactivate"
         GetRef(m_action_cb)(0)

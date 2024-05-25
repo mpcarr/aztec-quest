@@ -82,7 +82,7 @@ Sub Table1_Init
 	
 	vpmMapLights alights
 	lightCtrl.RegisterLights "VPX"
-	'waterfalldiverter.isdropped=1
+	
 
 	'Ball initializations need for physical trough
 	Set tmntproBall1 = swTrough1.CreateSizedballWithMass(Ballsize / 2,Ballmass)
@@ -1210,22 +1210,17 @@ Class BallDevice
     Private m_eject_strength
     Private m_eject_direction
     Private m_default_device
+    Private m_eject_callback
     Private m_debug
 
 	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
-  
-    Public Property Let EjectAngle(value) : m_eject_angle = value : End Property
-    Public Property Let EjectStrength(value) : m_eject_strength = value : End Property
-    Public Property Let EjectDirection(value) : m_eject_direction = value : End Property
-
+    Public Property Let EjectCallback(value) : m_eject_callback = value : End Property
+        
 	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, debug_on)
         m_ball_switches = ball_switches
         m_player_controlled_eject_event = player_controlled_eject_event
         m_eject_timeouts = eject_timeouts * 1000
-        m_name = "balldevice_"&name
-        m_eject_angle = 0
-        m_eject_strength = 0
-        m_eject_direction = ""
+        m_name = "balldevice_" & name
         m_ball=False
         m_debug = debug_on
         m_default_device = default_device
@@ -1241,13 +1236,15 @@ Class BallDevice
         RemoveDelay m_name & "_eject_timeout"
         SoundSaucerLock()
         Set m_ball = ball
-        Log "Ball Entered"        
+        Log "Ball Entered" 
+        DispatchPinEvent m_name & "_ball_entered", Null
         If m_default_device = False Then
             SetDelay m_name & "_eject_attempt", "BallDeviceEventHandler", Array(Array("ball_eject", Me), m_ball), 500
         End If
     End Sub
 
     Public Sub BallExiting(ball)
+        DispatchPinEvent m_name & "_ball_exiting", Null
         SetDelay m_name & "_eject_timeout", "BallDeviceEventHandler", Array(Array("eject_timeout", Me), m_ball), m_eject_timeouts
         Log "Ball Exiting"
     End Sub
@@ -1260,16 +1257,7 @@ Class BallDevice
 
     Public Sub Eject
         Log "Ejecting."
-        dim rangle
-	    rangle = PI * (m_eject_angle - 90) / 180
-        Select Case m_eject_direction
-            Case "y-up"
-                m_ball.vely = sin(rangle)*m_eject_strength
-            Case "z-up"
-                m_ball.z = m_ball.z + 30
-                m_ball.velz = m_eject_strength        
-        End Select
-        SoundSaucerKick 1, m_ball
+        GetRef(m_eject_callback)(m_ball)
     End Sub
 
     Private Sub Log(message)
@@ -1622,7 +1610,7 @@ Class Diverter
         GetRef(m_action_cb)(0)
     End Sub
 
-    Public Sub Activate
+    Public Sub Activate()
         Log "Activating"
         GetRef(m_action_cb)(1)
         If m_activation_time > 0 Then
@@ -1631,7 +1619,7 @@ Class Diverter
         DispatchPinEvent m_name & "_activating", Null
     End Sub
 
-    Public Sub Deactivate
+    Public Sub Deactivate()
         Log "Deactivating"
         RemoveDelay m_name & "_deactivate"
         GetRef(m_action_cb)(0)
@@ -1916,6 +1904,100 @@ Function ModeEventHandler(args)
             mode.StopMode
     End Select
     ModeEventHandler = kwargs
+End Function
+
+Class MultiballLocks
+
+    Private m_name
+    Private m_priority
+    Private m_mode
+    Private m_enable_events
+    Private m_disable_events
+    Private m_balls_to_lock
+    Private m_balls_locked
+    Private m_lock_devices
+    Private m_debug
+
+    Private m_count
+
+    Public Property Let EnableEvents(value) : m_enable_events = value : End Property
+    Public Property Let DisableEvents(value) : m_disable_events = value : End Property
+    Public Property Let BallsToLock(value) : m_balls_to_lock = value : End Property
+    Public Property Let LockDevices(value) : m_lock_devices = value : End Property
+    Public Property Let Debug(value) : m_debug = value : End Property
+
+	Public default Function init(name, mode, balls_to_lock, lock_devices)
+        m_name = "multiball_lock_" & name
+        m_mode = mode.Name
+        m_balls_to_lock = balls_to_lock
+        m_lock_devices = lock_devices
+        m_balls_locked = 0
+
+        AddPinEventListener m_mode & "_starting", m_name & "_activate", "MultiballLocksHandler", m_priority, Array("activate", Me)
+        AddPinEventListener m_mode & "_stopping", m_name & "_deactivate", "MultiballLocksHandler", m_priority, Array("deactivate", Me)
+        Set Init = Me
+	End Function
+
+    Public Sub Activate()
+        Dim evt
+        For Each evt in m_enable_events
+            AddPinEventListener evt, m_name & "_enable", "MultiballLocksHandler", m_priority, Array("enable", Me)
+        Next
+    End Sub
+
+    Public Sub Deactivate()
+        Disable()
+        Dim evt
+        For Each evt in m_enable_events
+            RemovePinEventListener evt, m_name & "_enable"
+        Next
+    End Sub
+
+    Public Sub Enable()
+        Log "Enabling"
+        Dim evt
+        For Each evt in m_lock_devices
+            AddPinEventListener evt & "_ball_entered", m_name & "_ball_locked", "MultiballLocksHandler", m_priority, Array("lock", Me)
+        Next
+    End Sub
+
+    Public Sub Disable()
+        Log "Disabling"
+        Dim evt
+        For Each evt in m_count_events
+            RemovePinEventListener evt, m_name & "_count"
+        Next
+    End Sub
+
+    Public Sub Lock()
+        m_balls_locked = m_balls_locked + 1
+    End Sub
+
+    Private Sub Log(message)
+        If m_debug = True Then
+            debugLog.WriteToLog m_name, message
+        End If
+    End Sub
+End Class
+
+Function MultiballLocksHandler(args)
+    
+    Dim ownProps, kwargs : ownProps = args(0) : kwargs = args(1) 
+    Dim evt : evt = ownProps(0)
+    Dim multiball : Set multiball = ownProps(1)
+    Select Case evt
+        Case "activate"
+            multiball.Activate
+        Case "deactivate"
+            multiball.Deactivate
+        Case "enable"
+            multiball.Enable
+        Case "disable"
+            multiball.Disable
+        Case "lock"
+            multiball.Lock
+    End Select
+    MultiballLocksHandler = kwargs
 End Function
 
 Class ShowPlayer
@@ -7583,7 +7665,7 @@ Sub Kicker001_Timer()
     debug.print("kicksw40")
 	Kicker001.TimerEnabled = False
     SoundSaucerKick 1, Kicker001
-    Kicker001.Kick 0, 80, 1.36
+    Kicker001.Kick 0, 45, 1.36
     'KickBall KickerBall40, 0, 0, 100, 50
 End Sub
 
@@ -7750,25 +7832,37 @@ Dim bd_cave_scoop: Set bd_cave_scoop = (new BallDevice)("bd_cave_scoop", "sw39",
 
 'Diverters
 Dim dv_panther : Set dv_panther = (new Diverter)("dv_panther", Array("ball_started"), Array("ball_ended"), Array("activate_panther"), Array("deactivate_panther"), 0, False)
+Dim dv_leftorbit : Set dv_leftorbit = (new Diverter)("dv_leftorbit", Array("ball_started"), Array("ball_ended"), Array("activate_panther"), Array(), 0, True)
+Dim dv_waterfall : Set dv_waterfall = (new Diverter)("dv_waterfall", Array("ball_started"), Array("ball_ended"), Array("sw44_active"), Array(), 0, True)
+
 
 'Drop Targets
-Dim dt_map1 : Set dt_map1 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False, Array("ball_starting"," machine_reset_phase_3"))
-Dim dt_map2 : Set dt_map2 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False, Array("ball_starting"," machine_reset_phase_3"))
-Dim dt_map3 : Set dt_map3 = (new DropTarget)(sw06, sw06a, BM_sw06, 6, 0, False, Array("ball_starting"," machine_reset_phase_3"))
-Dim dt_map4 : Set dt_map4 = (new DropTarget)(sw08, sw08a, BM_sw08, 8, 0, False, Array("ball_starting"," machine_reset_phase_3"))
-Dim dt_map5 : Set dt_map5 = (new DropTarget)(sw09, sw09a, BM_sw09, 9, 0, False, Array("ball_starting"," machine_reset_phase_3"))
-Dim dt_map6 : Set dt_map6 = (new DropTarget)(sw10, sw10a, BM_sw10, 10, 0, False, Array("ball_starting"," machine_reset_phase_3"))
+Dim dt_map1 : Set dt_map1 = (new DropTarget)(sw04, sw04a, BM_sw04, 4, 0, False, Array("ball_started"," machine_reset_phase_3"))
+Dim dt_map2 : Set dt_map2 = (new DropTarget)(sw05, sw05a, BM_sw05, 5, 0, False, Array("ball_started"," machine_reset_phase_3"))
+Dim dt_map3 : Set dt_map3 = (new DropTarget)(sw06, sw06a, BM_sw06, 6, 0, False, Array("ball_started"," machine_reset_phase_3"))
+Dim dt_map4 : Set dt_map4 = (new DropTarget)(sw08, sw08a, BM_sw08, 8, 0, False, Array("ball_started"," machine_reset_phase_3"))
+Dim dt_map5 : Set dt_map5 = (new DropTarget)(sw09, sw09a, BM_sw09, 9, 0, False, Array("ball_started"," machine_reset_phase_3"))
+Dim dt_map6 : Set dt_map6 = (new DropTarget)(sw10, sw10a, BM_sw10, 10, 0, False, Array("ball_started"," machine_reset_phase_3"))
 
 
 'Set up ball devices
+Function PlungerKickBall(ball)
+    dim rangle
+    rangle = PI * (0 - 90) / 180
+    ball.vely = sin(rangle)*50
+    SoundSaucerKick 1, ball
+End Function
 
-bd_plunger.EjectAngle = 0
-bd_plunger.EjectStrength = 50
-bd_plunger.EjectDirection = "y-up"
+Function CaveKickBall(ball)
+    dim rangle
+    rangle = PI * (0 - 90) / 180
+    ball.z = ball.z + 30
+    ball.velz = 60        
+    SoundSaucerKick 1, ball
+End Function
 
-bd_cave_scoop.EjectAngle = 0
-bd_cave_scoop.EjectStrength = 60
-bd_cave_scoop.EjectDirection = "z-up"
+bd_plunger.EjectCallback = "PlungerKickBall"
+bd_cave_scoop.EjectCallback = "CaveKickBall"
 
 'Set up diverters
 
@@ -7779,6 +7873,16 @@ Sub MovePanther(enabled)
     Else
         DTDrop 1
     End If
+End Sub
+
+dv_leftorbit.ActionCallback = "MoveLeftOrbitDiverter"
+Sub MoveLeftOrbitDiverter(enabled)
+    waterfalldiverter.isdropped=enabled
+End Sub
+
+dv_waterfall.ActionCallback = "WaterfallRelease"
+Sub WaterfallRelease(enabled)
+    sw44.isdropped=enabled
 End Sub
 
 Dim DT01, DT02
@@ -9185,6 +9289,9 @@ End Sub
 
 Sub sw99_Hit()   : DispatchPinEvent "sw99_active",   Null : End Sub
 Sub sw99_Unhit() : DispatchPinEvent "sw99_inactive", Null : End Sub
+
+Sub sw44_Hit()   : DispatchPinEvent "sw44_active",   Null : End Sub
+Sub sw44_Unhit() : DispatchPinEvent "sw44_inactive", Null : End Sub
 
 
 Sub DTAction(switchid, enabled)

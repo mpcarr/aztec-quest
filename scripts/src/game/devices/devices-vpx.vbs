@@ -1,13 +1,22 @@
 
 'Set up ball devices
+Function PlungerKickBall(ball)
+    dim rangle
+    rangle = PI * (0 - 90) / 180
+    ball.vely = sin(rangle)*50
+    SoundSaucerKick 1, ball
+End Function
 
-bd_plunger.EjectAngle = 0
-bd_plunger.EjectStrength = 50
-bd_plunger.EjectDirection = "y-up"
+Function CaveKickBall(ball)
+    dim rangle
+    rangle = PI * (0 - 90) / 180
+    ball.z = ball.z + 30
+    ball.velz = 60        
+    SoundSaucerKick 1, ball
+End Function
 
-bd_cave_scoop.EjectAngle = 0
-bd_cave_scoop.EjectStrength = 60
-bd_cave_scoop.EjectDirection = "z-up"
+bd_plunger.EjectCallback = "PlungerKickBall"
+bd_cave_scoop.EjectCallback = "CaveKickBall"
 
 'Set up diverters
 
@@ -18,6 +27,16 @@ Sub MovePanther(enabled)
     Else
         DTDrop 1
     End If
+End Sub
+
+dv_leftorbit.ActionCallback = "MoveLeftOrbitDiverter"
+Sub MoveLeftOrbitDiverter(enabled)
+    waterfalldiverter.isdropped=enabled
+End Sub
+
+dv_waterfall.ActionCallback = "WaterfallRelease"
+Sub WaterfallRelease(enabled)
+    sw44.isdropped=enabled
 End Sub
 
 Dim DT01, DT02

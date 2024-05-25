@@ -1,7 +1,7 @@
 {
   "Primitive": {
     "position": {
-      "x": 0.9865404,
+      "x": -14.360714,
       "y": 0.0,
       "z": 0.0
     },
@@ -52,7 +52,7 @@
     "object_space_normal_map": false,
     "min_aa_bound": null,
     "max_aa_bound": null,
-    "mesh_file_name": "BezierCurve.001.obj",
+    "mesh_file_name": "Primitive007.003.obj",
     "depth_bias": 0.0,
     "add_blend": false,
     "use_depth_mask": true,
