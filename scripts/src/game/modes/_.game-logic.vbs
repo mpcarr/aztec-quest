@@ -23,9 +23,7 @@ Sub StartGame()
 '08:04:31.505 : VERBOSE : BCP : Received BCP command: 
 End Sub
 
-Sub Spinner001_Spin
-    AddScore 100
-End Sub
+
 
 '****************************
 ' End Of Game

@@ -8,15 +8,21 @@ Function PlungerKickBall(ball)
 End Function
 
 Function CaveKickBall(ball)
-    dim rangle
-    rangle = PI * (0 - 90) / 180
     ball.z = ball.z + 30
     ball.velz = 60        
     SoundSaucerKick 1, ball
 End Function
 
+Function WaterfallVukKickBall(ball)
+    'ball.z = ball.z + 30
+    'ball.velz = 1        
+    SoundSaucerKick 1, ball
+    sw46.Kick 0, 45, 1.36
+End Function
+
 bd_plunger.EjectCallback = "PlungerKickBall"
 bd_cave_scoop.EjectCallback = "CaveKickBall"
+bd_waterfall_vuk.EjectCallback = "WaterfallVukKickBall"
 
 'Set up diverters
 
@@ -29,12 +35,10 @@ Sub MovePanther(enabled)
     End If
 End Sub
 
-dv_leftorbit.ActionCallback = "MoveLeftOrbitDiverter"
 Sub MoveLeftOrbitDiverter(enabled)
     waterfalldiverter.isdropped=enabled
 End Sub
 
-dv_waterfall.ActionCallback = "WaterfallRelease"
 Sub WaterfallRelease(enabled)
     sw44.isdropped=enabled
 End Sub

@@ -1043,7 +1043,7 @@
     "editor_layer_visibility": true
   },
   {
-    "file_name": "Spinner.Spinner001.json",
+    "file_name": "Spinner.sw45.json",
     "is_locked": false,
     "editor_layer": 0,
     "editor_layer_name": "Layer1Walls",
@@ -1302,7 +1302,7 @@
     "editor_layer_visibility": true
   },
   {
-    "file_name": "Kicker.Kicker001.json",
+    "file_name": "Kicker.sw46.json",
     "is_locked": false,
     "editor_layer": 0,
     "editor_layer_name": "New Layer 0",
@@ -2388,6 +2388,13 @@
   },
   {
     "file_name": "Wall.sw44.json",
+    "is_locked": false,
+    "editor_layer": 0,
+    "editor_layer_name": "Backbox",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "Trigger.sw47.json",
     "is_locked": false,
     "editor_layer": 0,
     "editor_layer_name": "Backbox",

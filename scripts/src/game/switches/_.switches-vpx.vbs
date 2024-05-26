@@ -92,12 +92,22 @@ Sub sw45_Hit()
     'DTHit 45
 End Sub
 
+Sub sw39_Hit()   : DispatchPinEvent "sw39_active",   ActiveBall : End Sub
+Sub sw39_Unhit() : DispatchPinEvent "sw39_inactive", ActiveBall : End Sub
+
+Sub sw46_Hit()   : DispatchPinEvent "sw46_active",   ActiveBall : End Sub
+Sub sw46_Unhit() : DispatchPinEvent "sw46_inactive", ActiveBall : End Sub
+
 Sub sw99_Hit()   : DispatchPinEvent "sw99_active",   Null : End Sub
 Sub sw99_Unhit() : DispatchPinEvent "sw99_inactive", Null : End Sub
 
 Sub sw44_Hit()   : DispatchPinEvent "sw44_active",   Null : End Sub
 Sub sw44_Unhit() : DispatchPinEvent "sw44_inactive", Null : End Sub
 
+Sub sw45_Spin()   : DispatchPinEvent "sw45_active",   Null : End Sub
+
+Sub sw47_Hit()   : DispatchPinEvent "sw47_active",   Null : End Sub
+Sub sw47_Unhit() : DispatchPinEvent "sw47_inactive", Null : End Sub
 
 Sub DTAction(switchid, enabled)
     If enabled = 1 Then

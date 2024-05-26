@@ -42,15 +42,13 @@ Sub SetDelay(name, callbackFunc, args, delayInMs)
         If delayQueue(executionTime).Exists(name) Then
             delayQueue(executionTime).Remove name
         End If
-
     Else
         delayQueue.Add executionTime, CreateObject("Scripting.Dictionary")
-
     End If
 
     debugLog.WriteToLog "Delay", "Adding delay for " & name & ", callback: " & callbackFunc
-     delayQueue(executionTime).Add name, (new DelayObject)(name, callbackFunc, executionTime, args)
-     delayQueueMap.Add name, executionTime
+    delayQueue(executionTime).Add name, (new DelayObject)(name, callbackFunc, executionTime, args)
+    delayQueueMap.Add name, executionTime
     
 End Sub
 
@@ -61,7 +59,8 @@ End Function
 Sub RemoveDelay(name)
     If delayQueueMap.Exists(name) Then
         If delayQueue.Exists(delayQueueMap(name)) Then
-            delayQueue.Remove(delayQueueMap(name))
+            delayQueue(delayQueueMap(name)).Remove name
+            delayQueueMap.Remove name
         End If
     End If
 End Sub

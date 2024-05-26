@@ -7,19 +7,28 @@ Class Diverter
     Private m_activation_time
     Private m_enable_events
     Private m_disable_events
+    Private m_activation_switches
     Private m_action_cb
     Private m_debug
 
     Public Property Let ActionCallback(value) : m_action_cb = value : End Property
+    Public Property Let EnableEvents(value) : m_enable_events = value : End Property
+    Public Property Let DisableEvents(value) : m_disable_events = value : End Property
+    Public Property Let ActivateEvents(value) : m_activate_events = value : End Property
+    Public Property Let DeactivateEvents(value) : m_deactivate_events = value : End Property
+    Public Property Let ActivationTime(value) : m_activation_time = value : End Property
+    Public Property Let ActivationSwitches(value) : m_activation_switches = value : End Property
+    Public Property Let Debug(value) : m_debug = value : End Property
 
-	Public default Function init(name, enable_events, disable_events, activate_events, deactivate_events, activation_time, debug_on)
+	Public default Function init(name, enable_events, disable_events)
+        m_name = "diverter_" & name
         m_enable_events = enable_events
         m_disable_events = disable_events
-        m_activate_events = activate_events
-        m_deactivate_events = deactivate_events
-        m_activation_time = activation_time
-        m_name = "diverter_"&name
-        m_debug = debug_on
+        m_activate_events = Array()
+        m_deactivate_events = Array()
+        m_activation_switches = Array()
+        m_activation_time = 0
+        m_debug = False
         Dim evt
         For Each evt in m_enable_events
             AddPinEventListener evt, m_name & "_enable", "DiverterEventHandler", 1000, Array("enable", Me)
@@ -39,6 +48,9 @@ Class Diverter
         For Each evt in m_deactivate_events
             AddPinEventListener evt, m_name & "_deactivate", "DiverterEventHandler", 1000, Array("deactivate", Me)
         Next
+        For Each evt in m_activation_switches
+            AddPinEventListener evt & "_active", m_name & "_activate", "DiverterEventHandler", 1000, Array("activate", Me)
+        Next
     End Sub
 
     Public Sub Disable()
@@ -49,6 +61,9 @@ Class Diverter
         Next
         For Each evt in m_deactivate_events
             RemovePinEventListener evt, m_name & "_deactivate"
+        Next
+        For Each evt in m_activation_switches
+            RemovePinEventListener evt & "_active", m_name & "_activate"
         Next
         RemoveDelay m_name & "_deactivate"
         GetRef(m_action_cb)(0)
