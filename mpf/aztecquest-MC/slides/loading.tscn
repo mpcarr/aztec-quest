@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://kedeg023q0kf"]
+
+[ext_resource type="Script" path="res://addons/mpf-gmc/classes/mpf_slide.gd" id="1_gw8g7"]
+[ext_resource type="Texture2D" uid="uid://c8kj3q0wb8jty" path="res://images/Untitled-1.png" id="2_d3uf0"]
+
+[node name="Loading" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gw8g7")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_d3uf0")
+expand_mode = 1

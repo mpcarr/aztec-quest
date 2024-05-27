@@ -1175,14 +1175,18 @@ Function AlignToQuarterSecond(timeMs)
     AlignToQuarterSecond = Int(timeMs / 125) * 125
 End Function
 
-Sub RemoveDelay(name)
+Function RemoveDelay(name)
     If delayQueueMap.Exists(name) Then
         If delayQueue.Exists(delayQueueMap(name)) Then
             delayQueue(delayQueueMap(name)).Remove name
             delayQueueMap.Remove name
+            RemoveDelay = True
+            debugLog.WriteToLog "Delay", "Removing delay for " & name
+            Exit Function
         End If
     End If
-End Sub
+    RemoveDelay = False
+End Function
 
 Sub DelayTick()
     Dim key, delayObject
@@ -1204,18 +1208,21 @@ Class BallDevice
     Private m_ball_switches
     Private m_player_controlled_eject_event
     Private m_eject_timeouts
-    Private m_ball
+    Private m_balls
     Private m_eject_angle
     Private m_eject_strength
     Private m_eject_direction
     Private m_default_device
     Private m_eject_callback
     Private m_eject_all_events
+    Private m_mechcanical_eject
     Private m_debug
 
+    Public Property Get Name(): Name = m_name : End Property
 	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
     Public Property Let EjectCallback(value) : m_eject_callback = value : End Property
     Public Property Let EjectAllEvents(value) : m_eject_all_events = value : End Property
+    Public Property Let MechcanicalEject(value) : m_mechcanical_eject = value : End Property
         
 	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, debug_on)
         m_ball_switches = ball_switches
@@ -1223,47 +1230,50 @@ Class BallDevice
         m_eject_timeouts = eject_timeouts * 1000
         m_eject_all_events = Array()
         m_name = "balldevice_" & name
-        m_ball=False
+        m_balls = Array(Ubound(ball_switches))
         m_debug = debug_on
         m_default_device = default_device
         If default_device = True Then
             Set PlungerDevice = Me
         End If
-        Dim evt
-        For Each evt in m_ball_switches
-            AddPinEventListener evt&"_active", m_name & "_ball_enter", "BallDeviceEventHandler", 1000, Array("ball_enter", Me)
-            AddPinEventListener evt&"_inactive", m_name & "_ball_exiting", "BallDeviceEventHandler", 1000, Array("ball_exiting", Me)
+        Dim x
+        For x=0 to UBound(ball_switches)
+            AddPinEventListener ball_switches(x)&"_active", m_name & "_ball_enter", "BallDeviceEventHandler", 1000, Array("ball_entering", Me, x)
+            AddPinEventListener ball_switches(x)&"_inactive", m_name & "_ball_exiting", "BallDeviceEventHandler", 1000, Array("ball_exiting", Me, x)
         Next
         
 	  Set Init = Me
 	End Function
 
-    Public Sub BallEnter(ball)
+    Public Sub BallEnter(ball, switch)
         RemoveDelay m_name & "_eject_timeout"
-        SoundSaucerLock()
-        Set m_ball = ball
+        SoundSaucerLockAtBall ball
+        Set m_balls(switch) = ball
         Log "Ball Entered" 
         DispatchPinEvent m_name & "_ball_entered", Null
-        If m_default_device = False Then
-            SetDelay m_name & "_eject_attempt", "BallDeviceEventHandler", Array(Array("ball_eject", Me), m_ball), 500
+        If m_default_device = False And switch = 0 Then
+            SetDelay m_name & "_eject_attempt", "BallDeviceEventHandler", Array(Array("ball_eject", Me), ball), 500
         End If
     End Sub
 
-    Public Sub BallExiting(ball)
+    Public Sub BallExiting(ball, switch)
+        m_balls(switch) = Null
         DispatchPinEvent m_name & "_ball_exiting", Null
-        SetDelay m_name & "_eject_timeout", "BallDeviceEventHandler", Array(Array("eject_timeout", Me), m_ball), m_eject_timeouts
+        If m_mechcanical_eject = True Then
+            SetDelay m_name & "_eject_timeout", "BallDeviceEventHandler", Array(Array("eject_timeout", Me), ball), m_eject_timeouts
+        End If
         Log "Ball Exiting"
     End Sub
 
     Public Sub BallExitSuccess(ball)
         DispatchPinEvent m_name & "_ball_eject_success", Null
-        m_ball = Null
         Log "Ball successfully exited"
     End Sub
 
     Public Sub Eject
         Log "Ejecting."
-        GetRef(m_eject_callback)(m_ball)
+        SetDelay m_name & "_eject_timeout", "BallDeviceEventHandler", Array(Array("eject_timeout", Me), m_balls(0)), m_eject_timeouts
+        GetRef(m_eject_callback)(m_balls(0))
     End Sub
 
     Private Sub Log(message)
@@ -1277,13 +1287,21 @@ Sub BallDeviceEventHandler(args)
     Dim ownProps, ball : ownProps = args(0) : Set ball = args(1) 
     Dim evt : evt = ownProps(0)
     Dim ballDevice : Set ballDevice = ownProps(1)
+    Dim switch
     Select Case evt
+        Case "ball_entering"
+            switch = ownProps(2)
+            SetDelay ballDevice.Name & "_" & switch & "_ball_enter", "BallDeviceEventHandler", Array(Array("ball_enter", ballDevice, switch), ball), 500
         Case "ball_enter"
-            ballDevice.BallEnter ball
+            switch = ownProps(2)
+            ballDevice.BallEnter ball, switch
         Case "ball_eject"
             ballDevice.Eject
         Case "ball_exiting"
-            ballDevice.BallExiting ball
+            switch = ownProps(2)
+            If RemoveDelay(ballDevice.Name & "_" & switch & "_ball_enter") = False Then
+                ballDevice.BallExiting ball, switch
+            End If
         Case "eject_timeout"
             ballDevice.BallExitSuccess ball
     End Select
@@ -7570,6 +7588,10 @@ Sub SoundSaucerLock()
 	PlaySoundAtLevelStatic ("Saucer_Enter_" & Int(Rnd * 2) + 1), SaucerLockSoundLevel, Activeball
 End Sub
 
+Sub SoundSaucerLockAtBall(ball)
+	PlaySoundAtLevelStatic ("Saucer_Enter_" & Int(Rnd * 2) + 1), SaucerLockSoundLevel, ball
+End Sub
+
 Sub SoundSaucerKick(scenario, saucer)
 	Select Case scenario
 		Case 0
@@ -7961,13 +7983,14 @@ Dim playerEventsOrder : Set playerEventsOrder = CreateObject("Scripting.Dictiona
 Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
 Dim bcpController : bcpController = Null
-Dim useBCP : useBCP = False
+Dim useBCP : useBCP = True
 Public Sub ConnectToBCPMediaController
     Set bcpController = (new VpxBcpController)(5050, "aztecquest-mc.exe")
 End Sub
 
 'Devices
 Dim bd_plunger: Set bd_plunger = (new BallDevice)("bd_plunger", Array("sw_plunger"), Null, 1, True, True)
+bd_plunger.MechcanicalEject = True
 Dim bd_cave_scoop: Set bd_cave_scoop = (new BallDevice)("bd_cave_scoop", Array("sw39"), Null, 2, False, True)
 Dim bd_waterfall_vuk: Set bd_waterfall_vuk = (new BallDevice)("bd_waterfall_vuk", Array("sw46"), Null, 1, False, True)
 

@@ -1,6 +1,7 @@
 
 'Devices
 Dim bd_plunger: Set bd_plunger = (new BallDevice)("bd_plunger", Array("sw_plunger"), Null, 1, True, True)
+bd_plunger.MechcanicalEject = True
 Dim bd_cave_scoop: Set bd_cave_scoop = (new BallDevice)("bd_cave_scoop", Array("sw39"), Null, 2, False, True)
 Dim bd_waterfall_vuk: Set bd_waterfall_vuk = (new BallDevice)("bd_waterfall_vuk", Array("sw46"), Null, 1, False, True)
 

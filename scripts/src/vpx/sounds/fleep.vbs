@@ -700,6 +700,10 @@ Sub SoundSaucerLock()
 	PlaySoundAtLevelStatic ("Saucer_Enter_" & Int(Rnd * 2) + 1), SaucerLockSoundLevel, Activeball
 End Sub
 
+Sub SoundSaucerLockAtBall(ball)
+	PlaySoundAtLevelStatic ("Saucer_Enter_" & Int(Rnd * 2) + 1), SaucerLockSoundLevel, ball
+End Sub
+
 Sub SoundSaucerKick(scenario, saucer)
 	Select Case scenario
 		Case 0

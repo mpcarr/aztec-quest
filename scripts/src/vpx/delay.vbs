@@ -56,14 +56,18 @@ Function AlignToQuarterSecond(timeMs)
     AlignToQuarterSecond = Int(timeMs / 125) * 125
 End Function
 
-Sub RemoveDelay(name)
+Function RemoveDelay(name)
     If delayQueueMap.Exists(name) Then
         If delayQueue.Exists(delayQueueMap(name)) Then
             delayQueue(delayQueueMap(name)).Remove name
             delayQueueMap.Remove name
+            RemoveDelay = True
+            debugLog.WriteToLog "Delay", "Removing delay for " & name
+            Exit Function
         End If
     End If
-End Sub
+    RemoveDelay = False
+End Function
 
 Sub DelayTick()
     Dim key, delayObject
