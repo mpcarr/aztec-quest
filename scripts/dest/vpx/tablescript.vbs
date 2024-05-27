@@ -75,7 +75,7 @@ Sub LoadCoreFiles
 	On Error GoTo 0
 End Sub
 
-Dim tmntproBall1, tmntproBall2, tmntproBall3, tmntproBall4, tmntproBall5, gBOT, tmag, NewtonBall, CaptiveBall
+Dim aztecqball1, aztecqball2, aztecqball3, aztecqball4, aztecqball5, gBOT, tmag, NewtonBall, CaptiveBall
 
 Sub Table1_Init
 	Dim i
@@ -85,14 +85,14 @@ Sub Table1_Init
 	
 
 	'Ball initializations need for physical trough
-	Set tmntproBall1 = swTrough1.CreateSizedballWithMass(Ballsize / 2,Ballmass)
-	Set tmntproBall2 = swTrough2.CreateSizedballWithMass(Ballsize / 2,Ballmass)
-	Set tmntproBall3 = swTrough3.CreateSizedballWithMass(Ballsize / 2,Ballmass)
-	Set tmntproBall4 = swTrough4.CreateSizedballWithMass(Ballsize / 2,Ballmass)
-	Set tmntproBall5 = swTrough5.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball1 = swTrough1.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball2 = swTrough2.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball3 = swTrough3.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball4 = swTrough4.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball5 = swTrough5.CreateSizedballWithMass(Ballsize / 2,Ballmass)
 	
 	'*** Use gBOT in the script wherever BOT is normally used. Then there is no need for GetBalls calls ***
-	gBOT = Array( tmntproBall1, tmntproBall2, tmntproBall3, tmntproBall4, tmntproBall5)
+	gBOT = Array( aztecqball1, aztecqball2, aztecqball3, aztecqball4, aztecqball5)
 	
 	Dim xx
 	
@@ -583,7 +583,7 @@ Class VpxBcpController
         m_bcpController.Connect port, backboxCommand
         m_connected = True
         bcpUpdate.Enabled = True
-        If Err Then Debug.print("Can't start Vpx Bcp Controller") : m_connected = False
+        If Err Then Debug.print("Can not start VPX BCP Controller") : m_connected = False
         Set Init = Me
 	End Function
 
@@ -1210,15 +1210,18 @@ Class BallDevice
     Private m_eject_direction
     Private m_default_device
     Private m_eject_callback
+    Private m_eject_all_events
     Private m_debug
 
 	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
     Public Property Let EjectCallback(value) : m_eject_callback = value : End Property
+    Public Property Let EjectAllEvents(value) : m_eject_all_events = value : End Property
         
 	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, debug_on)
         m_ball_switches = ball_switches
         m_player_controlled_eject_event = player_controlled_eject_event
         m_eject_timeouts = eject_timeouts * 1000
+        m_eject_all_events = Array()
         m_name = "balldevice_" & name
         m_ball=False
         m_debug = debug_on
@@ -1226,8 +1229,12 @@ Class BallDevice
         If default_device = True Then
             Set PlungerDevice = Me
         End If
-        AddPinEventListener m_ball_switches&"_active", m_name & "_ball_enter", "BallDeviceEventHandler", 1000, Array("ball_enter", Me)
-        AddPinEventListener m_ball_switches&"_inactive", m_name & "_ball_exiting", "BallDeviceEventHandler", 1000, Array("ball_exiting", Me)
+        Dim evt
+        For Each evt in m_ball_switches
+            AddPinEventListener evt&"_active", m_name & "_ball_enter", "BallDeviceEventHandler", 1000, Array("ball_enter", Me)
+            AddPinEventListener evt&"_inactive", m_name & "_ball_exiting", "BallDeviceEventHandler", 1000, Array("ball_exiting", Me)
+        Next
+        
 	  Set Init = Me
 	End Function
 
@@ -1998,10 +2005,10 @@ Class MultiballLocks
         SetPlayerState m_name & "_balls_locked", balls_locked
         DispatchPinEvent m_name & "_locked_ball", balls_locked
         Log CStr(balls_locked)
-        BIP = BIP - 1
         If balls_locked = m_balls_to_lock Then
             DispatchPinEvent m_name & "_full", balls_locked
         Else
+            BIP = BIP - 1
             SetDelay m_name & "_queued_release", "MultiballLocksHandler" , Array(Array("queue_release", Me),Null), 1000
         End If
     End Sub
@@ -3160,89 +3167,91 @@ End Sub
 '*******************************************
 
 Sub Table1_KeyDown(ByVal keycode)
-	DebugShotTableKeyDownCheck keycode
 	
-	
-	If keycode = LeftFlipperKey Then
-		FlipperActivate LeftFlipper, LFPress
-		'FlipperActivate LeftFlipper1, LFPress
-		SolLFlipper True	'This would be called by the solenoid callbacks if using a ROM
-		If gameStarted = True Then 
-			DispatchPinEvent SWITCH_LEFT_FLIPPER_DOWN, Null
+
+	If gameStarted = True Then
+		DebugShotTableKeyDownCheck keycode
+		
+		If keycode = LeftFlipperKey Then
+			FlipperActivate LeftFlipper, LFPress
+			'FlipperActivate LeftFlipper1, LFPress
+			SolLFlipper True	'This would be called by the solenoid callbacks if using a ROM
+			If gameStarted = True Then 
+				DispatchPinEvent SWITCH_LEFT_FLIPPER_DOWN, Null
+			End If
 		End If
-	End If
-	
-	If keycode = RightFlipperKey Then
-		FlipperActivate RightFlipper, RFPress
-		SolRFlipper True	'This would be called by the solenoid callbacks if using a ROM
-		UpRightFlipper.RotateToEnd
-		If gameStarted = True Then 
-			DispatchPinEvent SWITCH_RIGHT_FLIPPER_DOWN, Null
+		
+		If keycode = RightFlipperKey Then
+			FlipperActivate RightFlipper, RFPress
+			SolRFlipper True	'This would be called by the solenoid callbacks if using a ROM
+			UpRightFlipper.RotateToEnd
+			If gameStarted = True Then 
+				DispatchPinEvent SWITCH_RIGHT_FLIPPER_DOWN, Null
+			End If
 		End If
-	End If
-	
-	If keycode = PlungerKey Then
-		Plunger.Pullback
-		SoundPlungerPull
-	End If
-	
-	If keycode = LeftTiltKey Then
-		Nudge 90, 1
-		SoundNudgeLeft
-	End If
-	If keycode = RightTiltKey Then
-		Nudge 270, 1
-		SoundNudgeRight
-	End If
-	If keycode = CenterTiltKey Then
-		Nudge 0, 1
-		SoundNudgeCenter
-	End If
-	If keycode = MechanicalTilt Then
-		SoundNudgeCenter() 'Send the Tilting command to the ROM (usually by pulsing a Switch), or run the tilting code for an orginal table
-	End If
-	
-	If keycode = StartGameKey Then
-		SoundStartButton
-		If gameStarted = False Then
-			
-			AddPlayer()
-			StartGame()
-		Else
+		
+		If keycode = PlungerKey Then
+			Plunger.Pullback
+			SoundPlungerPull
+		End If
+		
+		If keycode = LeftTiltKey Then
+			Nudge 90, 1
+			SoundNudgeLeft
+		End If
+		If keycode = RightTiltKey Then
+			Nudge 270, 1
+			SoundNudgeRight
+		End If
+		If keycode = CenterTiltKey Then
+			Nudge 0, 1
+			SoundNudgeCenter
+		End If
+		If keycode = MechanicalTilt Then
+			SoundNudgeCenter() 'Send the Tilting command to the ROM (usually by pulsing a Switch), or run the tilting code for an orginal table
+		End If
+		
+		If keycode = StartGameKey Then
+			SoundStartButton
 			If canAddPlayers = True Then
 				AddPlayer()
-			End If		
+			End If
 		End If
-
+	Else
+		If keycode = StartGameKey Then
+			SoundStartButton
+			AddPlayer()
+			StartGame()
+		End If
 	End If
-	
-	
 End Sub
 
 
-
 Sub Table1_KeyUp(ByVal keycode)
-	DebugShotTableKeyUpCheck keycode
 	
-	If KeyCode = PlungerKey Then
-		Plunger.Fire
-		If BIPL = 1 Then
-			SoundPlungerReleaseBall()   'Plunger release sound when there is a ball in shooter lane
-		Else
-			SoundPlungerReleaseNoBall() 'Plunger release sound when there is no ball in shooter lane
+	If gameStarted = True Then
+		DebugShotTableKeyUpCheck keycode
+		
+		If KeyCode = PlungerKey Then
+			Plunger.Fire
+			If BIPL = 1 Then
+				SoundPlungerReleaseBall()   'Plunger release sound when there is a ball in shooter lane
+			Else
+				SoundPlungerReleaseNoBall() 'Plunger release sound when there is no ball in shooter lane
+			End If
 		End If
-	End If
-	
-	If keycode = LeftFlipperKey Then
-		FlipperDeActivate LeftFlipper, LFPress
-		'FlipperDeActivate LeftFlipper1, LFPress
-		SolLFlipper False   'This would be called by the solenoid callbacks if using a ROM
-	End If
-	
-	If keycode = RightFlipperKey Then
-		UpRightFlipper.RotateToStart
-		FlipperDeActivate RightFlipper, RFPress
-		SolRFlipper False   'This would be called by the solenoid callbacks if using a ROM
+		
+		If keycode = LeftFlipperKey Then
+			FlipperDeActivate LeftFlipper, LFPress
+			'FlipperDeActivate LeftFlipper1, LFPress
+			SolLFlipper False   'This would be called by the solenoid callbacks if using a ROM
+		End If
+		
+		If keycode = RightFlipperKey Then
+			UpRightFlipper.RotateToStart
+			FlipperDeActivate RightFlipper, RFPress
+			SolRFlipper False   'This would be called by the solenoid callbacks if using a ROM
+		End If
 	End If
 End Sub
 
@@ -7954,13 +7963,13 @@ Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 Dim bcpController : bcpController = Null
 Dim useBCP : useBCP = False
 Public Sub ConnectToBCPMediaController
-    Set bcpController = (new VpxBcpController)(5050, Null)
+    Set bcpController = (new VpxBcpController)(5050, "aztecquest-mc.exe")
 End Sub
 
 'Devices
-Dim bd_plunger: Set bd_plunger = (new BallDevice)("bd_plunger", "sw_plunger", Null, 1, True, False)
-Dim bd_cave_scoop: Set bd_cave_scoop = (new BallDevice)("bd_cave_scoop", "sw39", Null, 2, False, False)
-Dim bd_waterfall_vuk: Set bd_waterfall_vuk = (new BallDevice)("bd_waterfall_vuk", "sw46", Null, 1, False, True)
+Dim bd_plunger: Set bd_plunger = (new BallDevice)("bd_plunger", Array("sw_plunger"), Null, 1, True, True)
+Dim bd_cave_scoop: Set bd_cave_scoop = (new BallDevice)("bd_cave_scoop", Array("sw39"), Null, 2, False, True)
+Dim bd_waterfall_vuk: Set bd_waterfall_vuk = (new BallDevice)("bd_waterfall_vuk", Array("sw46"), Null, 1, False, True)
 
 'Diverters
 Dim dv_panther : Set dv_panther = (new Diverter)("dv_panther", Array("ball_started"), Array("ball_ended"))', Array("activate_panther"), Array("deactivate_panther"), 0, False
@@ -7972,10 +7981,10 @@ With dv_leftorbit
     .Debug = True
 End With
 
-Dim dv_waterfall : Set dv_waterfall = (new Diverter)("dv_waterfall", Array("ball_started"), Array("ball_ended"))
+Dim dv_waterfall : Set dv_waterfall = (new Diverter)("dv_waterfall", Array("game_started"), Array())
 With dv_waterfall
     .ActivationTime = 2000
-    .ActivateEvents = Array("multiball_waterfall_started")
+    .ActivateEvents = Array("multiball_waterfall_started", "game_ended")
     .ActionCallback = "WaterfallRelease"
     .Debug = True
 End With
@@ -8044,12 +8053,12 @@ DTArray = Array(DT01, DT02, dt_map1, dt_map2, dt_map3, dt_map4, dt_map5, dt_map6
 '*****   Pin Events                                ****
 '******************************************************
 
-Const START_GAME = "Start Game"
+Const START_GAME = "game_started"
 Const NEXT_PLAYER = "Next Player"
 Const BALL_DRAIN = "Ball Drain"
 Const BALL_SAVE = "Ball Save"
 Const ADD_BALL = "Add Ball"
-Const GAME_OVER = "Game Over"
+Const GAME_OVER = "game_ended"
 
 Const SWITCH_LEFT_FLIPPER_DOWN = "Switches Left Flipper Down"
 Const SWITCH_RIGHT_FLIPPER_DOWN = "Switches Right Flipper Down"
@@ -8286,6 +8295,7 @@ Function EndOfBall(args)
         Case "PLAYER 4":
             currentPlayer = "PLAYER 1"
     End Select
+    
     If useBcp Then
         bcpController.SendPlayerVariable "number", GetCurrentPlayerNumber(), previousPlayerNumber
     End If
@@ -9584,9 +9594,11 @@ Sub s_start_Unhit() : DispatchPinEvent "s_start_inactive", ActiveBall : End Sub
 '******************************************************
 
 Sub Drain_Hit 
-    BIP = BIP - 1
-	Drain.kick 57, 20
-    DispatchRelayPinEvent "ball_drain", 1
+    Drain.kick 57, 20    
+    If gameStarted = True Then
+        BIP = BIP - 1
+        DispatchRelayPinEvent "ball_drain", 1
+    End If
 End Sub
 
 Sub Drain_UnHit : UpdateTrough : End Sub

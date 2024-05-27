@@ -10,15 +10,18 @@ Class BallDevice
     Private m_eject_direction
     Private m_default_device
     Private m_eject_callback
+    Private m_eject_all_events
     Private m_debug
 
 	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
     Public Property Let EjectCallback(value) : m_eject_callback = value : End Property
+    Public Property Let EjectAllEvents(value) : m_eject_all_events = value : End Property
         
 	Public default Function init(name, ball_switches, player_controlled_eject_event, eject_timeouts, default_device, debug_on)
         m_ball_switches = ball_switches
         m_player_controlled_eject_event = player_controlled_eject_event
         m_eject_timeouts = eject_timeouts * 1000
+        m_eject_all_events = Array()
         m_name = "balldevice_" & name
         m_ball=False
         m_debug = debug_on
@@ -26,8 +29,12 @@ Class BallDevice
         If default_device = True Then
             Set PlungerDevice = Me
         End If
-        AddPinEventListener m_ball_switches&"_active", m_name & "_ball_enter", "BallDeviceEventHandler", 1000, Array("ball_enter", Me)
-        AddPinEventListener m_ball_switches&"_inactive", m_name & "_ball_exiting", "BallDeviceEventHandler", 1000, Array("ball_exiting", Me)
+        Dim evt
+        For Each evt in m_ball_switches
+            AddPinEventListener evt&"_active", m_name & "_ball_enter", "BallDeviceEventHandler", 1000, Array("ball_enter", Me)
+            AddPinEventListener evt&"_inactive", m_name & "_ball_exiting", "BallDeviceEventHandler", 1000, Array("ball_exiting", Me)
+        Next
+        
 	  Set Init = Me
 	End Function
 

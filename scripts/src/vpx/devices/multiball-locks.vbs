@@ -77,10 +77,10 @@ Class MultiballLocks
         SetPlayerState m_name & "_balls_locked", balls_locked
         DispatchPinEvent m_name & "_locked_ball", balls_locked
         Log CStr(balls_locked)
-        BIP = BIP - 1
         If balls_locked = m_balls_to_lock Then
             DispatchPinEvent m_name & "_full", balls_locked
         Else
+            BIP = BIP - 1
             SetDelay m_name & "_queued_release", "MultiballLocksHandler" , Array(Array("queue_release", Me),Null), 1000
         End If
     End Sub

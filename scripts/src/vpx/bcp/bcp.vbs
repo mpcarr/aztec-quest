@@ -14,7 +14,7 @@ Class VpxBcpController
         m_bcpController.Connect port, backboxCommand
         m_connected = True
         bcpUpdate.Enabled = True
-        If Err Then Debug.print("Can't start Vpx Bcp Controller") : m_connected = False
+        If Err Then Debug.print("Can not start VPX BCP Controller") : m_connected = False
         Set Init = Me
 	End Function
 

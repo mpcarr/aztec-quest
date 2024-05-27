@@ -75,7 +75,7 @@ Sub LoadCoreFiles
 	On Error GoTo 0
 End Sub
 
-Dim tmntproBall1, tmntproBall2, tmntproBall3, tmntproBall4, tmntproBall5, gBOT, tmag, NewtonBall, CaptiveBall
+Dim aztecqball1, aztecqball2, aztecqball3, aztecqball4, aztecqball5, gBOT, tmag, NewtonBall, CaptiveBall
 
 Sub Table1_Init
 	Dim i
@@ -85,14 +85,14 @@ Sub Table1_Init
 	
 
 	'Ball initializations need for physical trough
-	Set tmntproBall1 = swTrough1.CreateSizedballWithMass(Ballsize / 2,Ballmass)
-	Set tmntproBall2 = swTrough2.CreateSizedballWithMass(Ballsize / 2,Ballmass)
-	Set tmntproBall3 = swTrough3.CreateSizedballWithMass(Ballsize / 2,Ballmass)
-	Set tmntproBall4 = swTrough4.CreateSizedballWithMass(Ballsize / 2,Ballmass)
-	Set tmntproBall5 = swTrough5.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball1 = swTrough1.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball2 = swTrough2.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball3 = swTrough3.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball4 = swTrough4.CreateSizedballWithMass(Ballsize / 2,Ballmass)
+	Set aztecqball5 = swTrough5.CreateSizedballWithMass(Ballsize / 2,Ballmass)
 	
 	'*** Use gBOT in the script wherever BOT is normally used. Then there is no need for GetBalls calls ***
-	gBOT = Array( tmntproBall1, tmntproBall2, tmntproBall3, tmntproBall4, tmntproBall5)
+	gBOT = Array( aztecqball1, aztecqball2, aztecqball3, aztecqball4, aztecqball5)
 	
 	Dim xx
 	

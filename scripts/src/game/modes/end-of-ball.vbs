@@ -45,6 +45,7 @@ Function EndOfBall(args)
         Case "PLAYER 4":
             currentPlayer = "PLAYER 1"
     End Select
+    
     If useBcp Then
         bcpController.SendPlayerVariable "number", GetCurrentPlayerNumber(), previousPlayerNumber
     End If
