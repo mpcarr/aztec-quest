@@ -1,6 +1,6 @@
 {
   "Wall": {
-    "hit_event": false,
+    "hit_event": true,
     "is_droppable": false,
     "is_flipbook": false,
     "is_bottom_solid": true,
@@ -17,7 +17,7 @@
     "height_top": 50.0,
     "name": "Wall015",
     "display_texture": false,
-    "slingshot_force": 80.0,
+    "slingshot_force": 0.0,
     "slingshot_threshold": 0.0,
     "elasticity": 0.3,
     "elasticity_falloff": 0.0,
@@ -30,12 +30,12 @@
     "disable_lighting_top": 0.0,
     "disable_lighting_below": 1.0,
     "is_reflection_enabled": true,
-    "physics_material": "",
-    "overwrite_physics": true,
+    "physics_material": "zCol_MetalFO",
+    "overwrite_physics": false,
     "drag_points": [
       {
-        "x": 454.8559,
-        "y": 500.2241,
+        "x": 448.058,
+        "y": 493.07935,
         "z": 0.0,
         "smooth": false,
         "is_slingshot": false,
@@ -47,8 +47,8 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 454.8559,
-        "y": 600.22424,
+        "x": 446.80933,
+        "y": 524.40735,
         "z": 0.0,
         "smooth": false,
         "is_slingshot": false,
@@ -60,8 +60,8 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 530.22064,
-        "y": 600.22424,
+        "x": 526.85645,
+        "y": 523.1587,
         "z": 0.0,
         "smooth": false,
         "is_slingshot": false,
@@ -73,8 +73,8 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 530.22064,
-        "y": 500.2241,
+        "x": 523.42285,
+        "y": 496.8253,
         "z": 0.0,
         "smooth": false,
         "is_slingshot": false,

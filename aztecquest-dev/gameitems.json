@@ -1114,7 +1114,7 @@
   },
   {
     "file_name": "Wall.Wall003.json",
-    "is_locked": true,
+    "is_locked": false,
     "editor_layer": 0,
     "editor_layer_name": "Layer1Walls",
     "editor_layer_visibility": true
@@ -2383,6 +2383,13 @@
     "file_name": "Primitive.Primitive009.json",
     "is_locked": false,
     "editor_layer": 0,
+    "editor_layer_name": "VLM.Lightmaps",
+    "editor_layer_visibility": true
+  },
+  {
+    "file_name": "Primitive.metalScoop.json",
+    "is_locked": false,
+    "editor_layer": 3,
     "editor_layer_name": "VLM.Lightmaps",
     "editor_layer_visibility": true
   }

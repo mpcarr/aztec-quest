@@ -9507,6 +9507,11 @@ Sub sw45_Hit()
     'DTHit 45
 End Sub
 
+Sub Wall015_Hit()
+    ActiveBall.velx = 0
+    ActiveBall.vely = 0
+End Sub
+
 Sub sw39_Hit()   : DispatchPinEvent "sw39_active",   ActiveBall : End Sub
 Sub sw39_Unhit() : DispatchPinEvent "sw39_inactive", ActiveBall : End Sub
 
