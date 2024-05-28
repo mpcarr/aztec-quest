@@ -1,9 +1,9 @@
 {
   "Primitive": {
     "position": {
-      "x": 399.25012,
-      "y": 1212.6965,
-      "z": 5.579329
+      "x": 532.73376,
+      "y": 612.4815,
+      "z": 115.529434
     },
     "size": {
       "x": 1.0,
@@ -24,7 +24,7 @@
     "image": "VLM.Nestmap0",
     "normal_map": "",
     "sides": 4,
-    "name": "LM_inserts_L06_Parts",
+    "name": "LM_inserts_L07_Layer1",
     "material": "",
     "side_color": "#ff00ffff",
     "is_visible": true,
@@ -52,13 +52,13 @@
     "object_space_normal_map": true,
     "min_aa_bound": null,
     "max_aa_bound": null,
-    "mesh_file_name": "VLM.LM.inserts-L06.Parts",
-    "depth_bias": 0.0,
+    "mesh_file_name": "VLM.LM.inserts-L07.Layer1",
+    "depth_bias": -1.0,
     "add_blend": true,
     "use_depth_mask": false,
     "alpha": 100.0,
     "color": "#ff00ffff",
-    "light_map": "L06",
+    "light_map": "L07",
     "reflection_probe": "",
     "reflection_strength": 0.3,
     "refraction_probe": "",

@@ -13,8 +13,8 @@
     "side_material": "",
     "top_material": "Colour_Blue",
     "slingshot_material": "",
-    "height_bottom": 162.0,
-    "height_top": 190.0,
+    "height_bottom": 184.0,
+    "height_top": 250.0,
     "name": "Wall218",
     "display_texture": false,
     "slingshot_force": 80.0,
@@ -138,8 +138,8 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 697.15344,
-        "y": 105.021866,
+        "x": 642.6349,
+        "y": 74.47043,
         "z": 0.0,
         "smooth": false,
         "is_slingshot": false,
@@ -151,8 +151,8 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 696.2349,
-        "y": 107.58398,
+        "x": 641.7164,
+        "y": 77.03253,
         "z": 0.0,
         "smooth": false,
         "is_slingshot": false,

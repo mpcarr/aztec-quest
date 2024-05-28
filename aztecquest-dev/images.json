@@ -42,16 +42,30 @@
     "bits": false
   },
   {
+    "name": "backglassimage",
+    "path": "C:\\Visual Pinball\\Tables\\dof_test_table_VPX.png",
+    "width": 862,
+    "height": 140,
+    "alpha_test_value": -1.0,
+    "is_opaque": true,
+    "is_signed": false,
+    "jpeg": {
+      "path": "C:\\Visual Pinball\\Tables\\dof_test_table_VPX.png",
+      "name": "dof_test_table_VPX"
+    },
+    "bits": false
+  },
+  {
     "name": "VLM.Nestmap0",
-    "path": "C:\\vPinball\\VisualPinball\\Tables\\wip\\aztecquest\\game\\Nestmap 0.webp",
+    "path": "C:\\vPinball\\VisualPinball\\Tables\\wip\\aztecquest\\aztec - Bakes/Export/Nestmap 0.webp",
     "width": 2112,
     "height": 8192,
     "alpha_test_value": 1.0,
     "is_opaque": false,
     "is_signed": false,
     "jpeg": {
-      "path": "C:\\vPinball\\VisualPinball\\Tables\\wip\\aztecquest\\game\\Nestmap 0.webp",
-      "name": "Nestmap 0"
+      "path": "C:\\vPinball\\VisualPinball\\Tables\\wip\\aztecquest\\aztec - Bakes/Export/Nestmap 0.webp",
+      "name": "VLM.Nestmap0"
     },
     "bits": false
   },
@@ -66,20 +80,6 @@
     "jpeg": {
       "path": "C:\\vPinball\\VisualPinball\\Tables\\wip\\aztecquest\\aztec - Bakes/Export/Nestmap 1.exr",
       "name": "VLM.Nestmap1"
-    },
-    "bits": false
-  },
-  {
-    "name": "backglassimage",
-    "path": "C:\\Visual Pinball\\Tables\\dof_test_table_VPX.png",
-    "width": 862,
-    "height": 140,
-    "alpha_test_value": -1.0,
-    "is_opaque": true,
-    "is_signed": false,
-    "jpeg": {
-      "path": "C:\\Visual Pinball\\Tables\\dof_test_table_VPX.png",
-      "name": "dof_test_table_VPX"
     },
     "bits": false
   }

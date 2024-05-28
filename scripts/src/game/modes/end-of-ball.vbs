@@ -12,7 +12,8 @@ AddPinEventListener "ball_drain", "ball_drain", "EndOfBall", 20, Null
 Function EndOfBall(args)
     
     Dim ballsToSave : ballsToSave = args(1) 
-    debugLog.WriteToLog "end_of_ball", CStr(ballsToSave)
+    debugLog.WriteToLog "end_of_ball, unclaimed balls", CStr(ballsToSave)
+    debugLog.WriteToLog "end_of_ball, balls in play", CStr(BIP)
     If ballsToSave <= 0 Then
         Exit Function
     End If

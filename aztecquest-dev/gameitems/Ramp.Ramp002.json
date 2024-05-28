@@ -1,7 +1,7 @@
 {
   "Ramp": {
     "height_bottom": 0.0,
-    "height_top": 80.0,
+    "height_top": 100.0,
     "width_bottom": 90.0,
     "width_top": 55.0,
     "material": "Colour_Red",

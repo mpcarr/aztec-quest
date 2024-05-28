@@ -15,7 +15,7 @@ Class BallDevice
     Private m_debug
 
     Public Property Get Name(): Name = m_name : End Property
-	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
+	Public Property Get HasBall(): HasBall = Not IsNull(m_balls(0)): End Property
     Public Property Let EjectCallback(value) : m_eject_callback = value : End Property
     Public Property Let EjectAllEvents(value) : m_eject_all_events = value : End Property
     Public Property Let MechcanicalEject(value) : m_mechcanical_eject = value : End Property

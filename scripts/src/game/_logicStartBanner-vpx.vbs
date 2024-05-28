@@ -15,7 +15,7 @@ Dim playerEventsOrder : Set playerEventsOrder = CreateObject("Scripting.Dictiona
 Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
 Dim bcpController : bcpController = Null
-Dim useBCP : useBCP = True
+Dim useBCP : useBCP = False
 Public Sub ConnectToBCPMediaController
     Set bcpController = (new VpxBcpController)(5050, "aztecquest-mc.exe")
 End Sub

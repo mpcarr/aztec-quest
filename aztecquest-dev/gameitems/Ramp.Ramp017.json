@@ -1,10 +1,10 @@
 {
   "Ramp": {
-    "height_bottom": 80.0,
-    "height_top": 80.0,
+    "height_bottom": 100.0,
+    "height_top": 100.0,
     "width_bottom": 55.0,
     "width_top": 55.0,
-    "material": "",
+    "material": "Colour_Red",
     "is_timer_enabled": false,
     "timer_interval": 100,
     "ramp_type": "flat",

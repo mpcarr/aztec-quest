@@ -1,9 +1,9 @@
 {
   "Primitive": {
     "position": {
-      "x": 0.0,
-      "y": -0.0,
-      "z": 0.0
+      "x": 415.86826,
+      "y": 508.13342,
+      "z": 155.98625
     },
     "size": {
       "x": 1.0,
@@ -11,9 +11,9 @@
       "z": 1.0
     },
     "rot_and_tra": [
-      -0.0,
-      179.99998,
       0.0,
+      -0.0,
+      -0.0,
       0.0,
       0.0,
       0.0,
@@ -35,7 +35,7 @@
     "elasticity_falloff": 0.0,
     "friction": 0.0,
     "scatter": 0.0,
-    "edge_factor_ui": 1.0,
+    "edge_factor_ui": 0.1,
     "collision_reduction_factor": 0.0,
     "is_collidable": false,
     "is_toy": true,
@@ -55,7 +55,7 @@
     "mesh_file_name": "VLM.BM.Layer2",
     "depth_bias": 0.0,
     "add_blend": false,
-    "use_depth_mask": false,
+    "use_depth_mask": true,
     "alpha": 100.0,
     "color": "#ff00ffff",
     "light_map": "",

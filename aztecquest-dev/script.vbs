@@ -1219,7 +1219,7 @@ Class BallDevice
     Private m_debug
 
     Public Property Get Name(): Name = m_name : End Property
-	Public Property Get HasBall(): HasBall = Not IsNull(m_ball): End Property
+	Public Property Get HasBall(): HasBall = Not IsNull(m_balls(0)): End Property
     Public Property Let EjectCallback(value) : m_eject_callback = value : End Property
     Public Property Let EjectAllEvents(value) : m_eject_all_events = value : End Property
     Public Property Let MechcanicalEject(value) : m_mechcanical_eject = value : End Property
@@ -2023,10 +2023,10 @@ Class MultiballLocks
         SetPlayerState m_name & "_balls_locked", balls_locked
         DispatchPinEvent m_name & "_locked_ball", balls_locked
         Log CStr(balls_locked)
+        BIP = BIP - 1
         If balls_locked = m_balls_to_lock Then
             DispatchPinEvent m_name & "_full", balls_locked
         Else
-            BIP = BIP - 1
             SetDelay m_name & "_queued_release", "MultiballLocksHandler" , Array(Array("queue_release", Me),Null), 1000
         End If
     End Sub
@@ -5388,13 +5388,14 @@ Dim BP_Cab: BP_Cab=Array(BM_Cab)
 Dim BP_LEMK: BP_LEMK=Array(BM_LEMK)
 Dim BP_LSling1: BP_LSling1=Array(BM_LSling1)
 Dim BP_LSling2: BP_LSling2=Array(BM_LSling2)
-Dim BP_Layer2: BP_Layer2=Array(BM_Layer2)
+Dim BP_Layer1: BP_Layer1=Array(BM_Layer1, LM_inserts_L06_Layer1, LM_inserts_L07_Layer1)
+Dim BP_Layer2: BP_Layer2=Array(BM_Layer2, LM_inserts_L07_Layer2, LM_inserts_L08_Layer2)
+Dim BP_Layer3: BP_Layer3=Array(BM_Layer3, LM_inserts_L06_Layer3, LM_inserts_L07_Layer3)
 Dim BP_PF: BP_PF=Array(BM_PF, LM_inserts_L01_PF, LM_inserts_L02_PF, LM_inserts_L03_PF, LM_inserts_L04_PF, LM_inserts_L05_PF, LM_inserts_L06_PF, LM_inserts_L07_PF, LM_inserts_L08_PF)
-Dim BP_Parts: BP_Parts=Array(BM_Parts, LM_inserts_L04_Parts, LM_inserts_L05_Parts, LM_inserts_L06_Parts)
+Dim BP_Parts: BP_Parts=Array(BM_Parts, LM_inserts_L07_Parts, LM_inserts_L08_Parts)
 Dim BP_REMK: BP_REMK=Array(BM_REMK)
 Dim BP_RSling1: BP_RSling1=Array(BM_RSling1)
 Dim BP_RSling2: BP_RSling2=Array(BM_RSling2)
-Dim BP_Ramp1: BP_Ramp1=Array(BM_Ramp1)
 Dim BP_UnderPF: BP_UnderPF=Array(BM_UnderPF, LM_inserts_L01_UnderPF, LM_inserts_L02_UnderPF, LM_inserts_L03_UnderPF, LM_inserts_L04_UnderPF, LM_inserts_L05_UnderPF, LM_inserts_L06_UnderPF, LM_inserts_L07_UnderPF, LM_inserts_L08_UnderPF)
 Dim BP_pantherLid: BP_pantherLid=Array(BM_pantherLid)
 Dim BP_pantherLid2: BP_pantherLid2=Array(BM_pantherLid2, LM_inserts_L07_pantherLid2)
@@ -5414,23 +5415,23 @@ Dim BP_sw13: BP_sw13=Array(BM_sw13, LM_inserts_L04_sw13, LM_inserts_L05_sw13)
 Dim BP_sw15: BP_sw15=Array(BM_sw15, LM_inserts_L06_sw15, LM_inserts_L07_sw15, LM_inserts_L08_sw15)
 Dim BP_sw16: BP_sw16=Array(BM_sw16, LM_inserts_L06_sw16, LM_inserts_L07_sw16, LM_inserts_L08_sw16)
 Dim BP_sw17: BP_sw17=Array(BM_sw17, LM_inserts_L07_sw17, LM_inserts_L08_sw17)
-Dim BP_targetbank: BP_targetbank=Array(BM_targetbank, LM_inserts_L06_targetbank, LM_inserts_L07_targetbank, LM_inserts_L08_targetbank)
+Dim BP_targetbank: BP_targetbank=Array(BM_targetbank)
 ' Arrays per lighting scenario
-Dim BL_World: BL_World=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer2, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_Ramp1, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
+Dim BL_World: BL_World=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer1, BM_Layer2, BM_Layer3, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
 Dim BL_inserts_L01: BL_inserts_L01=Array(LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01)
 Dim BL_inserts_L02: BL_inserts_L02=Array(LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01)
 Dim BL_inserts_L03: BL_inserts_L03=Array(LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12)
-Dim BL_inserts_L04: BL_inserts_L04=Array(LM_inserts_L04_PF, LM_inserts_L04_Parts, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13)
-Dim BL_inserts_L05: BL_inserts_L05=Array(LM_inserts_L05_PF, LM_inserts_L05_Parts, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, LM_inserts_L05_sw13)
-Dim BL_inserts_L06: BL_inserts_L06=Array(LM_inserts_L06_PF, LM_inserts_L06_Parts, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L06_targetbank)
-Dim BL_inserts_L07: BL_inserts_L07=Array(LM_inserts_L07_PF, LM_inserts_L07_UnderPF, LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L07_targetbank)
-Dim BL_inserts_L08: BL_inserts_L08=Array(LM_inserts_L08_PF, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17, LM_inserts_L08_targetbank)
+Dim BL_inserts_L04: BL_inserts_L04=Array(LM_inserts_L04_PF, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13)
+Dim BL_inserts_L05: BL_inserts_L05=Array(LM_inserts_L05_PF, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, LM_inserts_L05_sw13)
+Dim BL_inserts_L06: BL_inserts_L06=Array(LM_inserts_L06_Layer1, LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16)
+Dim BL_inserts_L07: BL_inserts_L07=Array(LM_inserts_L07_Layer1, LM_inserts_L07_Layer2, LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17)
+Dim BL_inserts_L08: BL_inserts_L08=Array(LM_inserts_L08_Layer2, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
 ' Global arrays
-Dim BG_Bakemap: BG_Bakemap=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer2, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_Ramp1, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-Dim BG_Lightmap: BG_Lightmap=Array(LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01, LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12, LM_inserts_L04_PF, LM_inserts_L04_Parts, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13, LM_inserts_L05_PF, LM_inserts_L05_Parts, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, LM_inserts_L05_sw13, LM_inserts_L06_PF, LM_inserts_L06_Parts, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L06_targetbank, LM_inserts_L07_PF, LM_inserts_L07_UnderPF, LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, _
-	LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L07_targetbank, LM_inserts_L08_PF, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17, LM_inserts_L08_targetbank)
-Dim BG_All: BG_All=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer2, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_Ramp1, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank, LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01, LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12, LM_inserts_L04_PF, LM_inserts_L04_Parts, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13, LM_inserts_L05_PF, LM_inserts_L05_Parts, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, _
-	LM_inserts_L05_sw12, LM_inserts_L05_sw13, LM_inserts_L06_PF, LM_inserts_L06_Parts, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L06_targetbank, LM_inserts_L07_PF, LM_inserts_L07_UnderPF, LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L07_targetbank, LM_inserts_L08_PF, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17, LM_inserts_L08_targetbank)
+Dim BG_Bakemap: BG_Bakemap=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer1, BM_Layer2, BM_Layer3, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
+Dim BG_Lightmap: BG_Lightmap=Array(LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01, LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12, LM_inserts_L04_PF, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13, LM_inserts_L05_PF, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, LM_inserts_L05_sw13, LM_inserts_L06_Layer1, LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L07_Layer1, LM_inserts_L07_Layer2, LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, _
+	LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L08_Layer2, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
+Dim BG_All: BG_All=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer1, BM_Layer2, BM_Layer3, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank, LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01, LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12, LM_inserts_L04_PF, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13, LM_inserts_L05_PF, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, _
+	LM_inserts_L05_sw13, LM_inserts_L06_Layer1, LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L07_Layer1, LM_inserts_L07_Layer2, LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L08_Layer2, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
 ' VLM  Arrays - End
 
 
@@ -7983,7 +7984,7 @@ Dim playerEventsOrder : Set playerEventsOrder = CreateObject("Scripting.Dictiona
 Dim playerState : Set playerState = CreateObject("Scripting.Dictionary")
 
 Dim bcpController : bcpController = Null
-Dim useBCP : useBCP = True
+Dim useBCP : useBCP = False
 Public Sub ConnectToBCPMediaController
     Set bcpController = (new VpxBcpController)(5050, "aztecquest-mc.exe")
 End Sub
@@ -8285,7 +8286,8 @@ AddPinEventListener "ball_drain", "ball_drain", "EndOfBall", 20, Null
 Function EndOfBall(args)
     
     Dim ballsToSave : ballsToSave = args(1) 
-    debugLog.WriteToLog "end_of_ball", CStr(ballsToSave)
+    debugLog.WriteToLog "end_of_ball, unclaimed balls", CStr(ballsToSave)
+    debugLog.WriteToLog "end_of_ball, balls in play", CStr(BIP)
     If ballsToSave <= 0 Then
         Exit Function
     End If
