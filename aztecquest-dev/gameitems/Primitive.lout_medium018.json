@@ -27,7 +27,7 @@
     "name": "lout_medium018",
     "material": "Colour_Green",
     "side_color": "#96009696",
-    "is_visible": true,
+    "is_visible": false,
     "draw_textures_inside": false,
     "hit_event": true,
     "threshold": 0.5,

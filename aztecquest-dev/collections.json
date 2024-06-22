@@ -148,5 +148,19 @@
     "fire_events": false,
     "stop_single_events": false,
     "group_elements": true
+  },
+  {
+    "name": "Glf_Lights",
+    "items": [],
+    "fire_events": false,
+    "stop_single_events": false,
+    "group_elements": false
+  },
+  {
+    "name": "Glf_Switches",
+    "items": [],
+    "fire_events": false,
+    "stop_single_events": false,
+    "group_elements": false
   }
 ]

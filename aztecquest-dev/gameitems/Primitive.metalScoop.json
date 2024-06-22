@@ -1,8 +1,8 @@
 {
   "Primitive": {
     "position": {
-      "x": -223.70573,
-      "y": -58.614372,
+      "x": -210.09549,
+      "y": -56.16946,
       "z": 0.0
     },
     "size": {
@@ -52,7 +52,7 @@
     "object_space_normal_map": false,
     "min_aa_bound": null,
     "max_aa_bound": null,
-    "mesh_file_name": "Scoop.001.obj",
+    "mesh_file_name": "",
     "depth_bias": 0.0,
     "add_blend": false,
     "use_depth_mask": true,

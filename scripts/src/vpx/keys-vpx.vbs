@@ -6,14 +6,14 @@
 Sub Table1_KeyDown(ByVal keycode)
 	
 
-	If gameStarted = True Then
+	If glf_gameStarted = True Then
 		DebugShotTableKeyDownCheck keycode
 		
 		If keycode = LeftFlipperKey Then
 			FlipperActivate LeftFlipper, LFPress
 			'FlipperActivate LeftFlipper1, LFPress
 			SolLFlipper True	'This would be called by the solenoid callbacks if using a ROM
-			If gameStarted = True Then 
+			If glf_gameStarted = True Then 
 				DispatchPinEvent SWITCH_LEFT_FLIPPER_DOWN, Null
 			End If
 		End If
@@ -22,7 +22,7 @@ Sub Table1_KeyDown(ByVal keycode)
 			FlipperActivate RightFlipper, RFPress
 			SolRFlipper True	'This would be called by the solenoid callbacks if using a ROM
 			UpRightFlipper.RotateToEnd
-			If gameStarted = True Then 
+			If glf_gameStarted = True Then 
 				DispatchPinEvent SWITCH_RIGHT_FLIPPER_DOWN, Null
 			End If
 		End If
@@ -47,26 +47,15 @@ Sub Table1_KeyDown(ByVal keycode)
 		If keycode = MechanicalTilt Then
 			SoundNudgeCenter() 'Send the Tilting command to the ROM (usually by pulsing a Switch), or run the tilting code for an orginal table
 		End If
-		
-		If keycode = StartGameKey Then
-			SoundStartButton
-			If canAddPlayers = True Then
-				AddPlayer()
-			End If
-		End If
-	Else
-		If keycode = StartGameKey Then
-			SoundStartButton
-			AddPlayer()
-			StartGame()
-		End If
 	End If
+
+	Glf_KeyDown keycode
 End Sub
 
 
 Sub Table1_KeyUp(ByVal keycode)
 	
-	If gameStarted = True Then
+	If glf_gameStarted = True Then
 		DebugShotTableKeyUpCheck keycode
 		
 		If KeyCode = PlungerKey Then
@@ -90,4 +79,6 @@ Sub Table1_KeyUp(ByVal keycode)
 			SolRFlipper False   'This would be called by the solenoid callbacks if using a ROM
 		End If
 	End If
+
+	Glf_KeyUp keycode
 End Sub

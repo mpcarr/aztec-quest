@@ -1,8 +1,8 @@
 {
   "Primitive": {
     "position": {
-      "x": 639.755,
-      "y": 1163.9567,
+      "x": 610.9777,
+      "y": 1256.6835,
       "z": 33.699352
     },
     "size": {
@@ -21,7 +21,7 @@
       0.0,
       0.0
     ],
-    "image": "VLM.Nestmap0",
+    "image": "VLM.Nestmap1",
     "normal_map": "",
     "sides": 4,
     "name": "LM_inserts_L01_sw01",

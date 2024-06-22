@@ -173,7 +173,7 @@ Dim DSSources(30), numberofsources', DSGISide(30) 'Adapted for TZ with GI left /
 
 ' *** The Shadow Dictionary
 Dim bsDict
-Set bsDict = New cvpmDictionary
+Set bsDict = CreateObject("Scripting.Dictionary")
 Const bsNone = "None"
 Const bsWire = "Wire"
 Const bsRamp = "Ramp"

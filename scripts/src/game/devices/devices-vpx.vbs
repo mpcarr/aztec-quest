@@ -20,9 +20,6 @@ Function WaterfallVukKickBall(ball)
     sw46.Kick 0, 45, 1.36
 End Function
 
-bd_plunger.EjectCallback = "PlungerKickBall"
-bd_cave_scoop.EjectCallback = "CaveKickBall"
-bd_waterfall_vuk.EjectCallback = "WaterfallVukKickBall"
 
 'Set up diverters
 

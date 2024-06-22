@@ -15,7 +15,7 @@
     "target_type": "hit_target_slim",
     "name": "Target001",
     "material": "Colour_White",
-    "is_visible": true,
+    "is_visible": false,
     "is_legacy": false,
     "use_hit_event": true,
     "threshold": 2.0,

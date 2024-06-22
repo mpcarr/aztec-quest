@@ -1,20 +1,22 @@
+
+
 ' VLM  Arrays - Start
 ' Arrays per baked part
 Dim BP_Cab: BP_Cab=Array(BM_Cab)
 Dim BP_LEMK: BP_LEMK=Array(BM_LEMK)
 Dim BP_LSling1: BP_LSling1=Array(BM_LSling1)
 Dim BP_LSling2: BP_LSling2=Array(BM_LSling2)
-Dim BP_Layer1: BP_Layer1=Array(BM_Layer1, LM_inserts_L06_Layer1, LM_inserts_L07_Layer1)
-Dim BP_Layer2: BP_Layer2=Array(BM_Layer2, LM_inserts_L07_Layer2, LM_inserts_L08_Layer2)
-Dim BP_Layer3: BP_Layer3=Array(BM_Layer3, LM_inserts_L06_Layer3, LM_inserts_L07_Layer3)
+Dim BP_Layer1: BP_Layer1=Array(BM_Layer1)
+Dim BP_Layer2: BP_Layer2=Array(BM_Layer2)
+Dim BP_Layer3: BP_Layer3=Array(BM_Layer3, LM_inserts_L01_Layer3, LM_inserts_L02_Layer3, LM_inserts_L06_Layer3, LM_inserts_L07_Layer3, LM_inserts_L08_Layer3)
 Dim BP_PF: BP_PF=Array(BM_PF, LM_inserts_L01_PF, LM_inserts_L02_PF, LM_inserts_L03_PF, LM_inserts_L04_PF, LM_inserts_L05_PF, LM_inserts_L06_PF, LM_inserts_L07_PF, LM_inserts_L08_PF)
-Dim BP_Parts: BP_Parts=Array(BM_Parts, LM_inserts_L07_Parts, LM_inserts_L08_Parts)
+Dim BP_Parts: BP_Parts=Array(BM_Parts, LM_inserts_L06_Parts, LM_inserts_L07_Parts, LM_inserts_L08_Parts)
 Dim BP_REMK: BP_REMK=Array(BM_REMK)
 Dim BP_RSling1: BP_RSling1=Array(BM_RSling1)
 Dim BP_RSling2: BP_RSling2=Array(BM_RSling2)
 Dim BP_UnderPF: BP_UnderPF=Array(BM_UnderPF, LM_inserts_L01_UnderPF, LM_inserts_L02_UnderPF, LM_inserts_L03_UnderPF, LM_inserts_L04_UnderPF, LM_inserts_L05_UnderPF, LM_inserts_L06_UnderPF, LM_inserts_L07_UnderPF, LM_inserts_L08_UnderPF)
 Dim BP_pantherLid: BP_pantherLid=Array(BM_pantherLid)
-Dim BP_pantherLid2: BP_pantherLid2=Array(BM_pantherLid2, LM_inserts_L07_pantherLid2)
+Dim BP_pantherLid2: BP_pantherLid2=Array(BM_pantherLid2)
 Dim BP_pantherSupport: BP_pantherSupport=Array(BM_pantherSupport, LM_inserts_L01_pantherSupport, LM_inserts_L02_pantherSupport)
 Dim BP_pantherSupport2: BP_pantherSupport2=Array(BM_pantherSupport2)
 Dim BP_sw01: BP_sw01=Array(BM_sw01, LM_inserts_L01_sw01, LM_inserts_L02_sw01)
@@ -24,7 +26,7 @@ Dim BP_sw05: BP_sw05=Array(BM_sw05, LM_inserts_L03_sw05, LM_inserts_L04_sw05, LM
 Dim BP_sw06: BP_sw06=Array(BM_sw06, LM_inserts_L03_sw06, LM_inserts_L04_sw06, LM_inserts_L05_sw06)
 Dim BP_sw08: BP_sw08=Array(BM_sw08, LM_inserts_L06_sw08, LM_inserts_L07_sw08, LM_inserts_L08_sw08)
 Dim BP_sw09: BP_sw09=Array(BM_sw09, LM_inserts_L06_sw09, LM_inserts_L07_sw09, LM_inserts_L08_sw09)
-Dim BP_sw10: BP_sw10=Array(BM_sw10, LM_inserts_L06_sw10, LM_inserts_L07_sw10, LM_inserts_L08_sw10)
+Dim BP_sw10: BP_sw10=Array(BM_sw10, LM_inserts_L07_sw10, LM_inserts_L08_sw10)
 Dim BP_sw11: BP_sw11=Array(BM_sw11, LM_inserts_L03_sw11, LM_inserts_L04_sw11)
 Dim BP_sw12: BP_sw12=Array(BM_sw12, LM_inserts_L03_sw12, LM_inserts_L04_sw12, LM_inserts_L05_sw12)
 Dim BP_sw13: BP_sw13=Array(BM_sw13, LM_inserts_L04_sw13, LM_inserts_L05_sw13)
@@ -34,18 +36,18 @@ Dim BP_sw17: BP_sw17=Array(BM_sw17, LM_inserts_L07_sw17, LM_inserts_L08_sw17)
 Dim BP_targetbank: BP_targetbank=Array(BM_targetbank)
 ' Arrays per lighting scenario
 Dim BL_World: BL_World=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer1, BM_Layer2, BM_Layer3, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-Dim BL_inserts_L01: BL_inserts_L01=Array(LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01)
-Dim BL_inserts_L02: BL_inserts_L02=Array(LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01)
+Dim BL_inserts_L01: BL_inserts_L01=Array(LM_inserts_L01_Layer3, LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01)
+Dim BL_inserts_L02: BL_inserts_L02=Array(LM_inserts_L02_Layer3, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01)
 Dim BL_inserts_L03: BL_inserts_L03=Array(LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12)
 Dim BL_inserts_L04: BL_inserts_L04=Array(LM_inserts_L04_PF, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13)
 Dim BL_inserts_L05: BL_inserts_L05=Array(LM_inserts_L05_PF, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, LM_inserts_L05_sw13)
-Dim BL_inserts_L06: BL_inserts_L06=Array(LM_inserts_L06_Layer1, LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16)
-Dim BL_inserts_L07: BL_inserts_L07=Array(LM_inserts_L07_Layer1, LM_inserts_L07_Layer2, LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17)
-Dim BL_inserts_L08: BL_inserts_L08=Array(LM_inserts_L08_Layer2, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
+Dim BL_inserts_L06: BL_inserts_L06=Array(LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_Parts, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw15, LM_inserts_L06_sw16)
+Dim BL_inserts_L07: BL_inserts_L07=Array(LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17)
+Dim BL_inserts_L08: BL_inserts_L08=Array(LM_inserts_L08_Layer3, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
 ' Global arrays
 Dim BG_Bakemap: BG_Bakemap=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer1, BM_Layer2, BM_Layer3, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank)
-Dim BG_Lightmap: BG_Lightmap=Array(LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01, LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12, LM_inserts_L04_PF, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13, LM_inserts_L05_PF, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, LM_inserts_L05_sw13, LM_inserts_L06_Layer1, LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L07_Layer1, LM_inserts_L07_Layer2, LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, _
-	LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L08_Layer2, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
-Dim BG_All: BG_All=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer1, BM_Layer2, BM_Layer3, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank, LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01, LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12, LM_inserts_L04_PF, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13, LM_inserts_L05_PF, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, _
-	LM_inserts_L05_sw13, LM_inserts_L06_Layer1, LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw10, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L07_Layer1, LM_inserts_L07_Layer2, LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, LM_inserts_L07_pantherLid2, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L08_Layer2, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
+Dim BG_Lightmap: BG_Lightmap=Array(LM_inserts_L01_Layer3, LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01, LM_inserts_L02_Layer3, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01, LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12, LM_inserts_L04_PF, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13, LM_inserts_L05_PF, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, LM_inserts_L05_sw06, LM_inserts_L05_sw12, LM_inserts_L05_sw13, LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_Parts, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, LM_inserts_L07_sw08, _
+	LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L08_Layer3, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
+Dim BG_All: BG_All=Array(BM_Cab, BM_LEMK, BM_LSling1, BM_LSling2, BM_Layer1, BM_Layer2, BM_Layer3, BM_PF, BM_Parts, BM_REMK, BM_RSling1, BM_RSling2, BM_UnderPF, BM_pantherLid, BM_pantherLid2, BM_pantherSupport, BM_pantherSupport2, BM_sw01, BM_sw02, BM_sw04, BM_sw05, BM_sw06, BM_sw08, BM_sw09, BM_sw10, BM_sw11, BM_sw12, BM_sw13, BM_sw15, BM_sw16, BM_sw17, BM_targetbank, LM_inserts_L01_Layer3, LM_inserts_L01_PF, LM_inserts_L01_UnderPF, LM_inserts_L01_pantherSupport, LM_inserts_L01_sw01, LM_inserts_L02_Layer3, LM_inserts_L02_PF, LM_inserts_L02_UnderPF, LM_inserts_L02_pantherSupport, LM_inserts_L02_sw01, LM_inserts_L03_PF, LM_inserts_L03_UnderPF, LM_inserts_L03_sw04, LM_inserts_L03_sw05, LM_inserts_L03_sw06, LM_inserts_L03_sw11, LM_inserts_L03_sw12, LM_inserts_L04_PF, LM_inserts_L04_UnderPF, LM_inserts_L04_sw04, LM_inserts_L04_sw05, LM_inserts_L04_sw06, LM_inserts_L04_sw11, LM_inserts_L04_sw12, LM_inserts_L04_sw13, LM_inserts_L05_PF, LM_inserts_L05_UnderPF, LM_inserts_L05_sw04, LM_inserts_L05_sw05, _
+	LM_inserts_L05_sw06, LM_inserts_L05_sw12, LM_inserts_L05_sw13, LM_inserts_L06_Layer3, LM_inserts_L06_PF, LM_inserts_L06_Parts, LM_inserts_L06_UnderPF, LM_inserts_L06_sw08, LM_inserts_L06_sw09, LM_inserts_L06_sw15, LM_inserts_L06_sw16, LM_inserts_L07_Layer3, LM_inserts_L07_PF, LM_inserts_L07_Parts, LM_inserts_L07_UnderPF, LM_inserts_L07_sw08, LM_inserts_L07_sw09, LM_inserts_L07_sw10, LM_inserts_L07_sw15, LM_inserts_L07_sw16, LM_inserts_L07_sw17, LM_inserts_L08_Layer3, LM_inserts_L08_PF, LM_inserts_L08_Parts, LM_inserts_L08_UnderPF, LM_inserts_L08_sw08, LM_inserts_L08_sw09, LM_inserts_L08_sw10, LM_inserts_L08_sw15, LM_inserts_L08_sw16, LM_inserts_L08_sw17)
 ' VLM  Arrays - End

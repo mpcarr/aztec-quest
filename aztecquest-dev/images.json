@@ -72,7 +72,7 @@
   {
     "name": "VLM.Nestmap1",
     "path": "C:\\vPinball\\VisualPinball\\Tables\\wip\\aztecquest\\aztec - Bakes/Export/Nestmap 1.exr",
-    "width": 640,
+    "width": 576,
     "height": 8192,
     "alpha_test_value": 1.0,
     "is_opaque": true,

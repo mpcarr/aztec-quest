@@ -1,10 +1,30 @@
 
-'Devices
-Dim bd_plunger: Set bd_plunger = (new BallDevice)("bd_plunger", Array("sw_plunger"), Null, 1, True, True)
-bd_plunger.MechcanicalEject = True
-Dim bd_cave_scoop: Set bd_cave_scoop = (new BallDevice)("bd_cave_scoop", Array("sw39"), Null, 2, False, True)
-Dim bd_waterfall_vuk: Set bd_waterfall_vuk = (new BallDevice)("bd_waterfall_vuk", Array("sw46"), Null, 1, False, True)
+'Ball Devices
+Dim bd_plunger: Set bd_plunger = (new BallDevice)("bd_plunger")
+With bd_plunger
+    .BallSwitches = Array("sw_plunger")
+    .EjectTimeout = 1
+    .EjectCallback = "PlungerKickBall"
+    .MechcanicalEject = True
+    .DefaultDevice = True
+    .Debug = True
+End With
 
+Dim bd_cave_scoop: Set bd_cave_scoop = (new BallDevice)("cave_scoop")
+With bd_cave_scoop
+    .BallSwitches = Array("sw39")
+    .EjectTimeout = 2
+    .EjectCallback = "CaveKickBall"
+    .Debug = True
+End With
+
+Dim bd_waterfall_vuk: Set bd_waterfall_vuk = (new BallDevice)("bd_waterfall_vuk")
+With bd_waterfall_vuk
+    .BallSwitches = Array("sw46")
+    .EjectTimeout = 1
+    .EjectCallback = "WaterfallVukKickBall"
+    .Debug = True
+End With
 'Diverters
 Dim dv_panther : Set dv_panther = (new Diverter)("dv_panther", Array("ball_started"), Array("ball_ended"))', Array("activate_panther"), Array("deactivate_panther"), 0, False
 Dim dv_leftorbit : Set dv_leftorbit = (new Diverter)("leftorbit", Array("enable_waterfall"), Array("multiball_waterfall_started"))
