@@ -135,23 +135,16 @@
   },
   {
     "name": "alights",
-    "items": [
-      "l08",
-      "l07",
-      "l06",
-      "l05",
-      "l04",
-      "l03",
-      "l01",
-      "l02"
-    ],
+    "items": [],
     "fire_events": false,
     "stop_single_events": false,
     "group_elements": true
   },
   {
     "name": "Glf_Lights",
-    "items": [],
+    "items": [
+      "l13"
+    ],
     "fire_events": false,
     "stop_single_events": false,
     "group_elements": false
