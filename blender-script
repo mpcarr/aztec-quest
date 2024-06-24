@@ -1,0 +1,130 @@
+import bpy
+import re  # Import regular expressions module
+
+# Collection names
+source_collection_name = 'UnderPF'
+target_collection_name = 'inserts'
+color_lookup = {
+    "White": (0.949, 0.949, 0.949,1),  # Hex: #F3F3F3
+    "Red": (1.000, 0.427, 0.294,1),    # Hex: #FF6D4B
+    "Amber": (1.000, 0.737, 0.537,1),  # Hex: #FFBC89
+    "Yellow": (1.000, 0.953, 0.537,1), # Hex: #FFF389
+    "Green": (0.537, 1.000, 0.537,1),  # Hex: #89FF89
+    "Blue": (0.388, 0.737, 1.000,1)    # Hex: #63BCFF
+}
+
+# Create target collection if it doesn't exist
+if target_collection_name not in bpy.data.collections:
+    new_col = bpy.data.collections.new(target_collection_name)
+    bpy.context.scene.collection.children.link(new_col)
+
+# Get the source and target collections
+source_collection = bpy.data.collections.get(source_collection_name)
+target_collection = bpy.data.collections.get(target_collection_name)
+
+def extract_color_from_connected_node(obj):
+    # Default color
+    default_color = (1.0, 1.0, 1.0, 1.0)
+
+    if obj.material_slots and obj.material_slots[0].material and obj.material_slots[0].material.use_nodes:
+        material = obj.material_slots[0].material
+        nodes = material.node_tree.nodes
+        links = material.node_tree.links
+
+        for node in nodes:
+            #print(node.name)
+            if node.type == 'GROUP' and node.node_tree and node.name == "InsertColor":
+                print("START")
+                outputIndex = 0
+                for output in node.outputs:
+                    # Check if this output is connected
+                    print(output)
+                    for link in links:
+                        if link.from_node == node and link.from_socket == output:
+                            # Assuming the connected node has a color output
+                            connected_node = link.to_node
+                            print("GOT")
+                            print(outputIndex)
+                            print(node.node_tree.links[outputIndex].from_node.outputs['Color'].default_value)
+                            return node.node_tree.links[outputIndex].from_node.outputs['Color'].default_value
+                    outputIndex = outputIndex + 1
+                print("END")
+    return default_color
+
+if source_collection:
+    # Loop through each object in the source collection
+    for obj in source_collection.objects:
+        # Find the first number in the object's name using regular expression
+        match = re.search(r'\d+', obj.name)
+        if match:
+            number = match.group()
+            light_name = f"L{number}"
+        else:
+            light_name = f"L00"  # Default name if no number found
+
+        # Extract color from the connected node of the group node in the object's material
+        color = extract_color_from_connected_node(obj)
+
+        # Function to create a point light
+        def create_point_light(name, z_location, energy, use_color=False, use_blackbody=False):
+            new_light_data = bpy.data.lights.new(name=name, type='POINT')
+            new_light_data.energy = energy
+            new_light_data.shadow_soft_size = 0  # Radius
+
+            # Enable use of nodes for the light
+            new_light_data.use_nodes = True
+            new_light_data.node_tree.nodes.clear()
+
+            # Create an Emission node
+            emission_node = new_light_data.node_tree.nodes.new('ShaderNodeEmission')
+            emission_node.location.x -= 200
+
+            if use_blackbody:
+                # Create a Blackbody node
+                blackbody_node = new_light_data.node_tree.nodes.new(type='ShaderNodeBlackbody')
+                blackbody_node.inputs['Temperature'].default_value = 5500  # 5500K
+                blackbody_node.location.x -= 400
+
+                if use_color:
+                    # Create a Multiply node to combine color with blackbody
+                    multiply_node = new_light_data.node_tree.nodes.new(type='ShaderNodeMixRGB')
+                    multiply_node.blend_type = 'MULTIPLY'
+                    multiply_node.inputs[0].default_value = 1.0  # Set factor to 1
+                    multiply_node.inputs[1].default_value = color  # Input A: Extracted color
+                    multiply_node.location.x -= 600
+
+                    # Link Blackbody to Input B of the Multiply node
+                    new_light_data.node_tree.links.new(blackbody_node.outputs['Color'], multiply_node.inputs[2])
+
+                    # Connect Multiply node to Emission node
+                    new_light_data.node_tree.links.new(multiply_node.outputs['Color'], emission_node.inputs['Color'])
+                else:
+                    # Connect Blackbody node to Emission node
+                    new_light_data.node_tree.links.new(blackbody_node.outputs['Color'], emission_node.inputs['Color'])
+            elif use_color:
+                emission_node.inputs['Color'].default_value = color
+                new_light_data.color = color[:3]
+
+            # Create an Output node and connect Emission node to it
+            output_node = new_light_data.node_tree.nodes.new('ShaderNodeOutputLight')
+            output_node.location.x += 200
+            new_light_data.node_tree.links.new(emission_node.outputs['Emission'], output_node.inputs['Surface'])
+
+            # Create a new object with the light data
+            new_light_object = bpy.data.objects.new(name=name, object_data=new_light_data)
+            new_light_object.location.x = obj.location.x
+            new_light_object.location.y = obj.location.y
+            new_light_object.location.z = z_location
+            target_collection.objects.link(new_light_object)
+            if hasattr(new_light_object, 'vlmSettings'):
+                setattr(new_light_object.vlmSettings, 'vpx_object', name)
+
+
+        # For the first light use blackbody
+        create_point_light(light_name, -0.01778, 0.046, use_color=False, use_blackbody=True)
+
+        # For the second light at 0.00635 (0.25 inches) use both extracted color and blackbody
+        create_point_light(light_name, 0.00635, 0.005, use_color=True, use_blackbody=True)
+
+else:
+    print(f"Collection '{source_collection_name}' not found.")

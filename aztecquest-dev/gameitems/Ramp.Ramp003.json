@@ -1,7 +1,7 @@
 {
   "Ramp": {
     "height_bottom": 80.0,
-    "height_top": 100.0,
+    "height_top": 90.0,
     "width_bottom": 55.0,
     "width_top": 55.0,
     "material": "Colour_Red",
@@ -33,7 +33,7 @@
     "drag_points": [
       {
         "x": 128.60692,
-        "y": 740.7601,
+        "y": 741.2283,
         "z": 0.0,
         "smooth": true,
         "is_slingshot": false,
@@ -46,7 +46,7 @@
       },
       {
         "x": 215.99832,
-        "y": 696.4554,
+        "y": 696.9236,
         "z": 0.0,
         "smooth": true,
         "is_slingshot": false,
@@ -59,7 +59,7 @@
       },
       {
         "x": 323.83807,
-        "y": 642.6163,
+        "y": 643.0845,
         "z": 0.0,
         "smooth": true,
         "is_slingshot": false,
@@ -71,8 +71,8 @@
         "editor_layer_visibility": true
       },
       {
-        "x": 433.1887,
-        "y": 588.02277,
+        "x": 400.88135,
+        "y": 603.9422,
         "z": 0.0,
         "smooth": true,
         "is_slingshot": false,

@@ -55,7 +55,7 @@
     "mesh_file_name": "VLM.BM.PF",
     "depth_bias": -500.0,
     "add_blend": false,
-    "use_depth_mask": true,
+    "use_depth_mask": false,
     "alpha": 100.0,
     "color": "#ff00ffff",
     "light_map": "",
