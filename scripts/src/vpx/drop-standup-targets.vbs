@@ -79,7 +79,7 @@ Const DTBrickVel = 30 'velocity at which the target will brick, set to '0' to di
 Const DTEnableBrick = 0 'Set to 0 to disable bricking, 1 to enable bricking
 Const DTMass = 0.2 'Mass of the Drop Target (between 0 and 1), higher values provide more resistance
 
-  
+Dim DTArray : DTArray = Array()
 
 '******************************************************
 '  DROP TARGETS FUNCTIONS

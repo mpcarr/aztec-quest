@@ -13,18 +13,12 @@ Sub Table1_KeyDown(ByVal keycode)
 			FlipperActivate LeftFlipper, LFPress
 			'FlipperActivate LeftFlipper1, LFPress
 			SolLFlipper True	'This would be called by the solenoid callbacks if using a ROM
-			If glf_gameStarted = True Then 
-				DispatchPinEvent SWITCH_LEFT_FLIPPER_DOWN, Null
-			End If
 		End If
 		
 		If keycode = RightFlipperKey Then
 			FlipperActivate RightFlipper, RFPress
 			SolRFlipper True	'This would be called by the solenoid callbacks if using a ROM
 			UpRightFlipper.RotateToEnd
-			If glf_gameStarted = True Then 
-				DispatchPinEvent SWITCH_RIGHT_FLIPPER_DOWN, Null
-			End If
 		End If
 		
 		If keycode = PlungerKey Then

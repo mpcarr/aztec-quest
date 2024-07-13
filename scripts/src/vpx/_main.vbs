@@ -73,6 +73,8 @@ Sub Table1_Init
 	LeftSlingShot_Timer
 	RightSlingShot_Timer
 	lightCtrl.SyncLightMapColors
+
+	ConfigureDevices
 	
 	DTDrop 1
 	DTDrop 2
